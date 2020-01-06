@@ -1,25 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ThemeProvider } from 'styled-components'
+import { Provider } from 'react-redux'
+import getTheme from 'Theme';
+import GlobalStyle from 'GlobalStyle';
+import AppRouter from 'navigation/AppRouter';
+import store from 'store/store';
+
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={getTheme('light', 1)}>
+      <Provider store={store}>
+        <React.Fragment>
+          <GlobalStyle color={1} />
+          <AppRouter />
+        </React.Fragment>
+      </Provider>
+    </ThemeProvider>
   );
 }
 

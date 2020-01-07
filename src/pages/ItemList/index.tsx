@@ -66,6 +66,7 @@ const StyledButton = styled.div`
     padding-right: 20px;
 
     margin-top: 40px;
+    
     background-color: ${Constants.green};
 `
 

@@ -5,22 +5,29 @@ const DEFAULT_IMAGE = 'https://data-gcdn.basecdn.net/avatar/sys1/8e/ca/f6/00/20/
 
 
 const StyledWrapper = styled.div`
+
+
+`
+
+const StyledImage = styled.img<{size: 'small'|'big'| undefined}>`
+    border-radius : 50%;
     height: 40px;
     width: 40px;
-
+    ${props=> props.size === 'small' && `
+        width: 32px; 
+        height: 32px;
+    `}
 `
 
-const StyledImage = styled.img`
-    border-radius : 50%;
-    height: 100%;
-    width: 100%;
-`
+interface Props {
+    size?: 'small'| 'big'
+}
 
-const UserAvatar = ()=>{
+const UserAvatar = (props: Props)=>{
 
     return (
         <StyledWrapper>
-            <StyledImage  src={DEFAULT_IMAGE}/>
+            <StyledImage  size ={props.size}src={DEFAULT_IMAGE}/>
         </StyledWrapper>
     )
 

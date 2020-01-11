@@ -7,6 +7,8 @@ import Sidebar from 'components/Sidebar'
 import UserList from 'pages/UsersList'
 import ItemList from 'pages/ItemList'
 import styled from 'styled-components/macro'
+import Login from 'pages/Login'
+import Navbar from 'components/Navbar'
 
 
 const BodyWrapper = styled.div`
@@ -44,14 +46,14 @@ const AppRouter = () => {
     return (
         <Router>
             <RouterContext>
-                <Sidebar />
+                <Navbar/>
+                <Sidebar active={false}/>
                 <BodyWrapper>
                     <Switch>
                         <Route path={'/items'} component={ItemList} />
                         <Route path={'/item/:id'} component={Checkin} />
                         <Route path={'/users'} component={UserList} />
                         <Route path={'/user/:id'} component={Checkin} />
-                        <Route path={'/login'} component={Checkin} />
                         <Route path={'/admin'} component={Checkin} />
                         <Route path={'/'} component={Checkin} />
                     </Switch>

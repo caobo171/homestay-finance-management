@@ -31,4 +31,14 @@ const Column = ({ day, today }: Props) => {
     )
 }
 
+
 export default Column
+
+
+const SectionWrapper = styled.div`
+
+`
+
+const MembersSection = ()=>{
+
+}

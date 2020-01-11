@@ -13,6 +13,8 @@ const StyledName = styled.div`
     flex-direction: row;
     align-items: center;
     padding-left: 12px;
+    font-size: 16px;
+    font-weight: 500;
 `
 
 const StyledLogoutButton = styled.div`
@@ -28,7 +30,6 @@ const UserInfo = ()=>{
         <Wrapper>
             <UserAvatar/>
             <StyledName>Nguyễn Văn Cao</StyledName>
-            <StyledLogoutButton> Logout </StyledLogoutButton>
         </Wrapper>
     )
 }

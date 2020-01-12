@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Switch, RouteComponentProps, withRouter, Redirect } from 'react-router-dom'
 import Checkin from 'pages/Checkin'
 
@@ -17,6 +17,7 @@ import UseActionForm from 'pages/Form/AddActivityForm/UseActionForm'
 import { useCurrentUser } from 'store/user/hooks'
 import { useEffectOnce } from 'react-use'
 import { getCurrentUser } from 'store/user/function'
+import realtimeSystem from 'service/realtimeSystem'
 
 
 const BodyWrapper = styled.div`
@@ -68,6 +69,7 @@ class RouterContext extends React.Component {
 
 const AppRouter = () => {
 
+    const user = useCurrentUser()
     const [isFullyLoaded, setFullyLoaded] = useState(false)
 
     const [openSidebar, setOpenSidebar] = useState(false)
@@ -75,10 +77,17 @@ const AppRouter = () => {
     useEffectOnce(() => {
         (async () => {
 
+
             await getCurrentUser()
             await setFullyLoaded(true)
         })()
     })
+
+    useEffect(()=>{
+        if(user){
+            realtimeSystem.init()
+        }
+    },[user])
 
     const onClickMenu = useCallback(()=>{
         setOpenSidebar(true)

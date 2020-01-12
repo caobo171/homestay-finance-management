@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 const StyledWrapper = styled.div`
@@ -34,13 +34,22 @@ const StyledInput = styled.input`
 `
 
 interface Props{
-    title: string
+    title: string,
+    type?: 'text'|'number',
+    value: any,
+    onValueChange : (value:any)=>void 
 }
 
-const TextInput = ({title}: Props)=>{
+const TextInput = ({title , type ,value, onValueChange}: Props)=>{
+    const onValueChangeHandle = useCallback((event)=>{
+        onValueChange( type && type==='number' ? Number(event.target.value): event.target.value)
+    },[value])
     return <StyledWrapper>
         <StyledLabel>{title}*</StyledLabel>
-        <StyledInput/>
+        <StyledInput 
+        onChange={onValueChangeHandle}
+        value={value}
+        type={type? type: 'text'}/>
     </StyledWrapper>
 }
 

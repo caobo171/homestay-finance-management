@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 const StyledWrapper = styled.div`
@@ -39,16 +39,34 @@ const StyledSelect = styled.select`
     }
 `
 
-interface Props{
-    title: string
+
+interface OptionType {
+    value: any,
+    name: string
 }
 
-const SelectInput = ({title}: Props)=>{
+interface Props {
+    title: string,
+    data: OptionType[],
+    value: any,
+    onValueChange : (value: any)=> void
+}
+const SelectInput = ({ title, data , value, onValueChange }: Props) => {
+
+    const onValueChangeHandle = useCallback((event)=>{
+        onValueChange(event.target.value)
+    },[value])
+
     return <StyledWrapper>
         <StyledLabel>{title}*</StyledLabel>
-        <StyledSelect>
-            <option value="mua đồ">mua đồ</option>
-            <option value="mua đồ">mua đồ</option>
+        <StyledSelect value={value} 
+            onChange={onValueChangeHandle}
+        >
+            {
+                data.map(option => (
+                    <option  key={option.value} value={option.value}>{option.name}</option>
+                ))
+            }
         </StyledSelect>
     </StyledWrapper>
 }

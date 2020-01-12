@@ -41,7 +41,7 @@ const StyledSubmitButton = styled.div`
 const UseActionForm = () => {
     return (
         <StyledWrapper>
-            <TextInput title="Tên đồ"/>
+            {/* <TextInput title="Tên đồ"/> */}
             <DatePicker title="Chọn ngày"/>
  
             <StyledSubmitButton>

@@ -4,5 +4,12 @@ export interface Activity {
     user_id: string,
     amount: number,
     cost: number,
-    time : number
+    time : number,
+    photo?: string,
+    influencers: string[],
+    id: string
+}
+
+export interface State {
+    listActivities: Map<string, Activity>
 }

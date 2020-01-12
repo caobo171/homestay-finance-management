@@ -17,7 +17,10 @@ export const FAKEITEM_DATA: Item[] = [
         postDate: 1578285889603,
         remain: 0.2,
         cost: 150000,
-        amount: 0.5
+        amount: 0.5,
+        actionDate:1578285889603,
+        unit:'kg',
+        userId: '1'
     },
     {
         type: 'not_general',
@@ -26,6 +29,9 @@ export const FAKEITEM_DATA: Item[] = [
         postDate: 1578285889603,
         remain: 0.1,
         cost: 15000,
-        amount: 0.4
+        amount: 0.4,
+        actionDate:1578285889603,
+        unit:'kg',
+        userId: '1'
     },
 ]

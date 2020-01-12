@@ -1,5 +1,8 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
+import { changeModalContent, openModal } from 'components/Modal'
+import AddActivityForm from '../AddActivityForm/BuyAction'
+import UseActionForm from '../AddActivityForm/UseActionForm'
 
 const StyledWrapper = styled.div`
     
@@ -22,18 +25,32 @@ const StyledItem = styled.div`
 const SelectForm = () => {
     return (
         <StyledWrapper>
-            <SelectItem/>
-            <SelectItem/>
+            <SelectItem name={'Mua đồ'} type={'buy'}/>
+            <SelectItem name={'Dùng đồ'} type={'create'}/>
         </StyledWrapper>
     )
 }
 
 
 
+interface Props {
+    name: string,
+    type: 'buy' | 'create'
+}
+const SelectItem = ({name , type}: Props) => {
 
-const SelectItem = () => {
+    const onClickHandle = useCallback(()=>{
+        if(type==='buy'){
+            changeModalContent(<AddActivityForm/>)
+        }else{
+            changeModalContent(<UseActionForm/>)
+        }
+        
+    },[type])
     return (
-        <StyledItem><span>Mua đồ</span></StyledItem>
+        <StyledItem
+        onClick={onClickHandle}
+        ><span>{name}</span></StyledItem>
     )
 }
 

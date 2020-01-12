@@ -92,6 +92,8 @@ export const getCurrentUser = async (storex = store) => {
 }
 
 
+
+
 const getUsers = (): Promise<Map<string, User>> => {
     return new Promise((resolve, reject) => {
         let users = new Map<string, User>()
@@ -115,4 +117,12 @@ export const getUserList = async (storex = store) => {
     const users = await getUsers()
 
     return storex.dispatch(actions.getAllUsers(users))
+}
+
+export const logout = async (storex = store)=>{
+    await localStorage.removeItem(CURRENT_USER_STORAGE_KEY)
+
+    await firebase.auth().signOut()
+
+    return storex.dispatch(actions.login(null))
 }

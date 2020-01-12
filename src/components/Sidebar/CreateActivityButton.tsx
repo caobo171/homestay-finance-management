@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { CssVariable } from 'Constants'
 import PlusIcon from 'icons/PlusIcon'
+import { openModal } from 'components/Modal'
+import SelectForm from 'pages/Form/SelectForm'
 
 
 const StyledWrapper = styled.div`
@@ -30,8 +32,13 @@ const StyledName = styled.div`
 `
 
 const CreateActivityButton = ()=>{
+
+    const onClickHandle = ()=>{
+        openModal(<SelectForm/>)
+    }
+
     return (
-        <StyledWrapper>
+        <StyledWrapper onClick={onClickHandle}>
             <StyledName>Create Activity</StyledName>
             <StyledPlusIcon/>
         </StyledWrapper>

@@ -7,6 +7,9 @@ import HumanIcon from 'icons/HumanIcon';
 import DirectoryIcon from 'icons/DirectoryIcon';
 import ActivityIcon from 'icons/ActivityIcon';
 import ClockIcon from 'icons/ClockIcon';
+import LogoutIcon from 'icons/LogoutIcon';
+import { logout } from 'store/user/function';
+import { AppRouterContext } from 'navigation/AppRouter';
 
 const SIDEBAR_WIDTH = 225;
 
@@ -58,6 +61,11 @@ interface Props {
 }
 
 const Sidebar = (props: Props) => {
+
+    const onSelectPage = (name: string)=>{
+        AppRouterContext.ref.props.history.push(`/${name.toLowerCase()}`)
+    }
+
     return (
         <StyledWrapper active={props.active}>
             <StyledBack
@@ -68,16 +76,28 @@ const Sidebar = (props: Props) => {
                 <UserInfo />
                 <CreateActivityButton />
 
-                <SidebarItem name={'Users'} icon={HumanIcon} />
-                <SidebarItem name={'Items'} icon={DirectoryIcon} />
-                <SidebarItem name={'Activities'} icon={ActivityIcon} />
+                <SidebarItem
+                    dismissMenu={props.onDismissMenu}
+                    onSelectPage={onSelectPage}
+                    name={'Users'} icon={HumanIcon} />
+                <SidebarItem
+                    dismissMenu={props.onDismissMenu}
+                    onSelectPage={onSelectPage}
+                    name={'Items'} icon={DirectoryIcon} />
+                <SidebarItem
+                    dismissMenu={props.onDismissMenu}
+                    name={'Activities'} icon={ActivityIcon} />
 
 
                 <StyledHeader>
                     Actions
                 </StyledHeader>
-                <SidebarItem name={'Checkin'} icon={ClockIcon} />
-
+                <SidebarItem
+                    dismissMenu={props.onDismissMenu}
+                    name={'Checkin'} icon={ClockIcon} />
+                <SidebarItem
+                    dismissMenu={props.onDismissMenu}
+                    name={'Logout '} icon={LogoutIcon} onSelect={logout} />
             </StyledContainer>
 
         </StyledWrapper>

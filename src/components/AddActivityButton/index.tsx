@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { CssVariable } from 'Constants'
 import PlusIcon from 'icons/PlusIcon'
+import { openModal } from 'components/Modal'
+import SelectForm from 'pages/Form/SelectForm'
 
 
 
@@ -25,7 +27,12 @@ const StyledPlusIcon = styled(PlusIcon)`
 `
 
 const AddActivityButton = ()=>{
-    return <StyledWrapper>
+
+    const onClickHandle =()=>{
+        openModal(<SelectForm/>)
+    }
+
+    return <StyledWrapper onClick={onClickHandle}>
         <StyledPlusIcon/>
     </StyledWrapper>
 }

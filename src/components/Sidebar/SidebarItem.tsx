@@ -26,12 +26,24 @@ const StyledSpan = styled.span`
 
 interface Props {
     name: string,
-    icon : React.ElementType<any>
+    icon : React.ElementType<any>,
+    onSelect?: ()=>void ,
+    onSelectPage?: (name: string)=> void,
+    dismissMenu: ()=>void
 }
 
-const NavbarItem = ({name, icon}: Props)=>{
+const NavbarItem = ({name, icon , onSelect, onSelectPage, dismissMenu}: Props)=>{
     const Icon = icon
-    return <StyledWrapper >
+
+
+    const onClickHandle = ()=>{
+        onSelect && onSelect()
+
+        onSelectPage && onSelectPage(name)
+
+        dismissMenu()
+    }
+    return <StyledWrapper onClick={onClickHandle}>
         <StyledIcon>
             <Icon/>
         </StyledIcon>

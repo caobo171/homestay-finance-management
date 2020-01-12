@@ -95,9 +95,8 @@ const AppRouter = () => {
                     <RouterContext>
                         <Navbar onClickMenu={onClickMenu} />
                         <Sidebar active={openSidebar} onDismissMenu={onDismissMenu}/>
-                        {/* <Modal component={SelectForm}/> */}
-                        {/* <Modal component={AddActivityForm}/> */}
-                        {/* <Modal component={UseActionForm}/> */}
+
+                        <Modal/>
                         <BodyWrapper>
                             <Switch>
                                 <PrivateRoute path={'/items'} component={ItemList} />

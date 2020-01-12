@@ -14,7 +14,7 @@ const StyledWrapper = styled.div`
 
 const GroupCheckinButton = ()=>{
     return <StyledWrapper>
-        <CheckinButton color= {'#BA1313'}/>
+        <CheckinButton color= {'#BA1313'} />
         <CheckinButton  color= {'#1ABA00'}/>
         <CheckinButton  color= {'#AE7D20'}/>
     </StyledWrapper>

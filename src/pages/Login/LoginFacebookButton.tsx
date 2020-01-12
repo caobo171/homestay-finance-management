@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import FacebookIcon from 'icons/FacebookIcon'
 import { CssVariable } from 'Constants'
+import { login } from 'store/user/function'
 
 const StyledWrapper = styled.div`
     display: flex;
@@ -22,14 +23,18 @@ const StyledText = styled.span`
     font-size: 16px;
     
 `
-const LoginFacebookButton = ()=>{
+const LoginFacebookButton = React.memo(()=>{
+
+    const loginHandle = useCallback(()=>{
+        login()
+    },[])
     return (
-        <StyledWrapper>
+        <StyledWrapper onClick={loginHandle}> 
             <StyledFacebookLogo/>
             <StyledText>
                 Login With Facebook
             </StyledText>
         </StyledWrapper>
     )
-}
+})
 export default LoginFacebookButton

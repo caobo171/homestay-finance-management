@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { CssVariable } from 'Constants'
 import MenuIcon from 'icons/MenuIcon'
+import { useLocation } from 'react-router-dom'
 
 const StyledWrapper = styled.div`
     height: 52px;
@@ -23,13 +24,48 @@ const StyledTitle = styled.span`
     color: ${CssVariable.TEXT_COLOR_H1}
 `
 
-const Navbar = ()=>{
+
+const renderPathName =(pathname:string)=>{
+    switch(pathname){
+        case '/':{
+            return 'Checkin'
+        }
+        case '/items':{
+            return 'Items'
+        }
+        case '/users':{
+            return 'Users'
+        }
+        default: {
+            return 'Finance'
+        }
+    }
+}
+
+interface Props {
+    onClickMenu: ()=> void
+}
+
+const Navbar = React.memo(({onClickMenu}: Props) => {
+
+    const location = useLocation()
+
+
+
     return (
         <StyledWrapper>
-            <StyledMenuLogo/>
-            <StyledTitle>Users</StyledTitle>
+            {
+                ! (location.pathname === '/login') &&
+                (
+                    <>
+                        <StyledMenuLogo onClick= {onClickMenu}/>
+                        <StyledTitle>{renderPathName(location.pathname)}</StyledTitle>
+                    </>
+                )
+            }
+
         </StyledWrapper>
     )
-}
+})
 
 export default Navbar

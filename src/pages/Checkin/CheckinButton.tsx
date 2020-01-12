@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import * as firebase from 'firebase'
 
 const StyledWrapper = styled.div<{color: string}>`
     display: flex;
@@ -23,7 +24,13 @@ interface Props {
 
 const CheckinButton = ({color}: Props)=>{
     return (
-        <StyledWrapper color={color}>
+        <StyledWrapper color={color} onClick={async()=>{
+            const provider = new firebase.auth.FacebookAuthProvider();
+
+            firebase.auth().signInWithPopup(provider).then(result=>{
+              console.log(result)
+            })
+        }}>
             Morning
         </StyledWrapper>
     )

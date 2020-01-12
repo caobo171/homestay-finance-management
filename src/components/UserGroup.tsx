@@ -7,7 +7,10 @@ const StyledWrapper = styled.div`
     flex-direction: row;
 `
 const StyledUserWrapper = styled.div<{position?: 'first' | 'center'}>`
-    
+    border-width: 1px;
+    border-style: solid;
+    padding: 0;
+    border-radius: 50%;
     ${props=> (!props.position ||  (props.position && props.position !=='first'))  && `
         margin-left: -14px;
     `}

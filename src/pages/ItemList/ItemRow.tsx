@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import UserAvatar from 'components/UserAvatar.tsx'
 import Item from 'store/item/types'
 import ItemImage from 'components/ItemImage'
 import { CssVariable } from 'Constants'
@@ -14,26 +13,19 @@ const Wrapper = styled.div`
     border-color: #D6E4FF;
     
     font-weight: 500;
-    color: ${CssVariable.TEXT_COLOR_H2}
+    color: ${CssVariable.TEXT_COLOR_H2};
+
+    display: flex;
+    flex-wrap : wrap;
+
 `
 
 const StyledRowItem = styled.div`
     display: flex;
-    width: 90%;
+    flex-basis: 480px;
     align-items: center;
     padding-left: 20px;
-
-    padding-top: 8px;
-`
-
-const StyledItemInfo = styled.div`
-    display: flex;
     flex-direction: row;
-    width: 90%;
-    align-items: center;
-    padding-left: 20px;
-    padding-top: 8px;
-
 `
 
 const StyledName = styled.span`
@@ -51,12 +43,12 @@ interface Props {
 
 const UserRow = ({ item }: Props) => {
     return <Wrapper>
-        <StyledItemInfo>
+        <StyledRowItem>
             <ItemImage />
             <StyledName>{item.name}</StyledName>
-        </StyledItemInfo>
+        </StyledRowItem>
         <StyledRowItem>
-            <StyledText>-Remain: {item.remain} -Total: {item.cost}đ</StyledText>
+            <StyledText>-Remain: {item.remain}  -Total: {item.cost}đ</StyledText>
 
         </StyledRowItem>
     </Wrapper>

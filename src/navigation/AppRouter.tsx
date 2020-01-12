@@ -1,6 +1,6 @@
 // eslint-disable-next-line
-import React from 'react'
-import { BrowserRouter as Router, Route, Switch, RouteComponentProps, withRouter } from 'react-router-dom'
+import React, { useState, useCallback } from 'react'
+import { BrowserRouter as Router, Route, Switch, RouteComponentProps, withRouter, Redirect } from 'react-router-dom'
 import Checkin from 'pages/Checkin'
 
 import Sidebar from 'components/Sidebar'
@@ -10,12 +10,35 @@ import styled from 'styled-components/macro'
 import Login from 'pages/Login'
 import Navbar from 'components/Navbar'
 import ItemDetail from 'pages/ItemDetail'
+import Modal from 'components/Modal'
+import SelectForm from 'pages/Form/SelectForm'
+import AddActivityForm from 'pages/Form/AddActivityForm/BuyAction'
+import UseActionForm from 'pages/Form/AddActivityForm/UseActionForm'
+import { useCurrentUser } from 'store/user/hooks'
+import { useEffectOnce } from 'react-use'
+import { getCurrentUser } from 'store/user/function'
 
 
 const BodyWrapper = styled.div`
     display: flex;
     justify-content: center;
 `
+
+
+const PrivateRoute: React.FC<{
+    component: React.ComponentType<any>,
+    [prop: string]: any
+}> = ({ component, ...rest }) => {
+    const user = useCurrentUser()
+    return <Route {...rest} render={props => {
+        const Component = component;
+        return user ? <Component {...props} /> : <Redirect to={'/login'} />
+    }} />
+}
+
+
+
+
 
 export const AppRouterContext: React.Context<{}> & {
     ref?: any
@@ -44,23 +67,56 @@ class RouterContext extends React.Component {
 
 
 const AppRouter = () => {
+
+    const [isFullyLoaded, setFullyLoaded] = useState(false)
+
+    const [openSidebar, setOpenSidebar] = useState(false)
+
+    useEffectOnce(() => {
+        (async () => {
+
+            await getCurrentUser()
+            await setFullyLoaded(true)
+        })()
+    })
+
+    const onClickMenu = useCallback(()=>{
+        setOpenSidebar(true)
+    },[openSidebar])
+
+    const onDismissMenu = useCallback(()=>{
+        setOpenSidebar(false)
+    },[openSidebar])
+
     return (
         <Router>
-            <RouterContext>
-                <Navbar/>
-                <Sidebar active={false}/>
-                <BodyWrapper>
-                    <Switch>
-                        <Route path={'/items'} component={ItemList} />
-                        <Route path={'/item/:id'} component={ItemDetail} />
-                        <Route path={'/users'} component={UserList} />
-                        <Route path={'/user/:id'} component={Checkin} />
-                        <Route path={'/admin'} component={Checkin} />
-                        <Route path={'/'} component={Checkin} />
-                    </Switch>
-                </BodyWrapper>
+            {
+                isFullyLoaded ? (
+                    <RouterContext>
+                        <Navbar onClickMenu={onClickMenu} />
+                        <Sidebar active={openSidebar} onDismissMenu={onDismissMenu}/>
+                        {/* <Modal component={SelectForm}/> */}
+                        {/* <Modal component={AddActivityForm}/> */}
+                        {/* <Modal component={UseActionForm}/> */}
+                        <BodyWrapper>
+                            <Switch>
+                                <PrivateRoute path={'/items'} component={ItemList} />
+                                <PrivateRoute path={'/item/:id'} component={ItemDetail} />
+                                <PrivateRoute path={'/users'} component={UserList} />
+                                <PrivateRoute path={'/user/:id'} component={Checkin} />
+                                <PrivateRoute path={'/admin'} component={Checkin} />
+                                <Route path={'/login'} component={Login} />
+                                <PrivateRoute path={'/'} component={Checkin} />
 
-            </RouterContext>
+                            </Switch>
+                        </BodyWrapper>
+
+                    </RouterContext>
+                ) : (
+                        <div />
+                    )
+            }
+
         </Router>
     )
 }

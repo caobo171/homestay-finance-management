@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { CssVariable } from 'Constants'
 import LogoIcon from 'icons/LogoIcon'
 import LoginFacebookButton from './LoginFacebookButton'
+import { useCurrentUser } from 'store/user/hooks'
+import { AppRouterContext } from 'navigation/AppRouter'
 
 
 const StyledWrapper = styled.div`
@@ -29,6 +31,16 @@ const StyledLogo = styled(LogoIcon)`
 `
 
 const Login = ()=>{
+
+    const user = useCurrentUser()
+
+
+
+    useEffect(() => {
+        if (user) {
+            AppRouterContext.ref && AppRouterContext.ref.props.history.push('/')
+        }
+    }, [user])
     
     return (
         <StyledWrapper>

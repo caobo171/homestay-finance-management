@@ -4,6 +4,7 @@ import Item from 'store/item/types'
 import ItemRow from './ItemRow'
 import Constants from 'Constants'
 import {FAKEITEM_DATA } from 'fakedata'
+import AddActivityButton from 'components/AddActivityButton'
 
 
 
@@ -23,6 +24,7 @@ const StyledListUserWrapper = styled.div`
 const ItemList = () => {
     return (
         <Wrapper>
+
             <StyledListUserWrapper>
                 {
                     FAKEITEM_DATA.map((item: Item) => {
@@ -30,7 +32,7 @@ const ItemList = () => {
                     })
                 }
             </StyledListUserWrapper>
-
+            <AddActivityButton/>
         </Wrapper>
     )
 }

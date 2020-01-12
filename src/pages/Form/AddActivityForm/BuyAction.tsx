@@ -11,6 +11,7 @@ import Item from 'store/item/types'
 import { useCurrentUser } from 'store/user/hooks'
 import { Activity } from 'store/activity/types'
 import { addActivity } from 'store/activity/functions'
+import { closeModal } from 'components/Modal'
 
 const StyledWrapper = styled.div`
     font-size: 14px;
@@ -95,8 +96,12 @@ const AddActivityForm = () => {
             id: '-1'
         }
 
-        addActivity(activity)
+        const res2 = await addActivity(activity)
         
+        if(res2){
+            closeModal()
+        }
+
     }
 
     return (

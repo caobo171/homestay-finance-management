@@ -23,7 +23,7 @@ const StyledName = styled.div`
 const UserInfo = ()=>{
     return (
         <Wrapper>
-            <UserAvatar/>
+            {/* <UserAvatar/> */}
             <StyledName>Nguyễn Văn Cao</StyledName>
         </Wrapper>
     )

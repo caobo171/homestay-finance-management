@@ -41,7 +41,7 @@ interface Props {
     item: Item
 }
 
-const UserRow = ({ item }: Props) => {
+const ItemRow = ({ item }: Props) => {
     return <Wrapper>
         <StyledRowItem>
             <ItemImage />
@@ -54,4 +54,4 @@ const UserRow = ({ item }: Props) => {
     </Wrapper>
 }
 
-export default UserRow;
+export default ItemRow;

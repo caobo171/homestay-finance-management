@@ -10,6 +10,9 @@ export const useCurrentUser = (): User | null=>{
 
 
 export const useUserList = (): User[]=>{
-    //@ts-ignore
     return useSelector((state: {user: State})=> [...state.user.listUser.values()])
+}
+
+export const useUser  = (userId: string) =>{
+    return useSelector((state: {user: State})=> state.user.listUser.get(userId));
 }

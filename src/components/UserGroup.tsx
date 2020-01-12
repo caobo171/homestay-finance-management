@@ -20,13 +20,13 @@ const UserGroup = () => {
     return (
         <StyledWrapper >
             <StyledUserWrapper position="first">
-                <UserAvatar size="small" />
+                {/* <UserAvatar size="small" /> */}
             </StyledUserWrapper>
             <StyledUserWrapper>
-                <UserAvatar size="small" />
+                {/* <UserAvatar size="small" /> */}
             </StyledUserWrapper>
             <StyledUserWrapper>
-                <UserAvatar size="small" />
+                {/* <UserAvatar size="small" /> */}
             </StyledUserWrapper>
 
         </StyledWrapper>

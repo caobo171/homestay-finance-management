@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/macro'
 import UserAvatar from 'components/UserAvatar.tsx'
+import { useCurrentUser } from 'store/user/hooks'
 
 const Wrapper = styled.div`
     display: flex;
@@ -25,13 +26,15 @@ const StyledLogoutButton = styled.div`
 `
 
 
-const UserInfo = ()=>{
+const UserInfo = React.memo(()=>{
+    const currentUser  = useCurrentUser()
+
     return (
         <Wrapper>
-            <UserAvatar/>
-            <StyledName>Nguyễn Văn Cao</StyledName>
+            <UserAvatar userId={currentUser? currentUser.id: '-1'}/>
+            <StyledName>{currentUser ? currentUser.displayName : ''}</StyledName>
         </Wrapper>
     )
-}
+})
 
 export default UserInfo

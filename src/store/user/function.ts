@@ -44,7 +44,7 @@ export const login = async (storex = store) => {
         const user: User = {
             displayName: result.user.displayName,
             id: result.user.uid,
-            photoURL: result.user.photoURL,
+            photoURL: result.user.photoURL ? result.user.photoURL: '',
             email: result.user.email,
             placeId: '-1',
         }
@@ -81,13 +81,16 @@ export const getCurrentUser = async (storex = store) => {
         const userData = await getCurrentUserAsync(user.id)
         if (userData) {
 
-            return storex.dispatch(actions.login({...user, ...userData}))
+            storex.dispatch(actions.login({...user, ...userData}))
+            return userData
         } else {
-            return storex.dispatch(actions.login(user))
+            storex.dispatch(actions.login(user))
+            return user
         }
 
     } else {
-        return storex.dispatch(actions.login(null))
+        storex.dispatch(actions.login(null))
+        return null
     }
 }
 

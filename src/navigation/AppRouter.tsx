@@ -16,7 +16,7 @@ import AddActivityForm from 'pages/Form/AddActivityForm/BuyAction'
 import UseActionForm from 'pages/Form/AddActivityForm/UseActionForm'
 import { useCurrentUser } from 'store/user/hooks'
 import { useEffectOnce } from 'react-use'
-import { getCurrentUser } from 'store/user/function'
+import { getCurrentUser, getUserList } from 'store/user/function'
 import realtimeSystem from 'service/realtimeSystem'
 
 
@@ -78,16 +78,16 @@ const AppRouter = () => {
         (async () => {
 
 
-            await getCurrentUser()
+            const res = await getCurrentUser()
+
+            if(res){
+                await getUserList()
+                realtimeSystem.init()
+            }
+            
             await setFullyLoaded(true)
         })()
     })
-
-    useEffect(()=>{
-        if(user){
-            realtimeSystem.init()
-        }
-    },[user])
 
     const onClickMenu = useCallback(()=>{
         setOpenSidebar(true)

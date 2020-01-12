@@ -42,8 +42,8 @@ const UseActionForm = () => {
     return (
         <StyledWrapper>
             {/* <TextInput title="Tên đồ"/> */}
-            <DatePicker title="Chọn ngày"/>
- 
+            {/* <DatePicker title="Chọn ngày"/>
+  */}
             <StyledSubmitButton>
                 Add Activity
             </StyledSubmitButton>

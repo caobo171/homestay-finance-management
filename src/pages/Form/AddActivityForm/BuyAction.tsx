@@ -83,6 +83,7 @@ const AddActivityForm = () => {
             id: '-1' // Fake id to valid Item type
         }
 
+        // console.log(data)
         const itemId = await addItem(data)
 
         const activity : Activity = {
@@ -115,7 +116,10 @@ const AddActivityForm = () => {
             <TextInput value={amount} type={'number'} onValueChange={setAmount} title="Số lượng"/>
             <TextInput value={unit}  onValueChange={setUnit} title="Đơn vị"/>
             <TextInput value={cost} type={'number'} onValueChange={setCost} title="Tổng giá"/>
-            <DatePicker title="Chọn ngày"/>
+            <DatePicker 
+            value={postDate}
+            onValueChange={setPostDate}
+            title="Chọn ngày"/>
             {/* <ImagePicker title="File Ảnh đính kèm"/> */}
             <StyledSubmitButton onClick={onSubmitHandle}>
                 Add Activity

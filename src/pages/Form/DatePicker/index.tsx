@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 const StyledWrapper = styled.div`
@@ -34,13 +34,26 @@ const StyledFileInput = styled.input`
 `
 
 interface Props{
-    title: string
+    title: string,
+    value: number,
+    onValueChange: (value:number)=>void
 }
 
-const DatePicker = ({title}: Props)=>{
+const formatDate = (time:number)=>{
+    const date = new Date(time)
+    return `${date.getFullYear()}`+`-`+`${date.getMonth()+1}`.padStart(2,'0')+`-`+`${date.getDate()}`.padStart(2,'0')
+
+}
+const DatePicker = ({title , value, onValueChange}: Props)=>{
+
+    const onValueChangeHandle = useCallback((event)=>{
+        onValueChange(event.target.valueAsNumber)
+    },[value])
     return <StyledWrapper>
         <StyledLabel>{title}*</StyledLabel>
-        <StyledFileInput type="date"/>
+        <StyledFileInput onChange = {onValueChangeHandle}
+        value={formatDate(value)}
+        type="date" />
     </StyledWrapper>
 }
 

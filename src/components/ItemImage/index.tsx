@@ -1,12 +1,16 @@
 import React from 'react'
 import styled from 'styled-components/macro'
+import { useItem } from 'store/item/hooks'
+import { DEFAULT_ITEM_IMAGE } from 'store/item/function'
 
-const DEFAULT_IMAGE = 'https://media.suckhoedoisong.vn/Images/haiyen/2019/12/02/thit_lon.jpg'
 
-
-const StyledWrapper = styled.div`
+const StyledWrapper = styled.div<{ size: undefined | 'very_small' | 'small' }>`
     height: 32px;
     width: 32px;
+    ${props => props.size === 'very_small' && `
+        height: 20px;
+        width: 20px;
+    `}
 
 `
 
@@ -16,15 +20,23 @@ const StyledImage = styled.img`
     width: 100%;
 `
 
-const ItemImage = ()=>{
+interface Props {
+    itemId: string,
+    size?: 'very_small' | 'small'
+}
+
+
+const ItemImage = React.memo(({ itemId, size }: Props) => {
+
+    const item = useItem(itemId)
 
     return (
-        <StyledWrapper>
-            <StyledImage  src={DEFAULT_IMAGE}/>
+        <StyledWrapper size={size}>
+            <StyledImage src={item.photoUrl ? item.photoUrl : DEFAULT_ITEM_IMAGE} />
         </StyledWrapper>
     )
 
-}
+})
 
 
 export default ItemImage

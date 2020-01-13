@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components/macro'
-import UserAvatar from 'components/UserAvatar.tsx'
+import UserAvatar from 'components/UserAvatar'
 import { useCurrentUser } from 'store/user/hooks'
 
 const Wrapper = styled.div`

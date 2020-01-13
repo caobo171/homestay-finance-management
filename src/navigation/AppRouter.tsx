@@ -11,6 +11,7 @@ import Login from 'pages/Login'
 import Navbar from 'components/Navbar'
 import ItemDetail from 'pages/ItemDetail'
 import Modal from 'components/Modal'
+import UserDetail from 'pages/UserDetail'
 import SelectForm from 'pages/Form/SelectForm'
 import AddActivityForm from 'pages/Form/AddActivityForm/BuyAction'
 import UseActionForm from 'pages/Form/AddActivityForm/UseActionForm'
@@ -74,20 +75,30 @@ const AppRouter = () => {
 
     const [openSidebar, setOpenSidebar] = useState(false)
 
-    useEffectOnce(() => {
-        (async () => {
+    // useEffectOnce(() => {
+    //     (async () => {
 
 
-            const res = await getCurrentUser()
+            
+    //         await setFullyLoaded(true)
+    //     })()
+    // })
 
-            if(res){
+    useEffect(()=>{
+        (async ()=>{
+            if(!user){
+                const res = await getCurrentUser()
+            }
+            
+            if(user){
                 await getUserList()
                 realtimeSystem.init()
             }
-            
+
             await setFullyLoaded(true)
         })()
-    })
+    
+    },[user])
 
     const onClickMenu = useCallback(()=>{
         setOpenSidebar(true)
@@ -111,7 +122,7 @@ const AppRouter = () => {
                                 <PrivateRoute path={'/items'} component={ItemList} />
                                 <PrivateRoute path={'/item/:id'} component={ItemDetail} />
                                 <PrivateRoute path={'/users'} component={UserList} />
-                                <PrivateRoute path={'/user/:id'} component={Checkin} />
+                                <PrivateRoute path={'/user/:id'} component={UserDetail} />
                                 <PrivateRoute path={'/admin'} component={Checkin} />
                                 <Route path={'/login'} component={Login} />
                                 <PrivateRoute path={'/'} component={Checkin} />

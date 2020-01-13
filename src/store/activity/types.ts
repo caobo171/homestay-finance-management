@@ -1,5 +1,12 @@
+
+export enum ActivityType {
+    BUY = 'buy',
+    DESTROY = 'destroy',
+    USE =  'use'
+}
+
 export interface Activity {
-    type: 'buy' | 'destroy' | 'use',
+    type: ActivityType,
     item_id: string,
     user_id: string,
     amount: number,
@@ -7,7 +14,9 @@ export interface Activity {
     time : number,
     photo?: string,
     influencers: string[],
-    id: string
+    id: string, 
+    name: string,
+    actionDate: number
 }
 
 export interface State {

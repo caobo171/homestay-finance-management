@@ -30,7 +30,7 @@ const UserList = () => {
             <StyledListUserWrapper>
                 {
                     users.map((user: User) => {
-                        return <UserRow user={user} />
+                        return <UserRow key={user.id} user={user} />
                     })
                 }
             </StyledListUserWrapper>

@@ -8,6 +8,8 @@ import ObjectPicker from 'components/ObjectPicker'
 import { User } from 'store/user/types'
 import { CssVariable } from 'Constants'
 import PlusIcon from 'icons/PlusIcon'
+import UserAvatar from 'components/UserAvatar'
+import { useRemainUsers } from 'store/user/hooks'
 
 const StyledWrapper = styled.div`
     display: flex;
@@ -62,43 +64,37 @@ const StyledPlusIcon = styled(PlusIcon)`
 
 
 interface Props {
-    addPickItem: (item: Item, pickAmount: number) => void,
-    pickedItems: Item[]
+    addPickUser: (user: User) => void,
+    pickedUsers: User[]
 }
 
-const filterBySearchString = (items: Item[], searchString: string) => {
+const filterBySearchString = (users: User[], searchString: string) => {
     const rSearchString = searchString.toLowerCase().replace(/\s/g, '')
 
-    return items.filter(item => item.name.toLowerCase()
+    return users.filter(user => (user.displayName ? user.displayName : '') .toLowerCase()
         .replace(/\s/g, '').indexOf(rSearchString) > -1)
 }
 
-const ItemPick = ({ addPickItem, pickedItems }: Props) => {
+const UserPick = ({ addPickUser, pickedUsers }: Props) => {
 
     const [searchString, setSearchString] = useState('')
-    const avalableItems = useRemainItems(pickedItems)
+    const avalableUsers = useRemainUsers(pickedUsers)
     const [pickAmount, setPickAmount] = useState<number>(1)
 
-    const [currentItem, setCurrentItem] = useState<null | Item>(null)
+    const [currentUser, setCurrentUser] = useState<null | User>(null)
 
-    const displayItems = filterBySearchString(avalableItems, searchString)
+    const displayUsers = filterBySearchString(avalableUsers, searchString)
 
-    const onPickAmountChangeHandle = useCallback((event) => {
-        const number = Number(event.target.value)
-        setPickAmount(Math.abs(number))
-    }, [pickAmount])
-
-
-    const onChooseItemHandle = useCallback((value: Item | null) => {
-        setCurrentItem(value)
-    }, [currentItem])
+    const onChooseUserHandle = useCallback((value: User | null) => {
+        setCurrentUser(value)
+    }, [currentUser])
 
     const onAddItemHandle = useCallback(()=>{
-        if(currentItem){
-            addPickItem(currentItem,pickAmount)
+        if(currentUser){
+            addPickUser(currentUser)
         }
         
-    },[currentItem, pickAmount])
+    },[currentUser, pickAmount])
 
     return (
         <StyledWrapper>
@@ -106,27 +102,21 @@ const ItemPick = ({ addPickItem, pickedItems }: Props) => {
 
                 searchString={searchString}
                 setSearchString={setSearchString}
-                displayData={displayItems}
-                setCurrentObject={onChooseItemHandle}
+                displayData={displayUsers}
+                setCurrentObject={onChooseUserHandle}
                 renderer={OptionRow}
 
-                currentObject={currentItem}
-                currentObjectRender={currentItem ?
+                currentObject={currentUser}
+                currentObjectRender={currentUser ?
                     <>
-                        <ItemImage
-                            size={'very_small'}
-                            itemId={currentItem.id} />
+                        <UserAvatar
+                            height={20}
+                            userId={currentUser.id} />
                         <StyledText>
-                            {currentItem.name}
-                        </StyledText>
-                        <StyledText>
-                            -Còn: {currentItem.remain.toFixed(2)}{currentItem.unit}
+                            {currentUser.displayName}
                         </StyledText>
                     </> : null} />
 
-
-            <StyledText>{'1/ '}</StyledText>
-            <StyledInput type={'number'} value={pickAmount} onChange={onPickAmountChangeHandle} />
             <StyledPlusButton onClick={onAddItemHandle}>
                 <StyledPlusIcon/>
             </StyledPlusButton>
@@ -135,21 +125,18 @@ const ItemPick = ({ addPickItem, pickedItems }: Props) => {
 }
 
 
-export default ItemPick
+export default UserPick
 
 interface OptionProps {
-    data: Item,
+    data: User,
     onClick: () => void
 }
 
 const OptionRow = (props: OptionProps) => {
     return <StyledPopUpItem onClick={props.onClick}>
-        <ItemImage itemId={props.data.id} />
+        <UserAvatar userId={props.data.id} height={20} />
         <StyledText>
-            {props.data.name}
-        </StyledText>
-        <StyledText>
-            -Còn: {props.data.remain.toFixed(2)}{props.data.unit}
+            {props.data.displayName}
         </StyledText>
     </StyledPopUpItem>
 }

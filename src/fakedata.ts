@@ -1,5 +1,5 @@
 import {User } from 'store/user/types'
-import Item from 'store/item/types'
+import Item, { ItemType } from 'store/item/types'
 export const FAKE_CURRENT_USER: User = {
     displayName: 'Nguyễn Văn Cao',
     id: '1',
@@ -11,7 +11,7 @@ export const FAKE_CURRENT_USER: User = {
 
 export const FAKEITEM_DATA: Item[] = [
     {
-        type: 'not_general',
+        type: ItemType.GENERAL,
         name: 'Thịt lợn',
         id: '1',
         postDate: 1578285889603,
@@ -23,7 +23,7 @@ export const FAKEITEM_DATA: Item[] = [
         userId: '1'
     },
     {
-        type: 'not_general',
+        type: ItemType.GENERAL,
         name: 'Bắp cải',
         id: '2',
         postDate: 1578285889603,

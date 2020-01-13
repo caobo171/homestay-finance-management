@@ -5,6 +5,8 @@ import getTheme from 'Theme';
 import GlobalStyle from 'GlobalStyle';
 import AppRouter from 'navigation/AppRouter';
 import store from 'store/store';
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 const App: React.FC = () => {
 
@@ -15,6 +17,7 @@ const App: React.FC = () => {
         <React.Fragment>
           <GlobalStyle color={10} />
           <AppRouter/>  
+          <ToastContainer />
         </React.Fragment>
       </Provider>
     </ThemeProvider>

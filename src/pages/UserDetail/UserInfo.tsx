@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/macro'
-import UserAvatar from 'components/UserAvatar.tsx'
+import UserAvatar from 'components/UserAvatar'
+import { User } from 'store/user/types'
 
 const Wrapper = styled.div`
     display: flex;
@@ -19,12 +20,15 @@ const StyledName = styled.div`
     font-weight: 500;
 `
 
+interface Props{
+    user: User
+}
 
-const UserInfo = ()=>{
+const UserInfo = ({user}: Props)=>{
     return (
         <Wrapper>
-            {/* <UserAvatar/> */}
-            <StyledName>Nguyễn Văn Cao</StyledName>
+            <UserAvatar userId={user.id}/>
+            <StyledName>{user.displayName}</StyledName>
         </Wrapper>
     )
 }

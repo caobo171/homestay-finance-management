@@ -1,5 +1,10 @@
+export enum ItemType {
+    GENERAL = 'general',
+    NOT_GENERAL = 'not_general'
+}
+
 export default interface Item {
-    type: 'general' | 'not_general',
+    type: ItemType,
     name: string,
     id: string,
     postDate: number, // save the time we assume that action is executed in real
@@ -16,3 +21,4 @@ export default interface Item {
 export interface State {
     listItems: Map<string,Item>
 }
+

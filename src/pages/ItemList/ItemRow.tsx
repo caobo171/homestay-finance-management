@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import Item from 'store/item/types'
 import ItemImage from 'components/ItemImage'
 import { CssVariable } from 'Constants'
+import { AppRouterContext } from 'navigation/AppRouter'
+import { formatMoney } from 'service/helpers'
 
 const Wrapper = styled.div`
     height: 78px;
@@ -41,17 +43,21 @@ interface Props {
     item: Item
 }
 
-const ItemRow = ({ item }: Props) => {
-    return <Wrapper>
+const ItemRow = React.memo(({ item }: Props) => {
+
+    const onClickHandle = useCallback(()=>{
+        AppRouterContext.ref.props.history.push(`/item/${item.id}`)
+    },[item.id])
+    return <Wrapper onClick={onClickHandle }>
         <StyledRowItem>
-            <ItemImage />
+            <ItemImage itemId={item.id}/>
             <StyledName>{item.name}</StyledName>
         </StyledRowItem>
         <StyledRowItem>
-            <StyledText>-Remain: {item.remain}  -Total: {item.cost}đ</StyledText>
+            <StyledText>-Còn: {item.remain.toFixed(2)} {item.unit}  -Total: {formatMoney(item.cost)}</StyledText>
 
         </StyledRowItem>
     </Wrapper>
-}
+},(prev,next)=> prev.item.id === next.item.id)
 
 export default ItemRow;

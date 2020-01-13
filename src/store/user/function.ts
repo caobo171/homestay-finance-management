@@ -7,6 +7,17 @@ import * as actions from './action'
 export const USERS_COLLECTION = 'users'
 const CURRENT_USER_STORAGE_KEY = '@finance-user'
 
+export const DEFAULT_USER_IMAGE  = 'https://xmindnet.s3.amazonaws.com/img/default-avatar-m5.png'
+
+export const FAKE_USER: User = {
+    displayName: 'Fake User',
+    id: '-1',
+    photoURL: DEFAULT_USER_IMAGE ,
+    email: "fake@fake.com" ,
+    role:'member',
+    placeId: '-1'
+}
+
 const getCurrentUserAsync = (id: string): Promise<User | null> => {
 
     return new Promise((resolve, reject) => {

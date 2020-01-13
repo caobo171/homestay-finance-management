@@ -4,7 +4,7 @@ import Item from 'store/item/types'
 import ItemImage from 'components/ItemImage'
 import { CssVariable } from 'Constants'
 import { User } from 'store/user/types'
-import UserAvatar from 'components/UserAvatar.tsx'
+import UserAvatar from 'components/UserAvatar'
 import { AppRouterContext } from 'navigation/AppRouter'
 
 const Wrapper = styled.div`

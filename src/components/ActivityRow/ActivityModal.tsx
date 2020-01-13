@@ -1,28 +1,24 @@
 import React from 'react'
-import UserGroup from '../UserGroup'
-import styled from 'styled-components/macro'
+import styled from 'styled-components'
 import ItemImage from 'components/ItemImage'
+import { useItem } from 'store/item/hooks'
 import { CssVariable } from 'Constants'
 import { Activity, ActivityType } from 'store/activity/types'
-import { useItem } from 'store/item/hooks'
-import { openModal } from 'components/Modal'
-import ActivityModal from './ActivityModal'
-import { formatMoney } from 'service/helpers'
+import UserGroup from '../UserGroup'
+
 
 
 const StyledWrapper = styled.div`
-    height: 78px;
-    justify-content: flex-start;
-
-    border-width: 0px 0px 1px 0px ;
-    border-style: solid;
-    border-color: #D6E4FF;
-
-    font-weight: 500;
-    color: ${CssVariable.TEXT_COLOR_H2};
-
+    font-size: 14px;
+    width: 280px;
+    height: 200px;
     display: flex;
-    flex-wrap : wrap;
+    flex-direction: column;
+    background-color: #F6F6F6;
+
+    align-items: center;
+
+    border-radius: 4px;
 `
 const StyledRowItem = styled.div`
     display: flex;
@@ -34,16 +30,33 @@ const StyledRowItem = styled.div`
 
 const StyledText = styled.div`
     align-items: center;
-    margin-right: 16px;
+    margin-right: 8px;
+
+    font-weight: 500;
 `
 const StyledSpan = styled.span`
     margin-left: 8px;
-    margin-right: 16px;
+    margin-right: 8px;
+    text-transform: capitalize;
+    font-size: 18px;
+    font-weight: bold;
 `
 const StyledSmallText = styled.div`
     align-items: center;
     font-size: 12px;
     margin-right: 8px;
+`
+const StyledName = styled.div`
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 8px;
+    font-weight: 600;
+    font-size: 20px;
+
+    & > span {
+        margin-left: 8px;
+    }
 `
 
 interface Props {
@@ -69,36 +82,42 @@ const formatDate = (time: number) => {
 
     return `${day}/${month}/${year}`
 }
+interface Props {
+    activity: Activity
+}
 
-const ActivityRow = ({ activity }: Props) => {
+const ActivityModal = ({ activity }: Props) => {
 
     const item = useItem(activity.item_id)
 
-    return <StyledWrapper onClick ={()=>{
-        openModal(<ActivityModal activity={activity}/>)
-    }}>
+    return (<StyledWrapper>
+        <StyledName>
+            <ItemImage itemId={activity.item_id} />
+            <span>  {activity.name} </span>
+        </StyledName>
         <StyledRowItem>
             <StyledText>
                 {renderActivity(activity.type)}
             </StyledText>
-            <ItemImage itemId={activity.item_id} />
+
             <StyledSpan>{item.name}</StyledSpan>
             <StyledText>
                 {activity.amount.toFixed(2)} {item ? item.unit : ''}
             </StyledText>
             <StyledText>
-                {formatMoney(activity.cost)}
-            </StyledText>
+                {activity.cost.toFixed(0)}đ
+                </StyledText>
         </StyledRowItem>
         <StyledRowItem>
             <StyledSmallText>
                 {/* ({activity.name}) */}
-            {formatDate(activity.time)}</StyledSmallText>
+                {formatDate(activity.time)}</StyledSmallText>
             {activity.influencers.length > 0 && <StyledSmallText>Influencer:</StyledSmallText>}
             <UserGroup userIds={activity.influencers} />
         </StyledRowItem>
 
     </StyledWrapper>
+    )
 }
 
-export default ActivityRow
+export default ActivityModal

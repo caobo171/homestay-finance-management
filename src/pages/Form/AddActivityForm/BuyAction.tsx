@@ -7,11 +7,12 @@ import DatePicker from '../DatePicker'
 import ImagePicker from '../ImagePicker'
 import * as firebase from 'firebase'
 import { addItem } from 'store/item/function'
-import Item from 'store/item/types'
+import Item, { ItemType } from 'store/item/types'
 import { useCurrentUser } from 'store/user/hooks'
-import { Activity } from 'store/activity/types'
+import { Activity, ActivityType } from 'store/activity/types'
 import { addActivity } from 'store/activity/functions'
 import { closeModal } from 'components/Modal'
+import { toast } from 'react-toastify'
 
 const StyledWrapper = styled.div`
     font-size: 14px;
@@ -21,15 +22,8 @@ const StyledWrapper = styled.div`
     background-color: #F6F6F6;
 
     align-items: flex-end;
-`
 
-const StyledItem = styled.div`
-    display:flex;
-    align-items: center;
-    justify-content:  center;
-    border: 1px solid #D6E4FF;
-    width: 100%;
-    height: 42px;
+    border-radius: 4px;
 `
 
 const StyledSubmitButton = styled.div`
@@ -58,7 +52,7 @@ const SELECT_TYPE_DATA = [
 const AddActivityForm = () => {
 
     const currentUser = useCurrentUser()
-    const [type, setType ] = useState<"general" | "not_general">('not_general')
+    const [type, setType ] = useState<ItemType>(ItemType.NOT_GENERAL)
     const [name, setName ] = useState<string>('')
 
     const [postDate, setPostDate] = useState<number>((new Date()).getTime())
@@ -69,16 +63,17 @@ const AddActivityForm = () => {
 
     const [unit , setUnit] = useState<string>('')
 
-    const setTypeHandle = useCallback((value:"general" | "not_general")=>{
+    const setTypeHandle = useCallback((value: ItemType)=>{
         setType(value)
     },[type])
 
     const onSubmitHandle = async ()=>{
         
+        const actionDate = firebase.firestore.Timestamp.now().seconds*1000
         const data: Item = {
             type,name,postDate,amount, cost, unit,
             userId: currentUser ? currentUser.id: '-1',
-            actionDate: firebase.firestore.Timestamp.now().seconds*1000,
+            actionDate,
             remain: amount,
             id: '-1' // Fake id to valid Item type
         }
@@ -87,19 +82,22 @@ const AddActivityForm = () => {
         const itemId = await addItem(data)
 
         const activity : Activity = {
-            type:'buy',
+            type: ActivityType.BUY,
             item_id: itemId,
             user_id: currentUser ? currentUser.id: '-1',
             amount: amount,
             cost: cost,
             time: postDate,
             influencers: [],
-            id: '-1'
+            id: '-1', 
+            name: `Mua ${name}`,
+            actionDate
         }
 
         const res2 = await addActivity(activity)
         
         if(res2){
+            toast.success('Thêm đồ thành công !!')
             closeModal()
         }
 

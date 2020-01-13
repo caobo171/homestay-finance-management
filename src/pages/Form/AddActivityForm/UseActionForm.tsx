@@ -16,6 +16,7 @@ import { addActivity } from 'store/activity/functions'
 import { updateAmountOfItem } from 'store/item/function'
 import {toast} from 'react-toastify'
 import { closeModal } from 'components/Modal'
+import { formRef } from 'service/FormRefContext'
 
 const StyledWrapper = styled.div`
     font-size: 14px;
@@ -66,7 +67,7 @@ const UseActionForm = () => {
 
     const [type, setType] = useState<ActivityType>(ActivityType.USE)
 
-    const refActivityForm = useRef(null)
+
 
     const onSubmitHandle = async () => {
         if(window.confirm('Are your sure to create this activity ?')){
@@ -111,13 +112,13 @@ const UseActionForm = () => {
 
     return (
         <StyledWrapper
-        ref = {refActivityForm}
+        ref = {formRef}
         onClick={(event:any)=>{
             if(event.target.tagName === 'DIV'){
-                if(refActivityForm && refActivityForm.current){
+                if(formRef && formRef.current){
 
                     //@ts-ignore
-                    refActivityForm.current.style.marginTop='0px';
+                    formRef.current.style.marginTop='0px';
                 }
             }
         }}>
@@ -138,14 +139,12 @@ const UseActionForm = () => {
 
 
             <DatePicker
-                formRef = {refActivityForm}
                 title={'Chọn ngày'}
                 value={time}
                 onValueChange={setTime}
             />
 
             <ItemPicker
-                formRef = {refActivityForm}
                 pickedItems={pickedItems}
                 setPickedItems={setPickedItems}
             />

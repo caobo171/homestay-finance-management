@@ -1,5 +1,6 @@
 import React, { useCallback, useRef } from 'react'
 import styled from 'styled-components'
+import { formRef } from 'service/FormRefContext'
 
 const StyledWrapper = styled.div`
     width: 100%;
@@ -37,7 +38,6 @@ interface Props{
     title: string,
     value: number,
     onValueChange: (value:number)=>void,
-    formRef? :any
 }
 
 const formatDate = (time:number)=>{
@@ -45,13 +45,13 @@ const formatDate = (time:number)=>{
     return `${date.getFullYear()}`+`-`+`${date.getMonth()+1}`.padStart(2,'0')+`-`+`${date.getDate()}`.padStart(2,'0')
 
 }
-const DatePicker = ({title , value, onValueChange, formRef}: Props)=>{
+const DatePicker = ({title , value, onValueChange}: Props)=>{
 
     const onValueChangeHandle = useCallback((event)=>{
         onValueChange(event.target.valueAsNumber)
     },[value])
 
-    const ref = useRef(null)
+    const ref = useRef<HTMLInputElement>(null)
     return <StyledWrapper>
         <StyledLabel>{title}*</StyledLabel>
         <StyledFileInput onChange = {onValueChangeHandle}
@@ -61,8 +61,6 @@ const DatePicker = ({title , value, onValueChange, formRef}: Props)=>{
                  if(formRef && formRef.current  && ref && ref.current){
  
                      const formRefBottom = formRef.current.getBoundingClientRect().bottom
- 
-                     // @ts-ignore
                      const refTop = ref.current.getBoundingClientRect().top
  
  

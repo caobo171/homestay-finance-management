@@ -20,13 +20,11 @@ export interface PickedItemType{
 
 interface Props {
     pickedItems: Map<string,PickedItemType>,
-    setPickedItems: (value: Map<string,PickedItemType>)=> void,
-    formRef: any
+    setPickedItems: (value: Map<string,PickedItemType>)=> void
 }
 const ItemPicker = ({
     pickedItems, 
     setPickedItems,
-    formRef
 }: Props)=>{
 
    

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import TextInput from '../TextInput'
 import { CssVariable } from 'Constants'
@@ -49,6 +49,8 @@ const SELECT_TYPE_DATA = [
     }
 ]
 
+// export const refActivityForm = React.createRef()
+
 const AddActivityForm = () => {
 
     const currentUser = useCurrentUser()
@@ -63,6 +65,7 @@ const AddActivityForm = () => {
 
     const [unit , setUnit] = useState<string>('')
 
+    const refActivityForm = useRef(null)
     const setTypeHandle = useCallback((value: ItemType)=>{
         setType(value)
     },[type])
@@ -104,16 +107,25 @@ const AddActivityForm = () => {
     }
 
     return (
-        <StyledWrapper>
+        <StyledWrapper ref={refActivityForm} onClick={(event:any)=>{
+            if(event.target.tagName === 'DIV'){
+                if(refActivityForm && refActivityForm.current){
+
+                    //@ts-ignore
+                    refActivityForm.current.style.marginTop='0px';
+                }
+            }
+        }}>
             <TextInput value={name} 
             onValueChange={setName} 
+            formRef = {refActivityForm}
             title="Tên đồ"/>
             <SelectInput data={SELECT_TYPE_DATA}
             onValueChange={setTypeHandle}
             value={type} title="Thể loại"/>
-            <TextInput value={amount} type={'number'} onValueChange={setAmount} title="Số lượng"/>
-            <TextInput value={unit}  onValueChange={setUnit} title="Đơn vị"/>
-            <TextInput value={cost} type={'number'} onValueChange={setCost} title="Tổng giá"/>
+            <TextInput    formRef = {refActivityForm} value={amount} type={'number'} onValueChange={setAmount} title="Số lượng"/>
+            <TextInput    formRef = {refActivityForm} value={unit}  onValueChange={setUnit} title="Đơn vị"/>
+            <TextInput     formRef = {refActivityForm} value={cost} type={'number'} onValueChange={setCost} title="Tổng giá"/>
             <DatePicker 
             value={postDate}
             onValueChange={setPostDate}

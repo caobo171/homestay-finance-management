@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 
 const StyledWrapper = styled.div`
@@ -37,16 +37,36 @@ interface Props{
     title: string,
     type?: 'text'|'number',
     value: any,
-    onValueChange : (value:any)=>void 
+    onValueChange : (value:any)=>void ,
+    formRef?: any
 }
 
-const TextInput = ({title , type ,value, onValueChange}: Props)=>{
+const TextInput = ({title , type ,value, onValueChange, formRef}: Props)=>{
+
+    const ref = useRef(null)
     const onValueChangeHandle = useCallback((event)=>{
         onValueChange( type && type==='number' ? Number(event.target.value): event.target.value)
     },[value])
     return <StyledWrapper>
         <StyledLabel>{title}*</StyledLabel>
         <StyledInput 
+        ref = {ref}
+        onFocus={
+            ()=>{
+                if(formRef && formRef.current  && ref && ref.current){
+
+                    const formRefBottom = formRef.current.getBoundingClientRect().bottom
+
+                    // @ts-ignore
+                    const refTop = ref.current.getBoundingClientRect().top
+
+
+                    if(window.innerWidth <= 600){
+                        formRef.current.style.marginTop = `${formRefBottom - refTop - 100}px`
+                    }
+                }
+            }
+        }
         onChange={onValueChangeHandle}
         value={value}
         type={type? type: 'text'}/>

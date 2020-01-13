@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import styled from 'styled-components'
+import { formRef } from 'service/FormRefContext'
 
 const StyledWrapper = styled.div`
     width: 100%;
@@ -49,10 +50,11 @@ interface Props {
     title: string,
     data: OptionType[],
     value: any,
-    onValueChange : (value: any)=> void
+    onValueChange : (value: any)=> void,
 }
 const SelectInput = ({ title, data , value, onValueChange }: Props) => {
 
+    const ref = useRef<HTMLSelectElement>(null)
     const onValueChangeHandle = useCallback((event)=>{
         onValueChange(event.target.value)
     },[value])
@@ -61,6 +63,21 @@ const SelectInput = ({ title, data , value, onValueChange }: Props) => {
         <StyledLabel>{title}*</StyledLabel>
         <StyledSelect value={value} 
             onChange={onValueChangeHandle}
+            ref = {ref}
+            onFocus={
+                ()=>{
+                    if(formRef && formRef.current  && ref && ref.current){
+    
+                        const formRefBottom = formRef.current.getBoundingClientRect().bottom
+                        const refTop = ref.current.getBoundingClientRect().top
+    
+    
+                        if(window.innerWidth <= 600){
+                            formRef.current.style.marginTop = `${formRefBottom - refTop - 100}px`
+                        }
+                    }
+                }
+            }
         >
             {
                 data.map(option => (

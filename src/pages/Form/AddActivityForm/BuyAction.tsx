@@ -13,6 +13,7 @@ import { Activity, ActivityType } from 'store/activity/types'
 import { addActivity } from 'store/activity/functions'
 import { closeModal } from 'components/Modal'
 import { toast } from 'react-toastify'
+import { formRef } from 'service/FormRefContext'
 
 const StyledWrapper = styled.div`
     font-size: 14px;
@@ -49,7 +50,9 @@ const SELECT_TYPE_DATA = [
     }
 ]
 
-// export const refActivityForm = React.createRef()
+export const Buy: React.Context<{}> & {
+    ref?: any
+} = React.createContext<{}>({})
 
 const AddActivityForm = () => {
 
@@ -107,25 +110,23 @@ const AddActivityForm = () => {
     }
 
     return (
-        <StyledWrapper ref={refActivityForm} onClick={(event:any)=>{
+        <StyledWrapper ref={formRef} onClick={(event:any)=>{
             if(event.target.tagName === 'DIV'){
-                if(refActivityForm && refActivityForm.current){
-
-                    //@ts-ignore
-                    refActivityForm.current.style.marginTop='0px';
+                if(formRef && formRef.current){
+                    formRef.current.style.marginTop='0px';
                 }
             }
         }}>
             <TextInput value={name} 
             onValueChange={setName} 
-            formRef = {refActivityForm}
+         
             title="Tên đồ"/>
             <SelectInput data={SELECT_TYPE_DATA}
             onValueChange={setTypeHandle}
             value={type} title="Thể loại"/>
-            <TextInput    formRef = {refActivityForm} value={amount} type={'number'} onValueChange={setAmount} title="Số lượng"/>
-            <TextInput    formRef = {refActivityForm} value={unit}  onValueChange={setUnit} title="Đơn vị"/>
-            <TextInput     formRef = {refActivityForm} value={cost} type={'number'} onValueChange={setCost} title="Tổng giá"/>
+            <TextInput  value={amount} type={'number'} onValueChange={setAmount} title="Số lượng"/>
+            <TextInput  value={unit}  onValueChange={setUnit} title="Đơn vị"/>
+            <TextInput   value={cost} type={'number'} onValueChange={setCost} title="Tổng giá"/>
             <DatePicker 
             value={postDate}
             onValueChange={setPostDate}

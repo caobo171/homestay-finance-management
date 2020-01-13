@@ -1,5 +1,6 @@
 import React, { useCallback, useRef } from 'react'
 import styled from 'styled-components'
+import { formRef } from 'service/FormRefContext'
 
 const StyledWrapper = styled.div`
     width: 100%;
@@ -38,12 +39,11 @@ interface Props{
     type?: 'text'|'number',
     value: any,
     onValueChange : (value:any)=>void ,
-    formRef?: any
 }
 
-const TextInput = ({title , type ,value, onValueChange, formRef}: Props)=>{
+const TextInput = ({title , type ,value, onValueChange}: Props)=>{
 
-    const ref = useRef(null)
+    const ref = useRef<HTMLInputElement>(null)
     const onValueChangeHandle = useCallback((event)=>{
         onValueChange( type && type==='number' ? Number(event.target.value): event.target.value)
     },[value])
@@ -56,11 +56,7 @@ const TextInput = ({title , type ,value, onValueChange, formRef}: Props)=>{
                 if(formRef && formRef.current  && ref && ref.current){
 
                     const formRefBottom = formRef.current.getBoundingClientRect().bottom
-
-                    // @ts-ignore
                     const refTop = ref.current.getBoundingClientRect().top
-
-
                     if(window.innerWidth <= 600){
                         formRef.current.style.marginTop = `${formRefBottom - refTop - 100}px`
                     }

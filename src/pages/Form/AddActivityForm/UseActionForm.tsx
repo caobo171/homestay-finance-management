@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import TextInput from '../TextInput'
 import { CssVariable } from 'Constants'
@@ -66,6 +66,7 @@ const UseActionForm = () => {
 
     const [type, setType] = useState<ActivityType>(ActivityType.USE)
 
+    const refActivityForm = useRef(null)
 
     const onSubmitHandle = async () => {
         if(window.confirm('Are your sure to create this activity ?')){
@@ -109,7 +110,17 @@ const UseActionForm = () => {
     }
 
     return (
-        <StyledWrapper>
+        <StyledWrapper
+        ref = {refActivityForm}
+        onClick={(event:any)=>{
+            if(event.target.tagName === 'DIV'){
+                if(refActivityForm && refActivityForm.current){
+
+                    //@ts-ignore
+                    refActivityForm.current.style.marginTop='0px';
+                }
+            }
+        }}>
 
             <TextInput
                 title={'Tên'}
@@ -118,6 +129,7 @@ const UseActionForm = () => {
             />
 
             <SelectInput
+
                 data={SELECT_DATA_TYPES}
                 title={'Type'}
                 value={type}
@@ -126,12 +138,14 @@ const UseActionForm = () => {
 
 
             <DatePicker
+                formRef = {refActivityForm}
                 title={'Chọn ngày'}
                 value={time}
                 onValueChange={setTime}
             />
 
             <ItemPicker
+                formRef = {refActivityForm}
                 pickedItems={pickedItems}
                 setPickedItems={setPickedItems}
             />

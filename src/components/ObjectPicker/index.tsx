@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useRef } from 'react'
 import styled from 'styled-components'
 import SearchIcon from 'icons/SearchIcon'
 import Item from 'store/item/types'
 import { User } from 'store/user/types'
 import CloseIcon from 'icons/CloseIcon'
+import { formRef } from 'service/FormRefContext'
 
 const StyledWrapper = styled.div`
     display: flex;
@@ -61,7 +62,7 @@ const StyledCurrentItem = styled.div`
     background-color: transparent;
 `
 
-const StyledCloseIcon  = styled(CloseIcon)`
+const StyledCloseIcon = styled(CloseIcon)`
     width: 12px;
     height: 12px;
     margin-left: 8px;
@@ -97,6 +98,7 @@ const ObjectPicker = (props: Props) => {
         props.setSearchString(event.target.value)
     }, [props.searchString])
 
+    const ref = useRef<HTMLInputElement>(null)
 
     const Element = props.renderer
     return (
@@ -108,6 +110,19 @@ const ObjectPicker = (props: Props) => {
                         <>
                             <SearchIcon />
                             <StyledSearch value={props.searchString}
+                                ref={ref}
+                                onFocus={
+                                    () => {
+                                        if (formRef && formRef.current && ref && ref.current) {
+
+                                            const formRefBottom = formRef.current.getBoundingClientRect().bottom
+                                            const refTop = ref.current.getBoundingClientRect().top
+                                            if (window.innerWidth <= 600) {
+                                                formRef.current.style.marginTop = `${formRefBottom - refTop - 100}px`
+                                            }
+                                        }
+                                    }
+                                }
                                 onClick={onFocusHandle}
                                 onChange={searchStringChangeHandle} />
                         </>
@@ -115,8 +130,8 @@ const ObjectPicker = (props: Props) => {
                             <StyledCurrentItem>
                                 {props.currentObjectRender && props.currentObjectRender}
                                 <StyledCloseIcon onClick={
-                                       ()=> props.setCurrentObject(null)
-                                }/>
+                                    () => props.setCurrentObject(null)
+                                } />
                             </StyledCurrentItem>
                         )
                 }
@@ -132,7 +147,7 @@ const ObjectPicker = (props: Props) => {
                                     setVisible(false)
                                 }}
 
-                                data = {data}
+                                data={data}
                             />)
                     })}
                 </StyledPopUpList>}

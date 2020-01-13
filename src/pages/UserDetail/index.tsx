@@ -29,7 +29,7 @@ const StyledActivitiesWrapper = styled.div`
     width: 100%; 
     overflow-y: scroll;
 
-    height: 420px;
+    height: 400px;
 
     &::-webkit-scrollbar {
         width: 2px;

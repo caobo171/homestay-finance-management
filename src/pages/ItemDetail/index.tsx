@@ -24,6 +24,31 @@ const StyledActivityHeader = styled.div`
     
     padding: 30px 0px 16px 16px;
 `
+
+const StyledActivitiesWrapper = styled.div`
+    width: 100%; 
+    overflow-y: scroll;
+
+    height: 320px;
+
+    &::-webkit-scrollbar {
+        width: 2px;
+        height: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        height: 5px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,1); 
+    }
+`
+
+const StyledConclussion = styled.div`
+    weight: 400;
+    font-size: 20px;
+
+
+    padding: 30px 0px 16px 16px;
+`
 const ItemDetail = React.memo(() => {
 
     const param = useParams<{ id: string }>()
@@ -35,6 +60,7 @@ const ItemDetail = React.memo(() => {
         <StyledWrapper>
             <ItemInfo item={item} />
             <StyledActivityHeader>Activities</StyledActivityHeader>
+            <StyledActivitiesWrapper>
             {
                 activities.map(act => {
                     return (
@@ -42,6 +68,12 @@ const ItemDetail = React.memo(() => {
                     )
                 })
             }
+            </StyledActivitiesWrapper>
+
+            <StyledConclussion>
+               Còn lại: {item.remain.toFixed(2)} {item.unit} trong {item.amount}{item.unit}
+            </StyledConclussion>
+   
 
         </StyledWrapper>
     )

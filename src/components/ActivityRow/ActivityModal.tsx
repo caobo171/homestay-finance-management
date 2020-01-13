@@ -9,7 +9,7 @@ import UserGroup from '../UserGroup'
 
 
 const StyledWrapper = styled.div`
-    font-size: 14px;
+    font-size: 16px;
     width: 280px;
     height: 200px;
     display: flex;
@@ -43,7 +43,7 @@ const StyledSpan = styled.span`
 `
 const StyledSmallText = styled.div`
     align-items: center;
-    font-size: 12px;
+    font-size: 14px;
     margin-right: 8px;
 `
 const StyledName = styled.div`

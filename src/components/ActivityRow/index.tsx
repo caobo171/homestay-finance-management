@@ -18,7 +18,7 @@ const StyledWrapper = styled.div`
     border-style: solid;
     border-color: #D6E4FF;
 
-    font-weight: 500;
+    font-weight: 450;
     color: ${CssVariable.TEXT_COLOR_H2};
 
     display: flex;
@@ -34,11 +34,13 @@ const StyledRowItem = styled.div`
 
 const StyledText = styled.div`
     align-items: center;
-    margin-right: 16px;
+    margin-right: 8px;
 `
 const StyledSpan = styled.span`
     margin-left: 8px;
-    margin-right: 16px;
+    margin-right: 8px;
+    text-transform: capitalize;
+    font-weight: 600;
 `
 const StyledSmallText = styled.div`
     align-items: center;
@@ -81,22 +83,24 @@ const ActivityRow = ({ activity }: Props) => {
             <StyledText>
                 {renderActivity(activity.type)}
             </StyledText>
-            <ItemImage itemId={activity.item_id} />
+            <ItemImage itemId={activity.item_id} size={'very_small'}/>
             <StyledSpan>{item.name}</StyledSpan>
-            <StyledText>
+            {/* <StyledText>
                 {activity.amount.toFixed(2)} {item ? item.unit : ''}
-            </StyledText>
+            </StyledText> */}
             <StyledText>
                 {formatMoney(activity.cost)}
             </StyledText>
-        </StyledRowItem>
-        <StyledRowItem>
+
             <StyledSmallText>
                 {/* ({activity.name}) */}
-            {formatDate(activity.time)}</StyledSmallText>
+            ({formatDate(activity.time)})</StyledSmallText>
+        </StyledRowItem>
+        {/* <StyledRowItem>
+           
             {activity.influencers.length > 0 && <StyledSmallText>Influencer:</StyledSmallText>}
             <UserGroup userIds={activity.influencers} />
-        </StyledRowItem>
+        </StyledRowItem> */}
 
     </StyledWrapper>
 }

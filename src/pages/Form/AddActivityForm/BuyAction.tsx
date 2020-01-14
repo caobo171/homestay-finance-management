@@ -187,7 +187,7 @@ const AddActivityForm = () => {
                     Add Activity
                         </StyledSubmitButton>
 
-                        <div onClick={async ()=>{
+                        {/* <div onClick={async ()=>{
                             if(file){
                                 const res = await uploadImage(file)
                                 console.log(res)
@@ -195,7 +195,7 @@ const AddActivityForm = () => {
                             
                         }}>
                             test
-                        </div>
+                        </div> */}
             </StyledWrapper>)}
         </>
 

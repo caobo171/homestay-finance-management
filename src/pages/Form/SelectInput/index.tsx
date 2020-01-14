@@ -62,23 +62,7 @@ const SelectInput = ({ title, data , value, onValueChange }: Props) => {
     return <StyledWrapper>
         <StyledLabel>{title}*</StyledLabel>
         <StyledSelect value={value} 
-            onChange={onValueChangeHandle}
-            ref = {ref}
-            onFocus={
-                ()=>{
-                    if(formRef && formRef.current  && ref && ref.current){
-    
-                        const formRefBottom = formRef.current.getBoundingClientRect().bottom
-                        const refTop = ref.current.getBoundingClientRect().top
-    
-    
-                        if(window.innerWidth <= 600){
-                            formRef.current.style.marginTop = `${formRefBottom - refTop - 100}px`
-                        }
-                    }
-                }
-            }
-        >
+            onChange={onValueChangeHandle}>
             {
                 data.map(option => (
                     <option  key={option.value} value={option.value}>{option.name}</option>

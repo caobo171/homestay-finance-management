@@ -5,6 +5,9 @@ import UserInfo from './UserInfo'
 import { useParams } from 'react-router-dom'
 import { useUser } from 'store/user/hooks'
 import { useActivitiesByUserId } from 'store/activity/hooks'
+import { Activity, ActivityType } from 'store/activity/types'
+import { formatMoney } from 'service/helpers'
+import Constants from 'Constants'
 
 const StyledWrapper = styled.div`
     width: 100%;
@@ -29,7 +32,8 @@ const StyledActivitiesWrapper = styled.div`
     width: 100%; 
     overflow-y: scroll;
 
-    height: 400px;
+    max-height: 400px;
+
 
     &::-webkit-scrollbar {
         width: 2px;
@@ -42,6 +46,55 @@ const StyledActivitiesWrapper = styled.div`
     }
 `
 
+const StyledCountRow = styled.div`
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin-top: 20px;
+`
+
+const StyledName = styled.div`
+    flex: 1.4;
+    font-size: 20px;
+    font-weight: 500;
+    display: flex;
+    margin-right: 40px;
+    justify-content: flex-end;
+`
+
+const StyledCost = styled.div<{ color?: string }>`
+    flex: 1.4;
+    display: flex;
+    font-size: 24px;
+    font-weight: 600;
+
+    ${props => props.color && `
+        color: ${props.color};
+    `}
+`
+
+const countMoney = (activities: Activity[]) => {
+    let cost = 0;
+    for (let i = 0; i < activities.length; i++) {
+        const act = activities[i]
+        const lengthInfluencers = act.influencers.length
+        switch (act.type) {
+            case ActivityType.BUY:
+                cost = cost - act.cost
+                break;
+            case ActivityType.PAY:
+                cost = cost - act.cost
+                break;
+            case ActivityType.DESTROY:
+                cost = cost + (lengthInfluencers > 0 ? act.cost / lengthInfluencers : act.cost)
+            case ActivityType.USE:
+                cost = cost + (lengthInfluencers > 0 ? act.cost / lengthInfluencers : act.cost)
+        }
+    }
+
+    return cost
+}
+
 const UserDetail = () => {
 
     const param = useParams<{ id: string }>()
@@ -49,22 +102,35 @@ const UserDetail = () => {
 
     const activities = useActivitiesByUserId(param.id)
 
+    const money = countMoney(activities)
     return (<>
-        { (user && user.id) && (
+        {(user && user.id) && (
             <StyledWrapper>
-                <UserInfo user ={user} />
+                <UserInfo user={user} />
                 <StyledActivityHeader>Activities</StyledActivityHeader>
 
                 <StyledActivitiesWrapper>
-                {
-                    activities.map(act=>{
-                        return (
-                            <ActivityRow key={act.id} activity={act}/>
-                        )
-                    })
-                }
+                    {
+                        activities.map(act => {
+                            return (
+                                <ActivityRow key={act.id} activity={act} />
+                            )
+                        })
+                    }
                 </StyledActivitiesWrapper>
-           
+
+                {
+                    activities.length > 0 && (
+                        <StyledCountRow>
+                            <StyledName>Còn:</StyledName>
+                            <StyledCost
+                                color={money > 0 ? Constants.red : Constants.green}
+                            >{money > 0 && '+'}{formatMoney(money)}</StyledCost>
+                        </StyledCountRow>
+                    )
+                }
+
+
             </StyledWrapper>
         )}
     </>)

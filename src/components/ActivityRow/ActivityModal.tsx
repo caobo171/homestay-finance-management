@@ -9,7 +9,7 @@ import UserGroup from '../UserGroup'
 
 
 const StyledWrapper = styled.div`
-    font-size: 16px;
+    font-size: 14px;
     width: 280px;
     height: 200px;
     display: flex;
@@ -22,15 +22,15 @@ const StyledWrapper = styled.div`
 `
 const StyledRowItem = styled.div`
     display: flex;
-    flex-basis: 480px;
     align-items: center;
     padding-left: 20px;
     flex-direction: row;
+    margin: 36px 0px 0px 0px;
 `
 
 const StyledText = styled.div`
     align-items: center;
-    margin-right: 8px;
+    margin-right: 4px;
 
     font-weight: 500;
 `
@@ -38,7 +38,7 @@ const StyledSpan = styled.span`
     margin-left: 8px;
     margin-right: 8px;
     text-transform: capitalize;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;
 `
 const StyledSmallText = styled.div`
@@ -93,19 +93,20 @@ const ActivityModal = ({ activity }: Props) => {
     return (<StyledWrapper>
         <StyledName>
             <ItemImage itemId={activity.item_id} />
-            <span>  {activity.name} </span>
+            <span>  {activity.name ? activity.name : renderActivity(activity.type) + ' ' +item.name} </span>
         </StyledName>
         <StyledRowItem>
+       
             <StyledText>
                 {renderActivity(activity.type)}
             </StyledText>
-
-            <StyledSpan>{item.name}</StyledSpan>
             <StyledText>
                 {activity.amount.toFixed(2)} {item ? item.unit : ''}
             </StyledText>
+            <StyledSpan>{item.name}</StyledSpan>
+
             <StyledText>
-                {activity.cost.toFixed(0)}đ
+                hết {activity.cost.toFixed(0)}đ
                 </StyledText>
         </StyledRowItem>
         <StyledRowItem>

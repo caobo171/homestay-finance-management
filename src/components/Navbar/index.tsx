@@ -2,7 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import { CssVariable } from 'Constants'
 import MenuIcon from 'icons/MenuIcon'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
+import BackIcon from 'icons/BackIcon'
+import { User } from 'store/user/types'
+import Item from 'store/item/types'
+import { useUser } from 'store/user/hooks'
+import { useItem } from 'store/item/hooks'
+import { AppRouterContext } from 'navigation/AppRouter'
 
 const StyledWrapper = styled.div`
     height: 52px;
@@ -17,6 +23,13 @@ const StyledMenuLogo = styled(MenuIcon)`
     margin-left: 18px;
     margin-right: 12px;
 `
+
+
+const StyledBackLogo = styled(BackIcon)`
+    margin-left: 18px;
+    margin-right: 12px;
+`
+
 const StyledTitle = styled.span`
     font-size: 18px;
     text-transform: capitalize;
@@ -25,15 +38,17 @@ const StyledTitle = styled.span`
 `
 
 
-const renderPathName =(pathname:string)=>{
-    switch(pathname){
-        case '/':{
+const renderPathName = (pathname: string , item: Item , user: User) => {
+    if(user.id !== '-1') return user.displayName
+    if(item.id !== '-1') return item.name
+    switch (pathname) {
+        case '/': {
             return 'Checkin'
         }
-        case '/items':{
+        case '/items': {
             return 'Items'
         }
-        case '/users':{
+        case '/users': {
             return 'Users'
         }
         default: {
@@ -43,23 +58,46 @@ const renderPathName =(pathname:string)=>{
 }
 
 interface Props {
-    onClickMenu: ()=> void
+    onClickMenu: () => void
 }
 
-const Navbar = React.memo(({onClickMenu}: Props) => {
+const Navbar = React.memo(({ onClickMenu }: Props) => {
 
     const location = useLocation()
 
+    const param = useParams<{ id: string }>()
+    //@ts-ignore
+    window.val = location
 
+    console.log(param.id)
+
+    const isDetailPage = location.pathname.indexOf('user/') != -1 || location.pathname.indexOf('item/') != -1
+
+    const id = location.pathname.replace('/user/', '').replace('/item/', '')
+
+    const user: User = useUser(id)
+    const item: Item = useItem(id)
+
+
+
+    const onBackClick = () => {
+        AppRouterContext.ref.props.history.goBack()
+    }
 
     return (
         <StyledWrapper>
             {
-                ! (location.pathname === '/login') &&
+                !(location.pathname === '/login') &&
                 (
                     <>
-                        <StyledMenuLogo onClick= {onClickMenu}/>
-                        <StyledTitle>{renderPathName(location.pathname)}</StyledTitle>
+                        {isDetailPage ? <StyledBackLogo
+                            onClick={onBackClick}
+                        /> :
+                            <StyledMenuLogo onClick={onClickMenu} />}
+
+                        <StyledTitle>{
+                            renderPathName(location.pathname, item, user)
+                        }</StyledTitle>
                     </>
                 )
             }

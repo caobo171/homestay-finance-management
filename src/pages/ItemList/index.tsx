@@ -28,7 +28,7 @@ const ItemList = () => {
             <StyledListUserWrapper>
                 {
                     items.map((item: Item) => {
-                        return <ItemRow item={item} />
+                        return <ItemRow key={item.id} item={item} />
                     })
                 }
             </StyledListUserWrapper>

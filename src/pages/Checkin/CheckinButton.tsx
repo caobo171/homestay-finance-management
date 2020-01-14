@@ -19,10 +19,11 @@ const StyledWrapper = styled.div<{color: string}>`
 `
 
 interface Props {
-    color: string
+    color: string,
+    name: string
 }
 
-const CheckinButton = ({color}: Props)=>{
+const CheckinButton = ({color,name}: Props)=>{
     return (
         <StyledWrapper color={color} onClick={async()=>{
             const provider = new firebase.auth.FacebookAuthProvider();
@@ -31,7 +32,7 @@ const CheckinButton = ({color}: Props)=>{
               console.log(result)
             })
         }}>
-            Morning
+            <span>{name}</span>
         </StyledWrapper>
     )
 }

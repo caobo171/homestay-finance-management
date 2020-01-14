@@ -19,6 +19,7 @@ import { useCurrentUser } from 'store/user/hooks'
 import { useEffectOnce } from 'react-use'
 import { getCurrentUser, getUserList } from 'store/user/function'
 import realtimeSystem from 'service/realtimeSystem'
+import LoadingComponent from 'components/LoadingComponent'
 
 
 const BodyWrapper = styled.div`
@@ -132,7 +133,7 @@ const AppRouter = () => {
 
                     </RouterContext>
                 ) : (
-                        <div />
+                        <LoadingComponent />
                     )
             }
 

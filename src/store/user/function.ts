@@ -79,7 +79,7 @@ export const login = async (storex = store) => {
 
 
     } else {
-        return storex.dispatch(actions.login(null))
+        return await storex.dispatch(actions.login(null))
     }
 }
 
@@ -92,15 +92,15 @@ export const getCurrentUser = async (storex = store) => {
         const userData = await getCurrentUserAsync(user.id)
         if (userData) {
 
-            storex.dispatch(actions.login({...user, ...userData}))
+            await storex.dispatch(actions.login({...user, ...userData}))
             return userData
         } else {
-            storex.dispatch(actions.login(user))
+            await storex.dispatch(actions.login(user))
             return user
         }
 
     } else {
-        storex.dispatch(actions.login(null))
+        await storex.dispatch(actions.login(null))
         return null
     }
 }
@@ -130,7 +130,9 @@ const getUsers = (): Promise<Map<string, User>> => {
 export const getUserList = async (storex = store) => {
     const users = await getUsers()
 
-    return storex.dispatch(actions.getAllUsers(users))
+    console.log(users)
+
+    return await storex.dispatch(actions.getAllUsers(users))
 }
 
 export const logout = async (storex = store)=>{
@@ -138,5 +140,5 @@ export const logout = async (storex = store)=>{
 
     await firebase.auth().signOut()
 
-    return storex.dispatch(actions.login(null))
+    return await storex.dispatch(actions.login(null))
 }

@@ -14,9 +14,11 @@ import * as firebase from 'firebase'
 import Item from 'store/item/types'
 import { addActivity } from 'store/activity/functions'
 import { updateAmountOfItem } from 'store/item/function'
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 import { closeModal } from 'components/Modal'
 import { formRef } from 'service/FormRefContext'
+import { useAsyncFn } from 'react-use'
+import LoadingComponent from 'components/LoadingComponent'
 
 const StyledWrapper = styled.div`
     font-size: 14px;
@@ -70,22 +72,22 @@ const UseActionForm = () => {
 
 
     const onSubmitHandle = async () => {
-        if(window.confirm('Are your sure to create this activity ?')){
-            const actionDate = firebase.firestore.Timestamp.now().seconds*1000
-            const pickedUserIds = [...pickedUsers.values()].map(user=> user.id);
+        if (window.confirm('Are your sure to create this activity ?')) {
+            const actionDate = firebase.firestore.Timestamp.now().seconds * 1000
+            const pickedUserIds = [...pickedUsers.values()].map(user => user.id);
 
-            
-            const res = await Promise.all([...pickedItems.values()].map( async (data) => {
-                const amount = 1/(data.pickAmount) * data.item.remain;
+
+            const res = await Promise.all([...pickedItems.values()].map(async (data) => {
+                const amount = 1 / (data.pickAmount) * data.item.remain;
                 const activity: Activity = {
                     type,
                     item_id: data.item.id,
-                    user_id: currentUser ? currentUser.id: '-1' ,
-                    amount ,
-                    cost: amount / data.item.amount * data.item.cost , 
-                    time ,
+                    user_id: currentUser ? currentUser.id : '-1',
+                    amount,
+                    cost: amount / data.item.amount * data.item.cost,
+                    time,
                     influencers: pickedUserIds,
-                    id: '-1', 
+                    id: '-1',
                     name,
                     actionDate
                 }
@@ -98,65 +100,84 @@ const UseActionForm = () => {
                 await addActivity(activity)
 
                 return await updateAmountOfItem(item)
-                
+
             }))
 
-            if(res){
+            if (res) {
                 toast.success('Thêm hành động thành công !!')
-                closeModal()
+
+            } else {
+                toast.error('Có lỗi xảy ra rồi :(')
             }
+
+            return await closeModal()
         }
-     
-        
     }
 
+
+    const [state, fetch] = useAsyncFn(onSubmitHandle, [
+        pickedItems,
+        currentUser,
+        pickedUsers,
+        time,
+        type
+    ])
+
     return (
-        <StyledWrapper
-        ref = {formRef}
-        onClick={(event:any)=>{
-            if(event.target.tagName === 'DIV'){
-                if(formRef && formRef.current){
+        <>
+            {
+                state.loading ? <LoadingComponent /> :
+                    (
+                        <StyledWrapper
+                            ref={formRef}
+                            onClick={(event: any) => {
+                                if (event.target.tagName === 'DIV') {
+                                    if (formRef && formRef.current) {
 
-                    //@ts-ignore
-                    formRef.current.style.marginTop='0px';
-                }
+                                        //@ts-ignore
+                                        formRef.current.style.marginTop = '0px';
+                                    }
+                                }
+                            }}>
+
+                            <TextInput
+                                title={'Tên'}
+                                value={name}
+                                onValueChange={setName}
+                            />
+
+                            <SelectInput
+
+                                data={SELECT_DATA_TYPES}
+                                title={'Type'}
+                                value={type}
+                                onValueChange={setType}
+                            />
+
+
+                            <DatePicker
+                                title={'Chọn ngày'}
+                                value={time}
+                                onValueChange={setTime}
+                            />
+
+                            <ItemPicker
+                                pickedItems={pickedItems}
+                                setPickedItems={setPickedItems}
+                            />
+
+                            <UserPicker pickedUsers={pickedUsers}
+                                setPickedUsers={setPickedUsers}
+                            />
+
+                            <StyledSubmitButton onClick={fetch}>
+                                Add Activity
+                        </StyledSubmitButton>
+                        </StyledWrapper>
+                    )
             }
-        }}>
+        </>
 
-            <TextInput
-                title={'Tên'}
-                value={name}
-                onValueChange={setName}
-            />
-
-            <SelectInput
-
-                data={SELECT_DATA_TYPES}
-                title={'Type'}
-                value={type}
-                onValueChange={setType}
-            />
-
-
-            <DatePicker
-                title={'Chọn ngày'}
-                value={time}
-                onValueChange={setTime}
-            />
-
-            <ItemPicker
-                pickedItems={pickedItems}
-                setPickedItems={setPickedItems}
-            />
-
-            <UserPicker pickedUsers={pickedUsers}
-                setPickedUsers={setPickedUsers}
-            />
-
-            <StyledSubmitButton onClick={onSubmitHandle}>
-                Add Activity
-            </StyledSubmitButton>
-        </StyledWrapper>
     )
 }
 

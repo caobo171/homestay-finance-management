@@ -5,6 +5,7 @@ import ItemInfo from './ItemInfo'
 import { useParams } from 'react-router-dom'
 import { useItem } from 'store/item/hooks'
 import { useActivitiesByItemId } from 'store/activity/hooks'
+import Constants from 'Constants'
 
 const StyledWrapper = styled.div`
     width: 100%;
@@ -29,7 +30,7 @@ const StyledActivitiesWrapper = styled.div`
     width: 100%; 
     overflow-y: scroll;
 
-    height: 320px;
+    max-height: 320px;
 
     &::-webkit-scrollbar {
         width: 2px;
@@ -42,18 +43,37 @@ const StyledActivitiesWrapper = styled.div`
     }
 `
 
-const StyledConclussion = styled.div`
-    weight: 400;
+const StyledCountRow = styled.div`
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin-top: 20px;
+`
+
+const StyledName = styled.div`
+    flex: 1.4;
     font-size: 20px;
+    font-weight: 500;
+    display: flex;
+    margin-right: 40px;
+    justify-content: flex-end;
+`
 
+const StyledAmount = styled.div<{ color?: string }>`
+    flex: 1.4;
+    display: flex;
+    font-size: 24px;
+    font-weight: 600;
 
-    padding: 30px 0px 16px 16px;
+    ${props => props.color && `
+        color: ${props.color};
+    `}
 `
 const ItemDetail = React.memo(() => {
 
     const param = useParams<{ id: string }>()
     const item = useItem(param.id)
-
+    console.log(param.id)
 
     const activities = useActivitiesByItemId(param.id)
     return (
@@ -61,20 +81,26 @@ const ItemDetail = React.memo(() => {
             <ItemInfo item={item} />
             <StyledActivityHeader>Activities</StyledActivityHeader>
             <StyledActivitiesWrapper>
-            {
-                activities.map(act => {
-                    return (
-                        <ActivityRow key={act.id} activity={act} />
-                    )
-                })
-            }
+                {
+                    activities.map(act => {
+                        return (
+                            <ActivityRow key={act.id} activity={act} type={'item'} />
+                        )
+                    })
+                }
             </StyledActivitiesWrapper>
-
-            <StyledConclussion>
-               Còn lại: {item.remain.toFixed(2)} {item.unit} trong {item.amount}{item.unit}
-            </StyledConclussion>
-   
-
+            {
+                activities.length > 1 && (
+                    <StyledCountRow>
+                        <StyledName>Còn lại:</StyledName>
+                        <StyledAmount
+                            color={item.remain > 0 ? Constants.green : Constants.red}
+                        >
+                            {item.remain.toFixed(2)} {item ? item.unit : ''}
+                        </StyledAmount>
+                    </StyledCountRow>
+                )
+            }
         </StyledWrapper>
     )
 })

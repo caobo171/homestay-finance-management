@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { changeModalContent, openModal } from 'components/Modal'
 import AddActivityForm from '../AddActivityForm/BuyAction'
 import UseActionForm from '../AddActivityForm/UseActionForm'
+import PayForm from '../AddActivityForm/PayForm'
 
 const StyledWrapper = styled.div`
     
@@ -27,6 +28,7 @@ const SelectForm = () => {
         <StyledWrapper>
             <SelectItem name={'Mua đồ'} type={'buy'}/>
             <SelectItem name={'Dùng đồ'} type={'create'}/>
+            <SelectItem name={'Nộp tiền'} type={'pay'}/>
         </StyledWrapper>
     )
 }
@@ -35,15 +37,17 @@ const SelectForm = () => {
 
 interface Props {
     name: string,
-    type: 'buy' | 'create'
+    type: 'buy' | 'create' | 'pay'
 }
 const SelectItem = ({name , type}: Props) => {
 
     const onClickHandle = useCallback(()=>{
         if(type==='buy'){
             changeModalContent(<AddActivityForm/>)
-        }else{
+        }else if(type === 'create'){
             changeModalContent(<UseActionForm/>)
+        }else if(type === 'pay'){
+            changeModalContent(<PayForm/>)
         }
         
     },[type])

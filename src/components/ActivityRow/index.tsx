@@ -2,7 +2,7 @@ import React from 'react'
 import UserGroup from '../UserGroup'
 import styled from 'styled-components/macro'
 import ItemImage from 'components/ItemImage'
-import { CssVariable } from 'Constants'
+import Constants, { CssVariable } from 'Constants'
 import { Activity, ActivityType } from 'store/activity/types'
 import { useItem } from 'store/item/hooks'
 import { openModal } from 'components/Modal'
@@ -11,7 +11,6 @@ import { formatMoney } from 'service/helpers'
 
 
 const StyledWrapper = styled.div`
-    height: 78px;
     justify-content: flex-start;
 
     border-width: 0px 0px 1px 0px ;
@@ -22,19 +21,28 @@ const StyledWrapper = styled.div`
     color: ${CssVariable.TEXT_COLOR_H2};
 
     display: flex;
+    padding: 8px 0px 14px 14px;
     flex-wrap : wrap;
 `
 const StyledRowItem = styled.div`
     display: flex;
     flex-basis: 480px;
     align-items: center;
-    padding-left: 20px;
     flex-direction: row;
 `
 
-const StyledText = styled.div`
+const StyledText = styled.div<{ flex?: number, color?: string }>`
     align-items: center;
-    margin-right: 8px;
+    display: flex;
+    flex-direction:row;
+
+    ${props => props.flex && `
+        flex: ${props.flex} ;
+    ` }
+
+    ${props => props.color && `
+        color: ${props.color} ;
+    ` }
 `
 const StyledSpan = styled.span`
     margin-left: 8px;
@@ -49,7 +57,8 @@ const StyledSmallText = styled.div`
 `
 
 interface Props {
-    activity: Activity
+    activity: Activity,
+    type?: 'item' | 'user'
 }
 
 const renderActivity = (type: ActivityType) => {
@@ -60,6 +69,8 @@ const renderActivity = (type: ActivityType) => {
             return 'Hủy'
         case ActivityType.USE:
             return 'Dùng'
+        case ActivityType.PAY:
+            return 'Trả Tiền'
     }
 }
 
@@ -72,36 +83,58 @@ const formatDate = (time: number) => {
     return `${day}/${month}/${year}`
 }
 
-const ActivityRow = ({ activity }: Props) => {
+
+
+
+const ActivityRow = ({ activity, type }: Props) => {
 
     const item = useItem(activity.item_id)
 
-    return <StyledWrapper onClick ={()=>{
-        openModal(<ActivityModal activity={activity}/>)
+    return <StyledWrapper onClick={() => {
+        openModal(<ActivityModal activity={activity} />)
     }}>
         <StyledRowItem>
-            <StyledText>
+            <StyledText flex={1}>
                 {renderActivity(activity.type)}
             </StyledText>
-            <ItemImage itemId={activity.item_id} size={'very_small'}/>
-            <StyledSpan>{item.name}</StyledSpan>
-            {/* <StyledText>
-                {activity.amount.toFixed(2)} {item ? item.unit : ''}
-            </StyledText> */}
-            <StyledText>
-                {formatMoney(activity.cost)}
+            <StyledText flex={1.8}>
+                {
+                    activity.type !== ActivityType.PAY && (
+                        <>
+                            <ItemImage itemId={activity.item_id} size={'very_small'} />
+                            <StyledSpan>{item.name}</StyledSpan>
+                        </>
+                    )
+                }
+
+            </StyledText>
+
+            <StyledText flex={1.4} color={
+                activity.type === ActivityType.PAY || activity.type === ActivityType.BUY ?
+                    Constants.green :
+                    Constants.red
+            }>
+                {
+                    type === 'item' ? (<>
+
+                        {(activity.type === ActivityType.PAY || activity.type === ActivityType.BUY) ? '+' : '-'}{activity.amount.toFixed(2)} {item ? item.unit : ''}
+
+                    </>) : (<>
+
+                        {(activity.type === ActivityType.PAY || activity.type === ActivityType.BUY) ? '-' : '+'}
+                        {formatMoney(
+                            activity.influencers.length >= 1
+                                ? activity.cost / activity.influencers.length
+                                : activity.cost
+                        )}
+
+                    </>)
+                }
             </StyledText>
 
             <StyledSmallText>
-                {/* ({activity.name}) */}
-            ({formatDate(activity.time)})</StyledSmallText>
+                ({formatDate(activity.time)})</StyledSmallText>
         </StyledRowItem>
-        {/* <StyledRowItem>
-           
-            {activity.influencers.length > 0 && <StyledSmallText>Influencer:</StyledSmallText>}
-            <UserGroup userIds={activity.influencers} />
-        </StyledRowItem> */}
-
     </StyledWrapper>
 }
 

@@ -94,6 +94,7 @@ const Sidebar = (props: Props) => {
                 </StyledHeader>
                 <SidebarItem
                     dismissMenu={props.onDismissMenu}
+                    onSelectPage={onSelectPage}
                     name={'Checkin'} icon={ClockIcon} />
                 <SidebarItem
                     dismissMenu={props.onDismissMenu}

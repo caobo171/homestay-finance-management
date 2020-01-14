@@ -34,45 +34,29 @@ const StyledFileInput = styled.input`
     max-width: 140px;
 `
 
-interface Props{
+interface Props {
     title: string,
     value: number,
-    onValueChange: (value:number)=>void,
+    onValueChange: (value: number) => void,
 }
 
-const formatDate = (time:number)=>{
+const formatDate = (time: number) => {
     const date = new Date(time)
-    return `${date.getFullYear()}`+`-`+`${date.getMonth()+1}`.padStart(2,'0')+`-`+`${date.getDate()}`.padStart(2,'0')
+    return `${date.getFullYear()}` + `-` + `${date.getMonth() + 1}`.padStart(2, '0') + `-` + `${date.getDate()}`.padStart(2, '0')
 
 }
-const DatePicker = ({title , value, onValueChange}: Props)=>{
+const DatePicker = ({ title, value, onValueChange }: Props) => {
 
-    const onValueChangeHandle = useCallback((event)=>{
+    const onValueChangeHandle = useCallback((event) => {
         onValueChange(event.target.valueAsNumber)
-    },[value])
+    }, [value])
 
     const ref = useRef<HTMLInputElement>(null)
     return <StyledWrapper>
         <StyledLabel>{title}*</StyledLabel>
-        <StyledFileInput onChange = {onValueChangeHandle}
-         ref = {ref}
-         onFocus={
-             ()=>{
-                 if(formRef && formRef.current  && ref && ref.current){
- 
-                     const formRefBottom = formRef.current.getBoundingClientRect().bottom
-                     const refTop = ref.current.getBoundingClientRect().top
- 
- 
-                     if(window.innerWidth <= 600){
-                         formRef.current.style.marginTop = `${formRefBottom - refTop - 100}px`
-                     }
-                 }
-             }
-         }
-        
-        value={formatDate(value)}
-        type="date" />
+        <StyledFileInput onChange={onValueChangeHandle}
+            value={formatDate(value)}
+            type="date" />
     </StyledWrapper>
 }
 

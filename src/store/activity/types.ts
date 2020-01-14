@@ -2,7 +2,8 @@
 export enum ActivityType {
     BUY = 'buy',
     DESTROY = 'destroy',
-    USE =  'use'
+    USE =  'use',
+    PAY = 'pay'
 }
 
 export interface Activity {
@@ -16,7 +17,7 @@ export interface Activity {
     influencers: string[],
     id: string, 
     name: string,
-    actionDate: number
+    actionDate: number,
 }
 
 export interface State {

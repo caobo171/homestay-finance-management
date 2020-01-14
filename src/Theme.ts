@@ -9,7 +9,7 @@ export const Colors: {[x: number]: string} = {
     7: '#FF6F22',
     8: '#CF5555',
     9: '#ee59ba',
-    10: '#F59200'
+    10: '#ffb342'
 };
 
 

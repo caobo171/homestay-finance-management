@@ -15,6 +15,8 @@ import { toast } from 'react-toastify'
 import { formRef } from 'service/FormRefContext'
 import { useAsyncFn } from 'react-use'
 import LoadingComponent from 'components/LoadingComponent'
+import ImagePicker from '../ImagePicker'
+import { uploadImage, now } from 'service/helpers'
 
 const StyledWrapper = styled.div`
     font-size: 14px;
@@ -57,6 +59,8 @@ export const Buy: React.Context<{}> & {
 
 const AddActivityForm = () => {
 
+
+
     const currentUser = useCurrentUser()
     const [type, setType] = useState<ItemType>(ItemType.NOT_GENERAL)
     const [name, setName] = useState<string>('')
@@ -69,22 +73,53 @@ const AddActivityForm = () => {
 
     const [unit, setUnit] = useState<string>('')
 
+    const [file, setFile] = useState<null | File>(null)
+
     const setTypeHandle = useCallback((value: ItemType) => {
         setType(value)
     }, [type])
 
+
+    const validate = ()=>{
+        if(amount <= 0 ) {
+            toast.error('Số lượng đồ phải lớn hơn 0 ')
+            return false
+        }else if (unit.replace(/\s/g,'') === '') {
+            toast.error('Nên nhập cả đơn vị vào nữa')
+            return false
+        }else if (cost < 1000){
+            toast.error('Giá quá bé !')
+            return false
+        }else if (name.replace(/\s/g,'') === ''){
+            toast.error('Điền tên đồ nữa !')
+            return false
+        }
+
+        return true
+    }
+
+    const onPickFileHandle = useCallback((file: File)=>{
+            setFile(file)
+    }, [file])
     const onSubmitHandle = async () => {
 
-        const actionDate = firebase.firestore.Timestamp.now().seconds * 1000
+        if(!validate()) return ;
+    
+        let photoUrl = null
+        if(file){
+            photoUrl = await uploadImage(file) 
+            console.log(photoUrl)
+        }
+    
         const data: Item = {
-            type, name, postDate, amount, cost, unit,
+            type, name, postDate, amount, cost, unit,photoUrl,
             userId: currentUser ? currentUser.id : '-1',
-            actionDate,
+            actionDate: now(),
             remain: amount,
             id: '-1' // Fake id to valid Item type
         }
 
-        // console.log(data)
+
         const itemId = await addItem(data)
 
         const activity: Activity = {
@@ -97,7 +132,7 @@ const AddActivityForm = () => {
             influencers: [],
             id: '-1',
             name: `Mua ${name}`,
-            actionDate
+            actionDate: now()
         }
 
         const res = await addActivity(activity)
@@ -120,7 +155,8 @@ const AddActivityForm = () => {
         postDate,   
         amount,
         cost,
-        unit
+        unit,
+        file
     ])
 
     return (
@@ -146,10 +182,20 @@ const AddActivityForm = () => {
                     value={postDate}
                     onValueChange={setPostDate}
                     title="Chọn ngày" />
-                {/* <ImagePicker title="File Ảnh đính kèm"/> */}
+                <ImagePicker title="File Ảnh đính kèm" onValueChange = {onPickFileHandle}/>
                 <StyledSubmitButton onClick={fetch}>
                     Add Activity
                         </StyledSubmitButton>
+
+                        <div onClick={async ()=>{
+                            if(file){
+                                const res = await uploadImage(file)
+                                console.log(res)
+                            }
+                            
+                        }}>
+                            test
+                        </div>
             </StyledWrapper>)}
         </>
 

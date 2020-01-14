@@ -46,14 +46,20 @@ const PayForm = () => {
 
     const [money, setMoney] = useState(0)
 
+    const validate = ()=>{
+        if(name.replace(/\s/g,'') === ''){
+            toast.error('Bạn cần ghi tiêu đề !');
+            return false
+        }else if(money < 1000){
+            toast.error('Tiền quá nhỏ !');
+            return false
+        }
 
-
-    useEffect(()=>{
-        console.log(money)
-    },[money])
-
+        return true
+    }
     const onSubmitHandle = async () => {
-        console.log(money)
+        if(!validate()) return 
+
         if (window.confirm(`Are your sure to pay ${formatMoney(money)} ?`)) {
             const activity: Activity = {
                 type: ActivityType.PAY,
@@ -101,7 +107,7 @@ const PayForm = () => {
                             }}>
 
                             <TextInput
-                                title={'Tên'}
+                                title={'Tiêu đề'}
                                 value={name}
                                 onValueChange={setName}
                             />

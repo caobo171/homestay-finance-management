@@ -34,13 +34,22 @@ const StyledFileInput = styled.input`
 `
 
 interface Props{
-    title: string
+    title: string,
+    onValueChange : (file: File)=>void
 }
 
-const ImagePicker = ({title}: Props)=>{
+const ImagePicker = ({title, onValueChange}: Props)=>{
+
+    const onChangeHandle = (event:any)=>{
+            if(event.target.files && event.target.files.length > 0 ){
+                onValueChange(event.target.files[0])
+            }
+            
+            
+    }
     return <StyledWrapper>
         <StyledLabel>{title}*</StyledLabel>
-        <StyledFileInput type="file" accept="image/*"/>
+        <StyledFileInput type="file" accept="image/*" onChange ={onChangeHandle} />
     </StyledWrapper>
 }
 

@@ -69,10 +69,22 @@ const UseActionForm = () => {
 
     const [type, setType] = useState<ActivityType>(ActivityType.USE)
 
+    const validate = ()=>{
+        if([...pickedUsers.values()].length > 0 ){
+            toast.error('Bạn phải chọn ít nhất 1 đồ')
+            return false
+        }else if(name.replace(/\s/g,'')=== ''){
+            toast.error('Bạn phải ghi tiêu đề ')
+            return false
+        }
+        return true
+    }
 
 
     const onSubmitHandle = async () => {
-        if (window.confirm('Are your sure to create this activity ?')) {
+        if (window.confirm('Bạn có chắc muốn tạo không ? \n '+ (
+            [...pickedUsers.values()].length > 0 && (`Hành động này sẽ ảnh hưởng đến ${[...pickedUsers.values()].length} người`)
+        ))) {
             const actionDate = firebase.firestore.Timestamp.now().seconds * 1000
             const pickedUserIds = [...pickedUsers.values()].map(user => user.id);
 
@@ -141,7 +153,7 @@ const UseActionForm = () => {
                             }}>
 
                             <TextInput
-                                title={'Tên'}
+                                title={'Tiêu đề'}
                                 value={name}
                                 onValueChange={setName}
                             />

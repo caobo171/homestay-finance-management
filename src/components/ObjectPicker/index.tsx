@@ -97,7 +97,7 @@ const ObjectPicker = (props: Props) => {
 
             const refTop = ref.current.getBoundingClientRect().top
             if (window.innerWidth <= 600) {
-                formRef.current.style.marginTop = `${-refTop}px`
+                formRef.current.style.marginTop = `${20-refTop}px`
             }
         }
     }

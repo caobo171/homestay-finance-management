@@ -96,14 +96,9 @@ const ItemDetail = React.memo(() => {
 
     const [type, setType] = useState<ActivityFilterType>(ActivityFilterType.ALL)
 
-
-    useEffect(() => {
-        console.log(type)
-    }, [type])
-
     const activities = useActivitiesByItemId(param.id)
 
-    const displayData = filterData(activities, type)
+    const displayData = React.useMemo(()=>filterData(activities, type),[activities,type])
     return (
         <StyledWrapper>
             <ActivityFilter type={type} setType={setType} />

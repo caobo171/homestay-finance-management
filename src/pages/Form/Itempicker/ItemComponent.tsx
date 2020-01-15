@@ -37,7 +37,7 @@ const ItemComponent = React.memo(({ item , onRemoveItem }: Props) => {
         <StyledWrapper>
             <ItemImage itemId={item.item.id} size={'very_small'} />
             <StyledText>{item.item.name}</StyledText>
-            <StyledText>1/{item.pickAmount} ({item.item.remain.toFixed(2)}{item.item.unit}) </StyledText>
+            <StyledText>{item.pickAmount.toFixed(2)} ({item.item.unit}) </StyledText>
             <StyledTrash  onClick={onRemoveHandle}/>
         </StyledWrapper>
     )

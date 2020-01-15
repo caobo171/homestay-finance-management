@@ -28,7 +28,7 @@ const StyledWrapper = styled.div`
     background-color: #F6F6F6;
 
     align-items: flex-end;
-
+    transition: 0.3s;
     border-radius: 4px;
 `
 

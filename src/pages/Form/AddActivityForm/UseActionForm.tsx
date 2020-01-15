@@ -26,7 +26,7 @@ const StyledWrapper = styled.div`
     display: flex;
     flex-direction: column;
     background-color: #F6F6F6;
-
+    transition: 0.3s;
     align-items: flex-end;
     border-radius: 4px;
 `
@@ -81,9 +81,6 @@ const UseActionForm = () => {
     }
 
 
-    useEffect(()=>{
-        console.log('check ', [...pickedItems.values()])
-    },[pickedItems])
     const onSubmitHandle = async () => {
         if(!validate()) return 
         if (window.confirm('Bạn có chắc muốn tạo không ? \n '+ (
@@ -94,13 +91,12 @@ const UseActionForm = () => {
 
 
             const res = await Promise.all([...pickedItems.values()].map(async (data) => {
-                const amount = 1 / (data.pickAmount) * data.item.remain;
                 const activity: Activity = {
                     type,
                     item_id: data.item.id,
                     user_id: currentUser ? currentUser.id : '-1',
-                    amount,
-                    cost: amount / data.item.amount * data.item.cost,
+                    amount: data.pickAmount,
+                    cost: data.pickAmount / data.item.amount * data.item.cost,
                     time,
                     influencers: pickedUserIds,
                     id: '-1',
@@ -110,7 +106,7 @@ const UseActionForm = () => {
                 const item: Item = {
 
                     ...data.item,
-                    remain: data.item.remain - amount
+                    remain: data.item.remain - data.pickAmount
                 }
 
                 await addActivity(activity)

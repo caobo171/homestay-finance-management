@@ -89,16 +89,24 @@ const ObjectPicker = (props: Props) => {
 
 
     const [visible, setVisible] = useState(false)
-
+    const ref = useRef<HTMLInputElement>(null)
     const onFocusHandle = () => {
         setVisible(true)
+
+        if (formRef && formRef.current && ref && ref.current) {
+
+            const refTop = ref.current.getBoundingClientRect().top
+            if (window.innerWidth <= 600) {
+                formRef.current.style.marginTop = `${-refTop}px`
+            }
+        }
     }
 
     const searchStringChangeHandle = useCallback((event) => {
         props.setSearchString(event.target.value)
     }, [props.searchString])
 
-    const ref = useRef<HTMLInputElement>(null)
+    
 
     const Element = props.renderer
     return (
@@ -111,18 +119,6 @@ const ObjectPicker = (props: Props) => {
                             <SearchIcon />
                             <StyledSearch value={props.searchString}
                                 ref={ref}
-                                onFocus={
-                                    () => {
-                                        if (formRef && formRef.current && ref && ref.current) {
-
-                                            const formRefBottom = formRef.current.getBoundingClientRect().bottom
-                                            const refTop = ref.current.getBoundingClientRect().top
-                                            if (window.innerWidth <= 600) {
-                                                formRef.current.style.marginTop = `${-refTop}px`
-                                            }
-                                        }
-                                    }
-                                }
                                 onClick={onFocusHandle}
                                 onChange={searchStringChangeHandle} />
                         </>

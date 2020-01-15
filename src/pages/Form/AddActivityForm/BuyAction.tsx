@@ -17,6 +17,8 @@ import { useAsyncFn } from 'react-use'
 import LoadingComponent from 'components/LoadingComponent'
 import ImagePicker from '../ImagePicker'
 import { uploadImage, now } from 'service/helpers'
+import UserPicker from '../UserPicker'
+import { User } from 'store/user/types'
 
 const StyledWrapper = styled.div`
     font-size: 14px;
@@ -64,8 +66,8 @@ const AddActivityForm = () => {
     const currentUser = useCurrentUser()
     const [type, setType] = useState<ItemType>(ItemType.NOT_GENERAL)
     const [name, setName] = useState<string>('')
-
-    const [postDate, setPostDate] = useState<number>((new Date()).getTime())
+    const [pickedUsers, setPickedUsers] = useState<Map<string, User>>(new Map())
+    const [postDate, setPostDate] = useState<number>(now())
 
     const [amount, setAmount] = useState<number>(0)
 
@@ -80,17 +82,17 @@ const AddActivityForm = () => {
     }, [type])
 
 
-    const validate = ()=>{
-        if(amount <= 0 ) {
+    const validate = () => {
+        if (amount <= 0) {
             toast.error('Số lượng đồ phải lớn hơn 0 ')
             return false
-        }else if (unit.replace(/\s/g,'') === '') {
+        } else if (unit.replace(/\s/g, '') === '') {
             toast.error('Nên nhập cả đơn vị vào nữa')
             return false
-        }else if (cost < 1000){
+        } else if (cost < 1000) {
             toast.error('Giá quá bé !')
             return false
-        }else if (name.replace(/\s/g,'') === ''){
+        } else if (name.replace(/\s/g, '') === '') {
             toast.error('Điền tên đồ nữa !')
             return false
         }
@@ -98,21 +100,21 @@ const AddActivityForm = () => {
         return true
     }
 
-    const onPickFileHandle = useCallback((file: File)=>{
-            setFile(file)
+    const onPickFileHandle = useCallback((file: File) => {
+        setFile(file)
     }, [file])
     const onSubmitHandle = async () => {
 
-        if(!validate()) return ;
-    
+        if (!validate()) return;
+        const pickedUserIds = [...pickedUsers.values()].map(user => user.id);
         let photoUrl = null
-        if(file){
-            photoUrl = await uploadImage(file) 
+        if (file) {
+            photoUrl = await uploadImage(file)
             console.log(photoUrl)
         }
-    
+
         const data: Item = {
-            type, name, postDate, amount, cost, unit,photoUrl,
+            type, name, postDate, amount, cost, unit, photoUrl,
             userId: currentUser ? currentUser.id : '-1',
             actionDate: now(),
             remain: amount,
@@ -129,7 +131,7 @@ const AddActivityForm = () => {
             amount: amount,
             cost: cost,
             time: postDate,
-            influencers: [],
+            influencers: pickedUserIds,
             id: '-1',
             name: `Mua ${name}`,
             actionDate: now()
@@ -149,14 +151,15 @@ const AddActivityForm = () => {
     }
 
     const [state, fetch] = useAsyncFn(onSubmitHandle, [
-        currentUser, 
-        type, 
+        currentUser,
+        type,
         name,
-        postDate,   
+        postDate,
         amount,
         cost,
         unit,
-        file
+        file,
+        pickedUsers
     ])
 
     return (
@@ -168,6 +171,7 @@ const AddActivityForm = () => {
                     }
                 }
             }}>
+
                 <TextInput value={name}
                     onValueChange={setName}
 
@@ -178,24 +182,19 @@ const AddActivityForm = () => {
                 <TextInput value={amount} type={'number'} onValueChange={setAmount} title="Số lượng" />
                 <TextInput value={unit} onValueChange={setUnit} title="Đơn vị" />
                 <TextInput value={cost} type={'number'} onValueChange={setCost} title="Tổng giá" />
+
+                <UserPicker pickedUsers={pickedUsers}
+                    setPickedUsers={setPickedUsers}
+                />
+
                 <DatePicker
                     value={postDate}
                     onValueChange={setPostDate}
                     title="Chọn ngày" />
-                <ImagePicker title="File Ảnh đính kèm" onValueChange = {onPickFileHandle}/>
+                <ImagePicker title="File Ảnh" onValueChange={onPickFileHandle} />
                 <StyledSubmitButton onClick={fetch}>
                     Add Activity
-                        </StyledSubmitButton>
-
-                        {/* <div onClick={async ()=>{
-                            if(file){
-                                const res = await uploadImage(file)
-                                console.log(res)
-                            }
-                            
-                        }}>
-                            test
-                        </div> */}
+                </StyledSubmitButton>
             </StyledWrapper>)}
         </>
 

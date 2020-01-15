@@ -5,6 +5,8 @@ import Item from 'store/item/types'
 import { User } from 'store/user/types'
 import UserGroup from 'components/UserGroup'
 import UserPick from './UserPick'
+import CloseIcon from 'icons/CloseIcon'
+import TrashIcon from 'icons/TrashIcon'
 
 
 const StyledWrapper = styled.div`
@@ -16,49 +18,57 @@ const StyledHeader = styled.div`
 `
 
 interface Props {
-    pickedUsers:Map<string,User> , 
-    setPickedUsers: (value:Map<string,User> ) => void
+    pickedUsers: Map<string, User>,
+    setPickedUsers: (value: Map<string, User>) => void
 }
+
+const StyledUserGroupWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`
+
+const StyledCloseIcon = styled(TrashIcon)`
+    margin-right: 12px;
+`
 const UserPicker = ({
     pickedUsers, setPickedUsers
-}: Props)=>{
+}: Props) => {
 
-    
 
-    const addPickUser = (user: User)=>{
+
+    const addPickUser = (user: User) => {
         let mapItem = new Map(pickedUsers)
-        mapItem = mapItem.set(user.id,user)
+        mapItem = mapItem.set(user.id, user)
 
         setPickedUsers(mapItem)
     }
 
-    const removePickedUser = (userId: string)=>{
-        let mapItem = new Map(pickedUsers)
-        mapItem.delete(userId)
-
-        setPickedUsers(mapItem)
-    }
-
-    const displayUsers =  [...pickedUsers.values()] 
+    const displayUsers = [...pickedUsers.values()]
     return (
-       <StyledWrapper>
-           <StyledHeader>
-               Chọn người sử dụng*
+        <StyledWrapper>
+            <StyledHeader>
+                Chọn người sử dụng*
            </StyledHeader>
 
-            {
-                displayUsers.length > 0 && <UserGroup userIds={
-                    displayUsers.map(e=> e.id)
-                }/>
-            }
-           
-           
-            <UserPick addPickUser={addPickUser} 
-            pickedUsers = {displayUsers}
+            <StyledUserGroupWrapper>
+                {
+                    displayUsers.length > 0 && <>
+                        <UserGroup userIds={
+                            displayUsers.map(e => e.id)
+                        } />
+                        <StyledCloseIcon onClick={() => setPickedUsers(new Map())} />
+                    </>
+                }
+
+            </StyledUserGroupWrapper>
+
+            <UserPick addPickUser={addPickUser}
+                pickedUsers={displayUsers}
             />
-           
-       </StyledWrapper>
-    )   
+
+        </StyledWrapper>
+    )
 }
 
 export default UserPicker

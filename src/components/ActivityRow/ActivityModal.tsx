@@ -17,7 +17,7 @@ const StyledWrapper = styled.div`
     background-color: #F6F6F6;
 
     align-items: center;
-
+    justify-content: center;
     border-radius: 4px;
 `
 const StyledRowItem = styled.div`
@@ -25,7 +25,7 @@ const StyledRowItem = styled.div`
     align-items: center;
     padding-left: 20px;
     flex-direction: row;
-    margin: 36px 0px 0px 0px;
+    margin: 20px 0px 0px 0px;
 `
 
 const StyledText = styled.div`
@@ -113,7 +113,7 @@ const ActivityModal = ({ activity }: Props) => {
             <StyledSmallText>
                 {/* ({activity.name}) */}
                 {formatDate(activity.time)}</StyledSmallText>
-            {activity.influencers.length > 0 && <StyledSmallText>Influencer:</StyledSmallText>}
+            {activity.influencers.length > 0 && <StyledSmallText>Người dùng:</StyledSmallText>}
             <UserGroup userIds={activity.influencers} />
         </StyledRowItem>
 

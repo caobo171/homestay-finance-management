@@ -8,19 +8,26 @@ import ObjectPicker from 'components/ObjectPicker'
 import { User } from 'store/user/types'
 import { CssVariable } from 'Constants'
 import PlusIcon from 'icons/PlusIcon'
+import { toast } from 'react-toastify'
 
 const StyledWrapper = styled.div`
     display: flex;
     margin-bottom: 16px;
     align-items: center;
+    flex-direction: column;
 `
 
-
+const StyledAmountWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    align-items: center;
+`
 
 const StyledInput = styled.input`
     background: #DFDFDF;
-    height: 24px;
-    width: 20px;
+    height: 20px;
+    width: 40px;
     max-width: 30px;
     border:none;
     border-radius: 8px;
@@ -77,9 +84,12 @@ const ItemPick = ({ addPickItem, pickedItems }: Props) => {
 
     const [searchString, setSearchString] = useState('')
     const avalableItems = useRemainItems(pickedItems)
-    const [pickAmount, setPickAmount] = useState<number>(1)
+
 
     const [currentItem, setCurrentItem] = useState<null | Item>(null)
+
+    const remain = currentItem ? currentItem.remain : 0
+    const [pickAmount, setPickAmount] = useState<number>(remain)
 
     const displayItems = filterBySearchString(avalableItems, searchString)
 
@@ -88,17 +98,37 @@ const ItemPick = ({ addPickItem, pickedItems }: Props) => {
         setPickAmount(Math.abs(number))
     }, [pickAmount])
 
+    useEffect(()=>{
+        if(currentItem){
+            setPickAmount(remain)
+        }
+    },[currentItem])
+
+    const onPickDividerChangeHandle = useCallback((event) => {
+        const value = Number(event.target.value) > 0 ? Number(event.target.value) : 1
+
+        const pickAmount = 1 / value * remain
+
+        setPickAmount(pickAmount)
+
+
+    }, [pickAmount])
+
 
     const onChooseItemHandle = useCallback((value: Item | null) => {
         setCurrentItem(value)
     }, [currentItem])
 
-    const onAddItemHandle = useCallback(()=>{
-        if(currentItem){
-            addPickItem(currentItem,pickAmount)
+    const onAddItemHandle = useCallback(() => {
+        if(pickAmount <= 0  ){
+            toast.error('Số lượng đồ chọn phải lớn hơn 0')
+            return 
         }
-        
-    },[currentItem, pickAmount])
+        if (currentItem) {
+            addPickItem(currentItem, pickAmount)
+        }
+
+    }, [currentItem, pickAmount])
 
     return (
         <StyledWrapper>
@@ -122,14 +152,27 @@ const ItemPick = ({ addPickItem, pickedItems }: Props) => {
                         <StyledText>
                             -Còn: {currentItem.remain.toFixed(2)}{currentItem.unit}
                         </StyledText>
-                    </> : null} />
+                    </> : null}
+            />
+
+            {
+                currentItem && (
+                    <StyledAmountWrapper>
+                        <StyledText>{'1/ '}</StyledText>
+                        <StyledInput type={'number'}
+                            value={1 / (currentItem.remain > 0 ? pickAmount / currentItem.remain : 1)}
+                            onChange={onPickDividerChangeHandle} />
+                        <StyledText>{'- Số lượng: '}</StyledText>
+                        <StyledInput type={'number'} value={pickAmount} onChange={onPickAmountChangeHandle} />
+                        <StyledText>{currentItem.unit}</StyledText>
+                        <StyledPlusButton onClick={onAddItemHandle}>
+                            <StyledPlusIcon />
+                        </StyledPlusButton>
+                    </StyledAmountWrapper>
+                )
+            }
 
 
-            <StyledText>{'1/ '}</StyledText>
-            <StyledInput type={'number'} value={pickAmount} onChange={onPickAmountChangeHandle} />
-            <StyledPlusButton onClick={onAddItemHandle}>
-                <StyledPlusIcon/>
-            </StyledPlusButton>
         </StyledWrapper>
     )
 }

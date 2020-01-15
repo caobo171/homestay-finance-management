@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import ActivityRow from 'components/ActivityRow'
 import ItemInfo from './ItemInfo'
 import { useParams } from 'react-router-dom'
 import { useItem } from 'store/item/hooks'
 import { useActivitiesByItemId } from 'store/activity/hooks'
-import Constants from 'Constants'
+import Constants, { CssVariable } from 'Constants'
+import ActivityFilter, { ActivityFilterType } from 'components/ActivityFilter'
+import NodataImage from 'icons/NodataImage'
+import { Activity } from 'store/activity/types'
+import NotFound from 'icons/NotFound'
 
 const StyledWrapper = styled.div`
     width: 100%;
@@ -15,10 +19,10 @@ const StyledWrapper = styled.div`
 `
 
 const StyledActivityHeader = styled.div`
-    weight: 400;
+    font-weight: 700;
     font-size: 20px;
 
-
+    color: ${CssVariable.PRIMARY_COLOR};
     border-width: 0px 0px 1px 0px ;
     border-style: solid;
     border-color: #D6E4FF;
@@ -69,20 +73,45 @@ const StyledAmount = styled.div<{ color?: string }>`
         color: ${props.color};
     `}
 `
+
+const StyledNotFound = styled.div`
+    margin: auto;
+    margin-top: 70px;
+    text-align : center ;
+    padding: 10px;
+    font-size : 26px;
+    font-weight: 600;
+    opacity: 0.6;
+`
+
+const filterData = (activities: Activity[], type: ActivityFilterType) => {
+    if (type === ActivityFilterType.ALL) return activities
+    return activities.filter(act => act.type.toString() === type.toString())
+}
+
 const ItemDetail = React.memo(() => {
 
     const param = useParams<{ id: string }>()
     const item = useItem(param.id)
-    console.log(param.id)
+
+    const [type, setType] = useState<ActivityFilterType>(ActivityFilterType.ALL)
+
+
+    useEffect(() => {
+        console.log(type)
+    }, [type])
 
     const activities = useActivitiesByItemId(param.id)
+
+    const displayData = filterData(activities, type)
     return (
         <StyledWrapper>
+            <ActivityFilter type={type} setType={setType} />
             <ItemInfo item={item} />
             <StyledActivityHeader>Activities</StyledActivityHeader>
             <StyledActivitiesWrapper>
                 {
-                    activities.map(act => {
+                    displayData.map(act => {
                         return (
                             <ActivityRow key={act.id} activity={act} type={'item'} />
                         )
@@ -90,7 +119,7 @@ const ItemDetail = React.memo(() => {
                 }
             </StyledActivitiesWrapper>
             {
-                activities.length > 1 && (
+                (displayData.length >= 1 && type === ActivityFilterType.ALL) ? (
                     <StyledCountRow>
                         <StyledName>Còn lại:</StyledName>
                         <StyledAmount
@@ -99,7 +128,13 @@ const ItemDetail = React.memo(() => {
                             {item.remain.toFixed(2)} {item ? item.unit : ''}
                         </StyledAmount>
                     </StyledCountRow>
-                )
+                ) : (<>
+                            {displayData.length <= 0 && (
+                                <StyledNotFound>
+                                    Không có dữ liệu
+                                </StyledNotFound>
+                            )}
+                        </>)
             }
         </StyledWrapper>
     )

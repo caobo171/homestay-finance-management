@@ -71,7 +71,7 @@ interface Props {
 const filterBySearchString = (users: User[], searchString: string) => {
     const rSearchString = searchString.toLowerCase().replace(/\s/g, '')
 
-    return users.filter(user => (user.displayName ? user.displayName : '') .toLowerCase()
+    return users.filter(user => (user.displayName ? user.displayName : '').toLowerCase()
         .replace(/\s/g, '').indexOf(rSearchString) > -1)
 }
 
@@ -79,7 +79,6 @@ const UserPick = ({ addPickUser, pickedUsers }: Props) => {
 
     const [searchString, setSearchString] = useState('')
     const avalableUsers = useRemainUsers(pickedUsers)
-    const [pickAmount, setPickAmount] = useState<number>(1)
 
     const [currentUser, setCurrentUser] = useState<null | User>(null)
 
@@ -89,12 +88,14 @@ const UserPick = ({ addPickUser, pickedUsers }: Props) => {
         setCurrentUser(value)
     }, [currentUser])
 
-    const onAddItemHandle = useCallback(()=>{
-        if(currentUser){
+    const onAddItemHandle = useCallback(() => {
+        if (currentUser) {
             addPickUser(currentUser)
+            setCurrentUser(null)
+            setSearchString('')
         }
-        
-    },[currentUser, pickAmount])
+
+    }, [currentUser])
 
     return (
         <StyledWrapper>
@@ -116,10 +117,14 @@ const UserPick = ({ addPickUser, pickedUsers }: Props) => {
                             {currentUser.displayName}
                         </StyledText>
                     </> : null} />
+            {
+                currentUser && (
+                    <StyledPlusButton onClick={onAddItemHandle}>
+                        <StyledPlusIcon />
+                    </StyledPlusButton>
+                )
+            }
 
-            <StyledPlusButton onClick={onAddItemHandle}>
-                <StyledPlusIcon/>
-            </StyledPlusButton>
         </StyledWrapper>
     )
 }

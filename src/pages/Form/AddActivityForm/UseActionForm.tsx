@@ -70,7 +70,7 @@ const UseActionForm = () => {
     const [type, setType] = useState<ActivityType>(ActivityType.USE)
 
     const validate = ()=>{
-        if([...pickedUsers.values()].length > 0 ){
+        if([...pickedItems.values()].length > 0 ){
             toast.error('Bạn phải chọn ít nhất 1 đồ')
             return false
         }else if(name.replace(/\s/g,'')=== ''){
@@ -82,6 +82,7 @@ const UseActionForm = () => {
 
 
     const onSubmitHandle = async () => {
+        if(!validate()) return 
         if (window.confirm('Bạn có chắc muốn tạo không ? \n '+ (
             [...pickedUsers.values()].length > 0 && (`Hành động này sẽ ảnh hưởng đến ${[...pickedUsers.values()].length} người`)
         ))) {

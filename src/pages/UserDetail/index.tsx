@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import ActivityRow from 'components/ActivityRow'
 import UserInfo from './UserInfo'
@@ -7,7 +7,8 @@ import { useUser } from 'store/user/hooks'
 import { useActivitiesByUserId } from 'store/activity/hooks'
 import { Activity, ActivityType } from 'store/activity/types'
 import { formatMoney } from 'service/helpers'
-import Constants from 'Constants'
+import Constants, { CssVariable } from 'Constants'
+import ActivityFilter, { ActivityFilterType } from 'components/ActivityFilter'
 
 const StyledWrapper = styled.div`
     width: 100%;
@@ -17,8 +18,10 @@ const StyledWrapper = styled.div`
 `
 
 const StyledActivityHeader = styled.div`
-    weight: 400;
+    font-weight: 700;
     font-size: 20px;
+
+    color: ${CssVariable.PRIMARY_COLOR};
 
 
     border-width: 0px 0px 1px 0px ;
@@ -73,6 +76,17 @@ const StyledCost = styled.div<{ color?: string }>`
     `}
 `
 
+const StyledNotFound = styled.div`
+    margin: auto;
+    margin-top: 70px;
+    text-align : center ;
+    padding: 10px;
+    font-size : 26px;
+    font-weight: 600;
+    opacity: 0.6;
+`
+
+
 const countMoney = (activities: Activity[]) => {
     let cost = 0;
     for (let i = 0; i < activities.length; i++) {
@@ -95,6 +109,11 @@ const countMoney = (activities: Activity[]) => {
     return cost
 }
 
+const filterData = (activities: Activity[], type: ActivityFilterType) => {
+    if (type === ActivityFilterType.ALL) return activities
+    return activities.filter(act => act.type.toString() === type.toString())
+}
+
 const UserDetail = () => {
 
     const param = useParams<{ id: string }>()
@@ -103,15 +122,20 @@ const UserDetail = () => {
     const activities = useActivitiesByUserId(param.id)
 
     const money = countMoney(activities)
+
+    const [type, setType] = useState<ActivityFilterType>(ActivityFilterType.ALL)
+    const displayData = filterData(activities, type)
+
     return (<>
         {(user && user.id) && (
             <StyledWrapper>
+                <ActivityFilter type={type} setType={setType} />
                 <UserInfo user={user} />
                 <StyledActivityHeader>Activities</StyledActivityHeader>
 
                 <StyledActivitiesWrapper>
                     {
-                        activities.map(act => {
+                        displayData.map(act => {
                             return (
                                 <ActivityRow key={act.id} activity={act} />
                             )
@@ -120,14 +144,22 @@ const UserDetail = () => {
                 </StyledActivitiesWrapper>
 
                 {
-                    activities.length > 0 && (
+                    (displayData.length >= 1 && type === ActivityFilterType.ALL) ? (
                         <StyledCountRow>
                             <StyledName>Còn:</StyledName>
                             <StyledCost
                                 color={money > 0 ? Constants.red : Constants.green}
                             >{money > 0 && '+'}{formatMoney(money)}</StyledCost>
                         </StyledCountRow>
-                    )
+                    ) : (
+                            <>
+                                {displayData.length <= 0 && (
+                                    <StyledNotFound>
+                                        Không có dữ liệu
+                                </StyledNotFound>
+                                )}
+                            </>
+                        )
                 }
 
 

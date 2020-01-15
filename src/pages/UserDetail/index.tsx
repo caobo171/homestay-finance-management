@@ -94,7 +94,7 @@ const countMoney = (activities: Activity[]) => {
         const lengthInfluencers = act.influencers.length
         switch (act.type) {
             case ActivityType.BUY:
-                cost = cost - act.cost
+                cost = cost - (lengthInfluencers > 0 ? act.cost / lengthInfluencers : act.cost)
                 break;
             case ActivityType.PAY:
                 cost = cost - act.cost

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import TextInput from '../TextInput'
 import { CssVariable } from 'Constants'
@@ -70,7 +70,7 @@ const UseActionForm = () => {
     const [type, setType] = useState<ActivityType>(ActivityType.USE)
 
     const validate = ()=>{
-        if([...pickedItems.values()].length > 0 ){
+        if([...pickedItems.values()].length <= 0 ){
             toast.error('Bạn phải chọn ít nhất 1 đồ')
             return false
         }else if(name.replace(/\s/g,'')=== ''){
@@ -81,6 +81,9 @@ const UseActionForm = () => {
     }
 
 
+    useEffect(()=>{
+        console.log('check ', [...pickedItems.values()])
+    },[pickedItems])
     const onSubmitHandle = async () => {
         if(!validate()) return 
         if (window.confirm('Bạn có chắc muốn tạo không ? \n '+ (

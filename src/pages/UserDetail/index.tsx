@@ -121,10 +121,11 @@ const UserDetail = () => {
 
     const activities = useActivitiesByUserId(param.id)
 
-    const money = countMoney(activities)
+    
 
     const [type, setType] = useState<ActivityFilterType>(ActivityFilterType.ALL)
     const displayData = filterData(activities, type)
+    const money = countMoney(displayData)
 
     return (<>
         {(user && user.id) && (
@@ -144,7 +145,7 @@ const UserDetail = () => {
                 </StyledActivitiesWrapper>
 
                 {
-                    (displayData.length >= 1 && type === ActivityFilterType.ALL) ? (
+                    (displayData.length >= 1 ) ? (
                         <StyledCountRow>
                             <StyledName>Còn:</StyledName>
                             <StyledCost

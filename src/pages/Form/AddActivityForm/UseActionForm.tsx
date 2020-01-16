@@ -132,7 +132,8 @@ const UseActionForm = () => {
         currentUser,
         pickedUsers,
         time,
-        type
+        type,
+        name
     ])
 
     return (

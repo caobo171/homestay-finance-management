@@ -65,7 +65,8 @@ const StyledPlusIcon = styled(PlusIcon)`
 
 interface Props {
     addPickUser: (user: User) => void,
-    pickedUsers: User[]
+    pickedUsers: User[],
+    type? : 'all' | 'place'
 }
 
 const filterBySearchString = (users: User[], searchString: string) => {
@@ -75,7 +76,7 @@ const filterBySearchString = (users: User[], searchString: string) => {
         .replace(/\s/g, '').indexOf(rSearchString) > -1)
 }
 
-const UserPick = ({ addPickUser, pickedUsers }: Props) => {
+const UserPick = ({ addPickUser, pickedUsers ,type }: Props) => {
 
     const [searchString, setSearchString] = useState('')
     const avalableUsers = useRemainUsers(pickedUsers)

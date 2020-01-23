@@ -4,7 +4,8 @@ export interface User {
     photoURL: string ,
     email: string | null ,
     role?: 'admin' | 'root' | 'member',
-    placeId: string
+    placeId: string,
+    token?: string
 }
 
 

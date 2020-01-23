@@ -74,11 +74,11 @@ interface Props {
     searchString: string,
     setSearchString: (text: string) => void,
 
-    displayData: Array<User | Item>,
+    displayData: Array<User | Item |string>,
     renderer: React.ElementType<any>,
 
 
-    currentObject: User | Item | null,
+    currentObject: User | Item | null | string,
     setCurrentObject: (value: any) => void,
 
     currentObjectRender: React.ReactElement | null
@@ -137,7 +137,8 @@ const ObjectPicker = (props: Props) => {
                         return (
 
                             <Element
-                                key={data.id}
+                                //@ts-ignore
+                                key={data.id ? data.id : data}
                                 onClick={() => {
                                     props.setCurrentObject(data)
                                     setVisible(false)

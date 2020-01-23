@@ -12,14 +12,12 @@ import Navbar from 'components/Navbar'
 import ItemDetail from 'pages/ItemDetail'
 import Modal from 'components/Modal'
 import UserDetail from 'pages/UserDetail'
-import SelectForm from 'pages/Form/SelectForm'
-import AddActivityForm from 'pages/Form/AddActivityForm/BuyAction'
-import UseActionForm from 'pages/Form/AddActivityForm/UseActionForm'
 import { useCurrentUser } from 'store/user/hooks'
-import { useEffectOnce } from 'react-use'
-import { getCurrentUser, getUserList } from 'store/user/function'
+import { getCurrentUser, getUserList, updateUserToken } from 'store/user/function'
 import realtimeSystem from 'service/realtimeSystem'
 import LoadingComponent from 'components/LoadingComponent'
+import Admin from 'pages/Admin'
+import CurrentUser from 'service/CurrentUser'
 
 
 const BodyWrapper = styled.div`
@@ -92,8 +90,22 @@ const AppRouter = () => {
             }
             
             if(user){
+
+                CurrentUser.init()
                 await getUserList()
                 realtimeSystem.init()
+                
+                // messaging.requestPermission()
+                // .then(()=>{
+                //     return messaging.getToken()
+                // })
+                // .then((token)=>{
+                //     console.log(token)
+                //     updateUserToken(user,token)
+                // })
+                // .catch(err=>{
+                //     console.log(err)
+                // })
             }
 
             await setFullyLoaded(true)
@@ -124,7 +136,7 @@ const AppRouter = () => {
                                 <PrivateRoute path={'/item/:id'} component={ItemDetail} />
                                 <PrivateRoute path={'/users'} component={UserList} />
                                 <PrivateRoute path={'/user/:id'} component={UserDetail} />
-                                <PrivateRoute path={'/admin'} component={Checkin} />
+                                <PrivateRoute path={'/admin'} component={Admin} />
                                 <Route path={'/login'} component={Login} />
                                 <PrivateRoute path={'/'} component={Checkin} />
 

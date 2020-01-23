@@ -162,7 +162,7 @@ const UseActionForm = () => {
                             <SelectInput
 
                                 data={SELECT_DATA_TYPES}
-                                title={'Type'}
+                                title={'Phương thức dùng'}
                                 value={type}
                                 onValueChange={setType}
                             />

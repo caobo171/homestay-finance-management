@@ -8,15 +8,17 @@ import store from 'store/store';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
-const App: React.FC = () => {
 
+
+
+const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={getTheme('light', 10)}>
       <Provider store={store}>
         <React.Fragment>
           <GlobalStyle color={10} />
-          <AppRouter/>  
+          <AppRouter />
           <ToastContainer />
         </React.Fragment>
       </Provider>

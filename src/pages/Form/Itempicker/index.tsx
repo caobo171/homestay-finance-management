@@ -50,7 +50,7 @@ const ItemPicker = ({
     return (
         <StyledWrapper>
             <StyledHeader>
-                Chọn đồ *
+                Chọn đồ 
            </StyledHeader>
 
             {

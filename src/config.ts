@@ -8,8 +8,15 @@ import "firebase/analytics";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/database";
-import { FIREBASE_CONFIG } from "./env";
+import "firebase/messaging"
+import { FIREBASE_CONFIG , PUBLIC_KEY } from "./env";
 
 
 // Initialize Firebase
-firebase.initializeApp(FIREBASE_CONFIG);
+const app = firebase.initializeApp(FIREBASE_CONFIG);
+
+const messaging = app.messaging();
+messaging.usePublicVapidKey(PUBLIC_KEY)
+
+
+export { messaging };

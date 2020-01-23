@@ -60,7 +60,7 @@ const SelectInput = ({ title, data , value, onValueChange }: Props) => {
     },[value])
 
     return <StyledWrapper>
-        <StyledLabel>{title}*</StyledLabel>
+        <StyledLabel>{title}</StyledLabel>
         <StyledSelect value={value} 
             onChange={onValueChangeHandle}>
             {

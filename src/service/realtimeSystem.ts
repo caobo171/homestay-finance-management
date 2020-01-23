@@ -6,6 +6,8 @@ import Item from 'store/item/types'
 import { updateItems } from 'store/item/function'
 import { updateActivities } from 'store/activity/functions'
 import { Activity } from 'store/activity/types'
+import { HOMESTAY_COLLECTION, updateHomeStays } from 'store/homestay/function'
+import HomeStay from 'store/homestay/types'
 
 class RealTimeSystem {
     async init (){
@@ -20,8 +22,6 @@ class RealTimeSystem {
                     ...e.data()
                 })
             } )
-
-            console.log('realtime',items)
 
             updateItems(items)
             
@@ -40,9 +40,22 @@ class RealTimeSystem {
                 })
             } )
 
-            console.log('realtime',activities)
-
             updateActivities(activities)
+        })
+
+        const unsubscribe2 = await firebase.firestore().collection(HOMESTAY_COLLECTION).onSnapshot({
+            includeMetadataChanges: true
+        }, async (doc: any )=>{
+
+            let homestays = new Map<string,HomeStay>()
+            doc.docs.forEach((e:any)=> {
+                homestays = homestays.set(e.id, {
+                    id: e.id,
+                    ...e.data()
+                })
+            } )
+
+            updateHomeStays(homestays)
         })
     }
 }

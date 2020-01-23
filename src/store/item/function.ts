@@ -20,7 +20,8 @@ export const FAKE_ITEM: Item = {
     amount: 0,
     actionDate: 1, // save the time we create action 
     photoUrl: DEFAULT_ITEM_IMAGE,
-    userId: '-1'
+    userId: '-1',
+    placeId: '-1'
 }
 
 export const addItem = async (item: Item, storex = store)=>{

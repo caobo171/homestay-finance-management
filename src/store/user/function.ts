@@ -2,10 +2,13 @@ import * as firebase from 'firebase'
 import { User } from './types';
 import store from 'store/store';
 import * as actions from './action'
+import axios from 'axios'
+import { LIGACY_SERVER_KEY } from 'env';
+import CurrentUser from 'service/CurrentUser';
 
 
 export const USERS_COLLECTION = 'users'
-const CURRENT_USER_STORAGE_KEY = '@finance-user'
+export const CURRENT_USER_STORAGE_KEY = '@finance-user'
 
 export const DEFAULT_USER_IMAGE  = 'https://xmindnet.s3.amazonaws.com/img/default-avatar-m5.png'
 
@@ -43,13 +46,47 @@ const createUserFirebaseDatabase = (user: User) => {
 }
 
 
+export const  sendNotification = async (user:User, body:string, title:string)=>{
+
+
+    if(user.token){
+        const options = {
+            "to" : user.token,
+            "notification" : {
+                "body" : body,
+                "title": title,
+                "icon": "/firebase-logo.png"
+            }
+           }
+        return await axios.post('https://fcm.googleapis.com/fcm/send',options,{
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization': LIGACY_SERVER_KEY
+            }
+        })
+    }
+}
+
+export const updateUserToken = async (user:User, token:string)=>{
+
+    let updates:any = {};
+    updates[`/${USERS_COLLECTION}/${user.id}/token`] = token;
+    return firebase.database().ref().update(updates)
+}
+
+export const updateUserPlace = async (user:User, placeId:string)=>{
+
+    let updates:any = {};
+    updates[`/${USERS_COLLECTION}/${user.id}/placeId`] = placeId;
+    return firebase.database().ref().update(updates)
+}
+
 
 export const login = async (storex = store) => {
     const provider = new firebase.auth.FacebookAuthProvider()
     const result = await firebase.auth().signInWithPopup(provider)
 
 
-    console.log(result)
     if (result.user) {
 
         const user: User = {
@@ -92,10 +129,14 @@ export const getCurrentUser = async (storex = store) => {
         const userData = await getCurrentUserAsync(user.id)
         if (userData) {
 
+
+
             await storex.dispatch(actions.login({...user, ...userData}))
+            localStorage.setItem(CURRENT_USER_STORAGE_KEY,JSON.stringify({...user, ...userData}))
             return userData
         } else {
             await storex.dispatch(actions.login(user))
+            localStorage.setItem(CURRENT_USER_STORAGE_KEY,JSON.stringify(user))
             return user
         }
 
@@ -130,14 +171,16 @@ const getUsers = (): Promise<Map<string, User>> => {
 export const getUserList = async (storex = store) => {
     const users = await getUsers()
 
-    console.log(users)
 
     return await storex.dispatch(actions.getAllUsers(users))
 }
 
+
+
+
 export const logout = async (storex = store)=>{
     await localStorage.removeItem(CURRENT_USER_STORAGE_KEY)
-
+    CurrentUser.logout()
     await firebase.auth().signOut()
 
     return await storex.dispatch(actions.login(null))

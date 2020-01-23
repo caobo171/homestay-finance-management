@@ -48,7 +48,7 @@ const ImagePicker = ({title, onValueChange}: Props)=>{
             
     }
     return <StyledWrapper>
-        <StyledLabel>{title}*</StyledLabel>
+        <StyledLabel>{title}</StyledLabel>
         <StyledFileInput type="file" accept="image/*" onChange ={onChangeHandle} />
     </StyledWrapper>
 }

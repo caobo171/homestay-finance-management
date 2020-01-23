@@ -14,7 +14,8 @@ export default interface Item {
     amount: number,
     actionDate: number, // save the time we create action 
     photoUrl?: string,
-    userId: string
+    userId: string,
+    placeId: string,
 }
 
 

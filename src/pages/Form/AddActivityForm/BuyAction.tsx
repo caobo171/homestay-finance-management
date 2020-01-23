@@ -7,18 +7,22 @@ import DatePicker from '../DatePicker'
 import * as firebase from 'firebase'
 import { addItem } from 'store/item/function'
 import Item, { ItemType } from 'store/item/types'
-import { useCurrentUser } from 'store/user/hooks'
+import { useCurrentUser, useUserList } from 'store/user/hooks'
 import { Activity, ActivityType } from 'store/activity/types'
 import { addActivity } from 'store/activity/functions'
 import { closeModal } from 'components/Modal'
 import { toast } from 'react-toastify'
-import { formRef } from 'service/FormRefContext'
+import { formRef, undoFormPosition } from 'service/FormRefContext'
 import { useAsyncFn } from 'react-use'
 import LoadingComponent from 'components/LoadingComponent'
 import ImagePicker from '../ImagePicker'
 import { uploadImage, now } from 'service/helpers'
 import UserPicker from '../UserPicker'
 import { User } from 'store/user/types'
+import { sendNotification } from 'store/user/function'
+import { useItems } from 'store/item/hooks'
+import ObjectPicker from 'components/ObjectPicker'
+import ItemAutoComplete from '../ItemAutoComplete'
 
 const StyledWrapper = styled.div`
     font-size: 14px;
@@ -118,6 +122,7 @@ const AddActivityForm = () => {
             userId: currentUser ? currentUser.id : '-1',
             actionDate: now(),
             remain: amount,
+            placeId: currentUser ? currentUser.placeId : '-1',
             id: '-1' // Fake id to valid Item type
         }
 
@@ -138,6 +143,10 @@ const AddActivityForm = () => {
         }
 
         const res = await addActivity(activity)
+
+        // users.forEach(user=>{
+        //     sendNotification(user,`${currentUser?.displayName} đã thêm ${name}`, 'Finance Management')
+        // })
 
         if (res) {
             toast.success('Thêm đồ thành công !!')
@@ -166,16 +175,16 @@ const AddActivityForm = () => {
         <>{state.loading ? <LoadingComponent /> : (
             <StyledWrapper ref={formRef} onClick={(event: any) => {
                 if (event.target.tagName === 'DIV') {
-                    if (formRef && formRef.current) {
-                        formRef.current.style.marginTop = '0px';
-                    }
+                    undoFormPosition()
                 }
             }}>
 
-                <TextInput value={name}
-                    onValueChange={setName}
-
-                    title="Tên đồ" />
+                <ItemAutoComplete
+                    value={name}
+                    setValue={setName}
+                    title= "Tên đồ*"
+                />
+            
                 <SelectInput data={SELECT_TYPE_DATA}
                     onValueChange={setTypeHandle}
                     value={type} title="Thể loại" />

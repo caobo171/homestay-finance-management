@@ -48,7 +48,7 @@ const TextInput = ({title , type ,value, onValueChange}: Props)=>{
         onValueChange( type && type==='number' ? Number(event.target.value): event.target.value)
     },[value])
     return <StyledWrapper>
-        <StyledLabel>{title}*</StyledLabel>
+        <StyledLabel>{title}</StyledLabel>
         <StyledInput 
         ref = {ref}
         onFocus={

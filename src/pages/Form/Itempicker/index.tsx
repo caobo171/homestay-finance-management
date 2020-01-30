@@ -15,16 +15,19 @@ const StyledHeader = styled.div`
 
 export interface PickedItemType {
     pickAmount: number,
-    item: Item
+    item: Item,
+
 }
 
 interface Props {
     pickedItems: Map<string, PickedItemType>,
-    setPickedItems: (value: Map<string, PickedItemType>) => void
+    setPickedItems: (value: Map<string, PickedItemType>) => void,
+    title: string
 }
 const ItemPicker = ({
     pickedItems,
     setPickedItems,
+    title
 }: Props) => {
 
 
@@ -50,7 +53,7 @@ const ItemPicker = ({
     return (
         <StyledWrapper>
             <StyledHeader>
-                Chọn đồ 
+                {title}
            </StyledHeader>
 
             {

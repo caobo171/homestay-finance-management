@@ -92,10 +92,10 @@ const Sidebar = (props: Props) => {
                 <StyledHeader>
                     Actions
                 </StyledHeader>
-                <SidebarItem
+                {/* <SidebarItem
                     dismissMenu={props.onDismissMenu}
                     onSelectPage={onSelectPage}
-                    name={'Checkin'} icon={ClockIcon} />
+                    name={'Checkin'} icon={ClockIcon} /> */}
                 <SidebarItem
                     dismissMenu={props.onDismissMenu}
                     name={'Logout '} icon={LogoutIcon} onSelect={logout} />

@@ -23,6 +23,7 @@ import { sendNotification } from 'store/user/function'
 import { useItems } from 'store/item/hooks'
 import ObjectPicker from 'components/ObjectPicker'
 import ItemAutoComplete from '../ItemAutoComplete'
+import CurrentUser from 'service/CurrentUser'
 
 const StyledWrapper = styled.div`
     font-size: 14px;
@@ -68,6 +69,7 @@ const AddActivityForm = () => {
 
 
     const currentUser = useCurrentUser()
+    const users = useUserList()
     const [type, setType] = useState<ItemType>(ItemType.NOT_GENERAL)
     const [name, setName] = useState<string>('')
     const [pickedUsers, setPickedUsers] = useState<Map<string, User>>(new Map())
@@ -121,10 +123,13 @@ const AddActivityForm = () => {
             type, name, postDate, amount, cost, unit, photoUrl,
             userId: currentUser ? currentUser.id : '-1',
             actionDate: now(),
-            remain: amount,
+            remain: type === ItemType.GENERAL ? 0: amount,
             placeId: currentUser ? currentUser.placeId : '-1',
             id: '-1' // Fake id to valid Item type
         }
+
+
+
 
 
         const itemId = await addItem(data)
@@ -133,8 +138,8 @@ const AddActivityForm = () => {
             type: ActivityType.BUY,
             item_id: itemId,
             user_id: currentUser ? currentUser.id : '-1',
-            amount: amount,
-            cost: cost,
+            amount,
+            cost,
             time: postDate,
             influencers: pickedUserIds,
             id: '-1',
@@ -143,12 +148,33 @@ const AddActivityForm = () => {
         }
 
         const res = await addActivity(activity)
+        let res2 = null
+
+        if (type === ItemType.GENERAL) {
+
+            const userActivity: Activity = {
+                type: ActivityType.USE,
+                item_id: itemId,
+                user_id: currentUser ? currentUser.id : '-1',
+                amount,
+                cost,
+                name: `Dùng ${name}`,
+                time: postDate,
+                influencers: users.map(e => e.id),
+                id: '-1',
+                actionDate: now()
+            }
+
+            res2 =  await addActivity(userActivity)
+        }else{
+            res2 = true
+        }
 
         // users.forEach(user=>{
         //     sendNotification(user,`${currentUser?.displayName} đã thêm ${name}`, 'Finance Management')
         // })
 
-        if (res) {
+        if (res && res2) {
             toast.success('Thêm đồ thành công !!')
 
         } else {
@@ -182,9 +208,9 @@ const AddActivityForm = () => {
                 <ItemAutoComplete
                     value={name}
                     setValue={setName}
-                    title= "Tên đồ*"
+                    title="Tên đồ"
                 />
-            
+
                 <SelectInput data={SELECT_TYPE_DATA}
                     onValueChange={setTypeHandle}
                     value={type} title="Thể loại" />
@@ -194,6 +220,7 @@ const AddActivityForm = () => {
 
                 <UserPicker pickedUsers={pickedUsers}
                     setPickedUsers={setPickedUsers}
+                    title={'Chọn người mua'}
                 />
 
                 <DatePicker

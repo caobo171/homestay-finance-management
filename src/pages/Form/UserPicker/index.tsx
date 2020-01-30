@@ -20,7 +20,8 @@ const StyledHeader = styled.div`
 interface Props {
     pickedUsers: Map<string, User>,
     setPickedUsers: (value: Map<string, User>) => void,
-    type? : 'all' | 'place'
+    type? : 'all' | 'place',
+    title: string
 }
 
 const StyledUserGroupWrapper = styled.div`
@@ -33,7 +34,7 @@ const StyledCloseIcon = styled(TrashIcon)`
     margin-right: 12px;
 `
 const UserPicker = ({
-    pickedUsers, setPickedUsers , type
+    pickedUsers, setPickedUsers , type, title
 }: Props) => {
 
 
@@ -49,7 +50,7 @@ const UserPicker = ({
     return (
         <StyledWrapper>
             <StyledHeader>
-                Chọn người 
+                {title} 
            </StyledHeader>
 
             <StyledUserGroupWrapper>

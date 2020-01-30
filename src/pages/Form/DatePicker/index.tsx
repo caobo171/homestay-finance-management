@@ -53,7 +53,7 @@ const DatePicker = ({ title, value, onValueChange }: Props) => {
 
     const ref = useRef<HTMLInputElement>(null)
     return <StyledWrapper>
-        <StyledLabel>{title}*</StyledLabel>
+        <StyledLabel>{title}</StyledLabel>
         <StyledFileInput onChange={onValueChangeHandle}
             value={formatDate(value)}
             type="date" />

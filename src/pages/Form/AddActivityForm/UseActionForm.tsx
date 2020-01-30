@@ -8,7 +8,7 @@ import UserPicker from '../UserPicker'
 import SelectInput from '../SelectInput'
 import { User } from 'store/user/types'
 import { ActivityType, Activity } from 'store/activity/types'
-import { useCurrentUser } from 'store/user/hooks'
+import { useCurrentUser, useUserList } from 'store/user/hooks'
 
 import * as firebase from 'firebase'
 import Item from 'store/item/types'
@@ -46,7 +46,7 @@ const StyledSubmitButton = styled.div`
 
 const SELECT_DATA_TYPES = [
     {
-        value: ActivityType.BUY,
+        value: ActivityType.DESTROY,
         name: 'Hủy'
     },
     {
@@ -58,6 +58,8 @@ const SELECT_DATA_TYPES = [
 const UseActionForm = () => {
 
     const currentUser = useCurrentUser()
+
+    const listUsers = useUserList()
     const [pickedItems, setPickedItems] =
         useState<Map<string, PickedItemType>>(new Map())
 
@@ -69,21 +71,25 @@ const UseActionForm = () => {
 
     const [type, setType] = useState<ActivityType>(ActivityType.USE)
 
-    const validate = ()=>{
-        if([...pickedItems.values()].length <= 0 ){
+    const validate = () => {
+        if ([...pickedItems.values()].length <= 0) {
             toast.error('Bạn phải chọn ít nhất 1 đồ')
             return false
-        }else if(name.replace(/\s/g,'')=== ''){
+        } else if (name.replace(/\s/g, '') === '') {
             toast.error('Bạn phải ghi tiêu đề ')
             return false
         }
         return true
     }
 
+    // useEffect(()=>{
+    //     console.log(type === ActivityType.DESTROY)
+    // })
+
 
     const onSubmitHandle = async () => {
-        if(!validate()) return 
-        if (window.confirm('Bạn có chắc muốn tạo không ? \n '+ (
+        if (!validate()) return
+        if (window.confirm('Bạn có chắc muốn tạo không ? \n ' + (
             [...pickedUsers.values()].length > 0 && (`Hành động này sẽ ảnh hưởng đến ${[...pickedUsers.values()].length} người`)
         ))) {
             const actionDate = firebase.firestore.Timestamp.now().seconds * 1000
@@ -98,7 +104,7 @@ const UseActionForm = () => {
                     amount: data.pickAmount,
                     cost: data.pickAmount / data.item.amount * data.item.cost,
                     time,
-                    influencers: pickedUserIds,
+                    influencers: type=== ActivityType.DESTROY ? listUsers.map(e=>e.id) : pickedUserIds ,
                     id: '-1',
                     name,
                     actionDate
@@ -154,7 +160,7 @@ const UseActionForm = () => {
                             }}>
 
                             <TextInput
-                                title={'Tiêu đề'}
+                                title={'Tiêu đề*'}
                                 value={name}
                                 onValueChange={setName}
                             />
@@ -162,26 +168,34 @@ const UseActionForm = () => {
                             <SelectInput
 
                                 data={SELECT_DATA_TYPES}
-                                title={'Phương thức dùng'}
+                                title={'Phương thức*'}
                                 value={type}
                                 onValueChange={setType}
                             />
 
 
                             <DatePicker
-                                title={'Chọn ngày'}
+                                title={'Chọn ngày*'}
                                 value={time}
                                 onValueChange={setTime}
                             />
 
                             <ItemPicker
+                                title= {'Chọn đồ*'}
                                 pickedItems={pickedItems}
                                 setPickedItems={setPickedItems}
                             />
 
-                            <UserPicker pickedUsers={pickedUsers}
-                                setPickedUsers={setPickedUsers}
-                            />
+                            {
+                                type !== ActivityType.DESTROY && (
+                                    <UserPicker 
+                                        pickedUsers={pickedUsers}
+                                        setPickedUsers={setPickedUsers}
+                                        title= {'Chonj '}
+                                    />
+                                )
+                            }
+
 
                             <StyledSubmitButton onClick={fetch}>
                                 Add Activity

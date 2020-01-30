@@ -111,6 +111,7 @@ const HomestayDetail = ({ homestay }: Props) => {
 
                         <UserPicker
                             type = 'all'
+                            title= "Chọn người "
                             pickedUsers={pickedUsers}
                             setPickedUsers={setPickedUsers}
                         />

@@ -1,11 +1,10 @@
 import rootReducer from './rootReducer'
 
 import { compose, createStore, applyMiddleware } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
 
 const middlewares: any[] = []
 
-const enhancer = composeWithDevTools(applyMiddleware(...middlewares))
+const enhancer = compose(applyMiddleware(...middlewares))
 
 const initialState = {}
 

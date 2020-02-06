@@ -2,8 +2,6 @@ import * as firebase from 'firebase'
 import { User } from './types';
 import store from 'store/store';
 import * as actions from './action'
-import axios from 'axios'
-import { LIGACY_SERVER_KEY } from 'env';
 import CurrentUser from 'service/CurrentUser';
 
 
@@ -46,26 +44,7 @@ const createUserFirebaseDatabase = (user: User) => {
 }
 
 
-export const  sendNotification = async (user:User, body:string, title:string)=>{
 
-
-    if(user.token){
-        const options = {
-            "to" : user.token,
-            "notification" : {
-                "body" : body,
-                "title": title,
-                "icon": "/firebase-logo.png"
-            }
-           }
-        return await axios.post('https://fcm.googleapis.com/fcm/send',options,{
-            headers:{
-                'Content-Type':'application/json',
-                'Authorization': LIGACY_SERVER_KEY
-            }
-        })
-    }
-}
 
 export const updateUserToken = async (user:User, token:string)=>{
 

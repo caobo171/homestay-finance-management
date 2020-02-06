@@ -19,11 +19,7 @@ import ImagePicker from '../ImagePicker'
 import { uploadImage, now } from 'service/helpers'
 import UserPicker from '../UserPicker'
 import { User } from 'store/user/types'
-import { sendNotification } from 'store/user/function'
-import { useItems } from 'store/item/hooks'
-import ObjectPicker from 'components/ObjectPicker'
 import ItemAutoComplete from '../ItemAutoComplete'
-import CurrentUser from 'service/CurrentUser'
 
 const StyledWrapper = styled.div`
     font-size: 14px;

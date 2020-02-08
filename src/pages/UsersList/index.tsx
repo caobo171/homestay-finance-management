@@ -17,6 +17,18 @@ const Wrapper = styled.div`
 
 const StyledListUserWrapper = styled.div`
     width : 100%;
+    overflow-y: scroll;
+    max-height: ${window.innerHeight - 150}px;
+
+    &::-webkit-scrollbar {
+        width: 2px;
+        height: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        height: 5px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,1); 
+    }
 `
 
 const UserList = () => {

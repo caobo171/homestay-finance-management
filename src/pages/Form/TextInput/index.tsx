@@ -58,7 +58,7 @@ const TextInput = ({title , type ,value, onValueChange}: Props)=>{
                     const formRefBottom = formRef.current.getBoundingClientRect().bottom
                     const refTop = ref.current.getBoundingClientRect().top
                     if(window.innerWidth <= 600){
-                        formRef.current.style.marginTop = `${formRefBottom - refTop - 100}px`
+                        formRef.current.style.marginTop = `${formRefBottom - refTop - 50}px`
                     }
                 }
             }

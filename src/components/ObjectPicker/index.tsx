@@ -90,17 +90,18 @@ const ObjectPicker = (props: Props) => {
 
     const [visible, setVisible] = useState(false)
     const ref = useRef<HTMLInputElement>(null)
-    const onFocusHandle = () => {
-        setVisible(true)
+    const onFocusHandle = useCallback(() => {
+        
+        setVisible(!visible)
 
         if (formRef && formRef.current && ref && ref.current) {
 
             const refTop = ref.current.getBoundingClientRect().top
             if (window.innerWidth <= 600) {
-                formRef.current.style.marginTop = `${20-refTop}px`
+                formRef.current.style.marginTop = `${80-refTop}px`
             }
         }
-    }
+    },[visible])
 
     const searchStringChangeHandle = useCallback((event) => {
         props.setSearchString(event.target.value)

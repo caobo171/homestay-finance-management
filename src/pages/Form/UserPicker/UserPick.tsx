@@ -79,7 +79,7 @@ const filterBySearchString = (users: User[], searchString: string) => {
 const UserPick = ({ addPickUser, pickedUsers ,type }: Props) => {
 
     const [searchString, setSearchString] = useState('')
-    const avalableUsers = useRemainUsers(pickedUsers)
+    const avalableUsers = useRemainUsers(pickedUsers, type)
 
     const [currentUser, setCurrentUser] = useState<null | User>(null)
 

@@ -126,6 +126,7 @@ const ItemPick = ({ addPickItem, pickedItems }: Props) => {
         }
         if (currentItem) {
             addPickItem(currentItem, pickAmount)
+            setCurrentItem(null)
         }
 
     }, [currentItem, pickAmount])

@@ -9,7 +9,7 @@ import { CssVariable } from 'Constants'
 import { useAsyncFn } from 'react-use'
 import LoadingComponent from 'components/LoadingComponent'
 import { toast } from 'react-toastify'
-import { useUserByPlaceid } from 'store/user/hooks'
+import { useUserByPlaceid, useAllUsers } from 'store/user/hooks'
 import UserGroup from 'components/UserGroup'
 
 const StyledWrapper = styled.div`
@@ -77,6 +77,7 @@ const HomestayDetail = ({ homestay }: Props) => {
     const [pickedUsers, setPickedUsers] = useState<Map<string, User>>(new Map())
 
     const users = useUserByPlaceid(homestay.id)
+    const allUsers = useAllUsers()
     const onSubmitHandle = async () => {
         const res = await Promise.all([...pickedUsers.values()].map(async (user) => {
             return await updateUserPlace(user, homestay.id)

@@ -97,7 +97,7 @@ const ActivityRow = ({ activity, type }: Props) => {
             <StyledText flex={1}>
                 {renderActivity(activity.type)}
             </StyledText>
-            <StyledText flex={1.8}>
+            <StyledText flex={2.6}>
                 {
                     activity.type !== ActivityType.PAY && (
                         <>

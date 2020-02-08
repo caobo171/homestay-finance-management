@@ -96,8 +96,10 @@ const ItemAutoComplete = (props: Props) => {
         if (formRef && formRef.current && ref && ref.current) {
 
             const refTop = ref.current.getBoundingClientRect().top
+
+            console.log(refTop)
             if (window.innerWidth <= 600) {
-                formRef.current.style.marginTop = `${20 - refTop}px`
+                formRef.current.style.marginTop = `${200 - refTop}px`
             }
         }
     }
@@ -123,6 +125,7 @@ const ItemAutoComplete = (props: Props) => {
                     {displayItems.map(data => {
                         return (
                             <StyleDiv
+                                key={data.id}
                                 onClick={() => {
                                     props.setValue(data.name)
                                     setVisible(false)

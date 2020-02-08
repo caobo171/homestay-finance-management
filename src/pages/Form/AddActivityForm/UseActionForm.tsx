@@ -9,7 +9,6 @@ import SelectInput from '../SelectInput'
 import { User } from 'store/user/types'
 import { ActivityType, Activity } from 'store/activity/types'
 import { useCurrentUser, useUserList } from 'store/user/hooks'
-
 import * as firebase from 'firebase'
 import Item from 'store/item/types'
 import { addActivity } from 'store/activity/functions'
@@ -104,7 +103,7 @@ const UseActionForm = () => {
                     amount: data.pickAmount,
                     cost: data.pickAmount / data.item.amount * data.item.cost,
                     time,
-                    influencers: type=== ActivityType.DESTROY ? listUsers.map(e=>e.id) : pickedUserIds ,
+                    influencers: type === ActivityType.DESTROY ? listUsers.map(e => e.id) : pickedUserIds,
                     id: '-1',
                     name,
                     actionDate
@@ -144,64 +143,62 @@ const UseActionForm = () => {
 
     return (
         <>
-            {
-                state.loading ? <LoadingComponent /> :
-                    (
-                        <StyledWrapper
-                            ref={formRef}
-                            onClick={(event: any) => {
-                                if (event.target.tagName === 'DIV') {
-                                    if (formRef && formRef.current) {
+            {state.loading ? <LoadingComponent /> :
+                (<StyledWrapper
+                    ref={formRef}
+                    onClick={(event: any) => {
+                        if (event.target.tagName === 'DIV') {
+                            if (formRef && formRef.current) {
 
-                                        //@ts-ignore
-                                        formRef.current.style.marginTop = '0px';
-                                    }
-                                }
-                            }}>
-
-                            <TextInput
-                                title={'Tiêu đề*'}
-                                value={name}
-                                onValueChange={setName}
-                            />
-
-                            <SelectInput
-
-                                data={SELECT_DATA_TYPES}
-                                title={'Phương thức*'}
-                                value={type}
-                                onValueChange={setType}
-                            />
-
-
-                            <DatePicker
-                                title={'Chọn ngày*'}
-                                value={time}
-                                onValueChange={setTime}
-                            />
-
-                            <ItemPicker
-                                title= {'Chọn đồ*'}
-                                pickedItems={pickedItems}
-                                setPickedItems={setPickedItems}
-                            />
-
-                            {
-                                type !== ActivityType.DESTROY && (
-                                    <UserPicker 
-                                        pickedUsers={pickedUsers}
-                                        setPickedUsers={setPickedUsers}
-                                        title= {'Chonj '}
-                                    />
-                                )
+                                //@ts-ignore
+                                formRef.current.style.marginTop = '0px';
                             }
+                        }
+                    }}>
+
+                    <TextInput
+                        title={'Tiêu đề*'}
+                        value={name}
+                        onValueChange={setName}
+                    />
+
+                    <SelectInput
+
+                        data={SELECT_DATA_TYPES}
+                        title={'Phương thức*'}
+                        value={type}
+                        onValueChange={setType}
+                    />
 
 
-                            <StyledSubmitButton onClick={fetch}>
-                                Add Activity
+                    <DatePicker
+                        title={'Chọn ngày*'}
+                        value={time}
+                        onValueChange={setTime}
+                    />
+
+                    <ItemPicker
+                        title={'Chọn đồ*'}
+                        pickedItems={pickedItems}
+                        setPickedItems={setPickedItems}
+                    />
+
+                    {
+                        type !== ActivityType.DESTROY && (
+                            <UserPicker
+                                pickedUsers={pickedUsers}
+                                setPickedUsers={setPickedUsers}
+                                title={'Chọn người'}
+                            />
+                        )
+                    }
+
+
+                    <StyledSubmitButton onClick={fetch}>
+                        Add Activity
                         </StyledSubmitButton>
-                        </StyledWrapper>
-                    )
+                </StyledWrapper>
+                )
             }
         </>
 

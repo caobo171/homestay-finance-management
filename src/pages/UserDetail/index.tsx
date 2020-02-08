@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import styled from 'styled-components'
 import ActivityRow from 'components/ActivityRow'
 import UserInfo from './UserInfo'
@@ -10,11 +10,47 @@ import { formatMoney } from 'service/helpers'
 import Constants, { CssVariable } from 'Constants'
 import ActivityFilter, { ActivityFilterType } from 'components/ActivityFilter'
 
+//@ts-ignore
+import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
+import useBoolean  from 'react-use/lib/useBoolean';
+import AddActivityButton from 'components/AddActivityButton'
+
+const StyledHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding-right: 10px;
+    margin-top: 10px;
+    align-items: center;
+`
+const StyledDateTimeRangePicker = styled.div`
+
+    span {
+        display: none;
+    }
+
+    select {
+        display: none;
+    }
+
+    input {
+        display: none;
+    }
+
+    .react-datetimerange-picker__inputGroup {
+        display:none;
+    }
+
+    .react-datetimerange-picker__clear-button {
+        display: none;
+    }
+`
+
 const StyledWrapper = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
 `
 
 const StyledActivityHeader = styled.div`
@@ -65,6 +101,16 @@ const StyledName = styled.div`
     justify-content: flex-end;
 `
 
+const StyledAllButton = styled.div`
+    color: #ffffff;
+    background-color: orange;
+    padding: 6px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
 const StyledCost = styled.div<{ color?: string }>`
     flex: 1.4;
     display: flex;
@@ -86,6 +132,17 @@ const StyledNotFound = styled.div`
     opacity: 0.6;
 `
 
+const filterByDate = (startDate:Date, endDate : Date, activities: Activity[]) => {
+    let rStartDate = startDate;
+    rStartDate.setHours(0);
+    let rEndDate = endDate;
+    rEndDate.setHours(23);
+
+    return activities.filter(act => {
+        return act.time > rStartDate.getTime() && act.time < rEndDate.getTime();
+    })
+
+} 
 
 const countMoney = (activities: Activity[]) => {
     let cost = 0;
@@ -116,22 +173,54 @@ const filterData = (activities: Activity[], type: ActivityFilterType) => {
 
 const UserDetail = () => {
 
+
+    const [filter, toggleFilter ] = useBoolean(false)
+
     const param = useParams<{ id: string }>()
     const user = useUser(param.id)
 
+
+    const [date, setDate] = useState<[Date, Date]>([new Date(), new Date()])
+
+    const onDateChangeHandle = (date: [Date, Date]) => {
+        setDate(date)
+    }
     const activities = useActivitiesByUserId(param.id)
 
-    
-
     const [type, setType] = useState<ActivityFilterType>(ActivityFilterType.ALL)
-    const displayData = filterData(activities, type)
+    
+    const filterActivities = filterData(activities, type);
+
+    const displayData = useMemo(()=> filter ? 
+    filterByDate( date[0], date[1] ,filterActivities) : 
+    filterActivities , [filter, filterActivities])
+
+
+    
     const money = countMoney(displayData)
 
     return (<>
         {(user && user.id) && (
             <StyledWrapper>
                 <ActivityFilter type={type} setType={setType} />
-                <UserInfo user={user} />
+                <StyledHeader>
+                    <UserInfo user={user} />
+
+
+                    <span>Chọn ngày: </span>
+                    <StyledDateTimeRangePicker>
+                        <DateTimeRangePicker
+                            value={date}
+                            onChange={onDateChangeHandle}
+                        ></DateTimeRangePicker>
+                    </StyledDateTimeRangePicker>
+
+                    <StyledAllButton onClick={toggleFilter}>
+                        <span>{filter ? 'Filter': 'All' }</span>
+                    </StyledAllButton>
+                </StyledHeader>
+
+
                 <StyledActivityHeader>Activities</StyledActivityHeader>
 
                 <StyledActivitiesWrapper>
@@ -145,7 +234,7 @@ const UserDetail = () => {
                 </StyledActivitiesWrapper>
 
                 {
-                    (displayData.length >= 1 ) ? (
+                    (displayData.length >= 1) ? (
                         <StyledCountRow>
                             <StyledName>Còn:</StyledName>
                             <StyledCost
@@ -163,7 +252,7 @@ const UserDetail = () => {
                         )
                 }
 
-
+                <AddActivityButton/>
             </StyledWrapper>
         )}
     </>)

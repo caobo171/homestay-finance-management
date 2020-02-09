@@ -19,7 +19,7 @@ const StyledWrapper = styled.div`
 `
 
 const StyledImage  = styled.img`
-    flex: 2;
+    flex: 1;
     height: 100%;
     width: 100%;
 `

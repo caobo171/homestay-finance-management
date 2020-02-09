@@ -31,3 +31,18 @@ export const useActivitiesByItemId = (itemId: string) => {
         activity: State
     }) => [...state.activity.listActivities.values()].filter(act => act.item_id === itemId).sort((a, b) => b.time - a.time))
 }
+
+
+export const useActivitiesByDate = (day: Date) => {
+    let startTime = new Date(day);
+    let endTime = new Date(day)
+    startTime.setHours(0);
+    endTime.setHours(23); 
+    
+
+    return useSelector((state: {
+        activity: State
+    }) => [...state.activity.listActivities.values()].filter(e=>{
+        return e.time > startTime.getTime() && e.time < endTime.getTime()
+    }).sort((a, b) => b.time - a.time))
+}

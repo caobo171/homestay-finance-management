@@ -18,6 +18,7 @@ import realtimeSystem from 'service/realtimeSystem'
 import LoadingComponent from 'components/LoadingComponent'
 import Admin from 'pages/Admin'
 import CurrentUser from 'service/CurrentUser'
+import Activities from 'pages/Activities'
 
 
 const BodyWrapper = styled.div`
@@ -74,15 +75,6 @@ const AppRouter = () => {
 
     const [openSidebar, setOpenSidebar] = useState(false)
 
-    // useEffectOnce(() => {
-    //     (async () => {
-
-
-            
-    //         await setFullyLoaded(true)
-    //     })()
-    // })
-
     useEffect(()=>{
         (async ()=>{
             if(!user){
@@ -90,22 +82,9 @@ const AppRouter = () => {
             }
             
             if(user){
-
                 CurrentUser.init()
                 await getUserList()
                 realtimeSystem.init()
-                
-                // messaging.requestPermission()
-                // .then(()=>{
-                //     return messaging.getToken()
-                // })
-                // .then((token)=>{
-                //     console.log(token)
-                //     updateUserToken(user,token)
-                // })
-                // .catch(err=>{
-                //     console.log(err)
-                // })
             }
 
             await setFullyLoaded(true)
@@ -137,6 +116,7 @@ const AppRouter = () => {
                                 <PrivateRoute path={'/users'} component={UserList} />
                                 <PrivateRoute path={'/user/:id'} component={UserDetail} />
                                 <PrivateRoute path={'/admin'} component={Admin} />
+                                <PrivateRoute path={'/activities'} component={Activities} />
                                 <Route path={'/login'} component={Login} />
                                 <PrivateRoute path={'/'} component={Checkin} />
 

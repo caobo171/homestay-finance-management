@@ -20,8 +20,8 @@ const StyledWrapper = styled.div`
 
 const StyledImage = styled.img`
     flex: 1;
-    height: 100%;
-    width: 100%;
+    height: 50%;
+    width: 50%;
 `
 
 const StyledName = styled.div`

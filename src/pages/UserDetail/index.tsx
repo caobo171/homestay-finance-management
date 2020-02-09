@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 import { useUser } from 'store/user/hooks'
 import { useActivitiesByUserId } from 'store/activity/hooks'
 import { Activity, ActivityType } from 'store/activity/types'
-import { formatMoney } from 'service/helpers'
+import { formatMoney, countMoney } from 'service/helpers'
 import Constants, { CssVariable } from 'Constants'
 import ActivityFilter, { ActivityFilterType } from 'components/ActivityFilter'
 
@@ -144,27 +144,6 @@ const filterByDate = (startDate:Date, endDate : Date, activities: Activity[]) =>
 
 } 
 
-const countMoney = (activities: Activity[]) => {
-    let cost = 0;
-    for (let i = 0; i < activities.length; i++) {
-        const act = activities[i]
-        const lengthInfluencers = act.influencers.length
-        switch (act.type) {
-            case ActivityType.BUY:
-                cost = cost - (lengthInfluencers > 0 ? act.cost / lengthInfluencers : act.cost)
-                break;
-            case ActivityType.PAY:
-                cost = cost - act.cost
-                break;
-            case ActivityType.DESTROY:
-                cost = cost + (lengthInfluencers > 0 ? act.cost / lengthInfluencers : act.cost)
-            case ActivityType.USE:
-                cost = cost + (lengthInfluencers > 0 ? act.cost / lengthInfluencers : act.cost)
-        }
-    }
-
-    return cost
-}
 
 const filterData = (activities: Activity[], type: ActivityFilterType) => {
     if (type === ActivityFilterType.ALL) return activities

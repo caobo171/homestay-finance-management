@@ -6,7 +6,6 @@ import CreateActivityButton from './CreateActivityButton';
 import HumanIcon from 'icons/HumanIcon';
 import DirectoryIcon from 'icons/DirectoryIcon';
 import ActivityIcon from 'icons/ActivityIcon';
-import ClockIcon from 'icons/ClockIcon';
 import LogoutIcon from 'icons/LogoutIcon';
 import { logout } from 'store/user/function';
 import { AppRouterContext } from 'navigation/AppRouter';
@@ -86,6 +85,7 @@ const Sidebar = (props: Props) => {
                     name={'Items'} icon={DirectoryIcon} />
                 <SidebarItem
                     dismissMenu={props.onDismissMenu}
+                    onSelectPage={onSelectPage}
                     name={'Activities'} icon={ActivityIcon} />
 
 

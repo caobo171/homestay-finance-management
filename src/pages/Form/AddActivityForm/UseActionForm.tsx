@@ -122,7 +122,7 @@ const UseActionForm = () => {
 
             if (res) {
                 toast.success('Thêm hành động thành công !!')
-
+                window.location.reload()
             } else {
                 toast.error('Có lỗi xảy ra rồi :(')
             }

@@ -4,8 +4,6 @@ import ItemImage from 'components/ItemImage'
 import Constants, { CssVariable } from 'Constants'
 import { Activity, ActivityType } from 'store/activity/types'
 import { useItem } from 'store/item/hooks'
-import { openModal } from 'components/Modal'
-import ActivityModal from './ActivityModal'
 import { formatMoney } from 'service/helpers'
 
 
@@ -73,25 +71,13 @@ const renderActivity = (type: ActivityType) => {
     }
 }
 
-const formatDate = (time: number) => {
-    const date = new Date(time)
-    const day = `${date.getDate()}`.padStart(2, '0')
-    const month = `${date.getMonth() + 1}`.padStart(2, '0')
-    const year = `${date.getFullYear()}`
-
-    return `${day}/${month}/${year}`
-}
-
-
 
 
 const ActivityRow = ({ activity, type }: Props) => {
 
     const item = useItem(activity.item_id)
 
-    return <StyledWrapper onClick={() => {
-        openModal(<ActivityModal activity={activity} />)
-    }}>
+    return <StyledWrapper>
         <StyledRowItem>
             <StyledText flex={1}>
                 {renderActivity(activity.type)}
@@ -107,32 +93,30 @@ const ActivityRow = ({ activity, type }: Props) => {
                 }
 
             </StyledText>
+            <StyledText flex={1.2} color={
+                activity.type === ActivityType.PAY || activity.type === ActivityType.BUY ?
+                    Constants.green :
+                    Constants.red
+            }>
+                {(activity.type === ActivityType.PAY || activity.type === ActivityType.BUY) ?
+                    '+' : '-'}{activity.amount.toFixed(2)} {item ? item.unit : ''}
 
-            <StyledText flex={1.4} color={
+            </StyledText>
+
+            <StyledText flex={1.2} color={
                 activity.type === ActivityType.PAY || activity.type === ActivityType.BUY ?
                     Constants.green :
                     Constants.red
             }>
                 {
                     type === 'item' ? (<>
-
                         {(activity.type === ActivityType.PAY || activity.type === ActivityType.BUY) ? '+' : '-'}{activity.amount.toFixed(2)} {item ? item.unit : ''}
-
                     </>) : (<>
-
                         {(activity.type === ActivityType.PAY || activity.type === ActivityType.BUY) ? '-' : '+'}
-                        {formatMoney(
-                            activity.influencers.length >= 1
-                                ? activity.cost / activity.influencers.length
-                                : activity.cost
-                        )}
-
+                        {formatMoney(activity.cost)}
                     </>)
                 }
             </StyledText>
-
-            <StyledSmallText>
-                ({formatDate(activity.time)})</StyledSmallText>
         </StyledRowItem>
     </StyledWrapper>
 }

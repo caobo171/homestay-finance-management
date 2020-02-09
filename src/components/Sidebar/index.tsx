@@ -9,6 +9,9 @@ import ActivityIcon from 'icons/ActivityIcon';
 import LogoutIcon from 'icons/LogoutIcon';
 import { logout } from 'store/user/function';
 import { AppRouterContext } from 'navigation/AppRouter';
+import Constants from 'Constants';
+import { useActivitiesByDate } from 'store/activity/hooks';
+import { now } from 'service/helpers';
 
 const SIDEBAR_WIDTH = 225;
 
@@ -32,7 +35,8 @@ const StyledBack = styled.div<{ active: boolean }>`
     ${props => !props.active && 'opacity: 0;'}
 `
 const StyledContainer = styled.div<{ active: boolean }>`
-    position:absolute;
+    ${Constants.IS_MOBILE && 'position:absolute;'}
+    height: 100%;
     top:0;
     bottom: 0;
     left: 0 ;
@@ -43,6 +47,8 @@ const StyledContainer = styled.div<{ active: boolean }>`
     align-items: flex-start;
     transition: 0.3s;
     padding: 40px 18px;
+    ${!Constants.IS_MOBILE && 'background-color: rgba(100,100,100,0.1);'}
+  
     ${props => !props.active && `left: -${SIDEBAR_WIDTH * 1.5}px`}
 `
 
@@ -61,47 +67,81 @@ interface Props {
 
 const Sidebar = (props: Props) => {
 
-    const onSelectPage = (name: string)=>{
+    const onSelectPage = (name: string) => {
         AppRouterContext.ref.props.history.push(`/${name.toLowerCase()}`)
     }
 
+    const activities = useActivitiesByDate(new Date(now()))
+
+
     return (
-        <StyledWrapper active={props.active}>
-            <StyledBack
-                active={props.active}
-                onClick={props.onDismissMenu}
-            />
-            <StyledContainer active={props.active}>
-                <UserInfo />
-                <CreateActivityButton />
+        <>
+            {
+                Constants.IS_MOBILE ? (
+                    <StyledWrapper active={props.active}>
+                        <StyledBack
+                            active={props.active}
+                            onClick={props.onDismissMenu}
+                        />
+                        <StyledContainer active={props.active}>
+                            <UserInfo />
+                            <CreateActivityButton />
 
-                <SidebarItem
-                    dismissMenu={props.onDismissMenu}
-                    onSelectPage={onSelectPage}
-                    name={'Users'} icon={HumanIcon} />
-                <SidebarItem
-                    dismissMenu={props.onDismissMenu}
-                    onSelectPage={onSelectPage}
-                    name={'Items'} icon={DirectoryIcon} />
-                <SidebarItem
-                    dismissMenu={props.onDismissMenu}
-                    onSelectPage={onSelectPage}
-                    name={'Activities'} icon={ActivityIcon} />
+                            <SidebarItem
+                                dismissMenu={props.onDismissMenu}
+                                onSelectPage={onSelectPage}
+                                name={'Users'} icon={HumanIcon} />
+                            <SidebarItem
+                                dismissMenu={props.onDismissMenu}
+                                onSelectPage={onSelectPage}
+                                name={'Items'} icon={DirectoryIcon} />
+                            <SidebarItem
+                                dismissMenu={props.onDismissMenu}
+                                onSelectPage={onSelectPage}
+
+                                todayActivitiesNumber={activities.length}
+                                name={'Activities'} icon={ActivityIcon} />
 
 
-                <StyledHeader>
-                    Actions
-                </StyledHeader>
-                {/* <SidebarItem
-                    dismissMenu={props.onDismissMenu}
-                    onSelectPage={onSelectPage}
-                    name={'Checkin'} icon={ClockIcon} /> */}
-                <SidebarItem
-                    dismissMenu={props.onDismissMenu}
-                    name={'Logout '} icon={LogoutIcon} onSelect={logout} />
-            </StyledContainer>
+                            <StyledHeader>
+                                Actions
+                            </StyledHeader>
+                            <SidebarItem
+                                dismissMenu={props.onDismissMenu}
+                                name={'Logout '} icon={LogoutIcon} onSelect={logout} />
+                        </StyledContainer>
 
-        </StyledWrapper>
+                    </StyledWrapper>
+                ) : (<StyledContainer active={true}>
+                    <UserInfo />
+                    <CreateActivityButton />
+
+                    <SidebarItem
+                        dismissMenu={props.onDismissMenu}
+                        onSelectPage={onSelectPage}
+                        name={'Users'} icon={HumanIcon} />
+                    <SidebarItem
+                        dismissMenu={props.onDismissMenu}
+                        onSelectPage={onSelectPage}
+                        name={'Items'} icon={DirectoryIcon} />
+                    <SidebarItem
+                        dismissMenu={props.onDismissMenu}
+                        onSelectPage={onSelectPage}
+                        todayActivitiesNumber = {activities.length}
+                        name={'Activities'} icon={ActivityIcon} />
+
+
+                    <StyledHeader>
+                        Actions
+                            </StyledHeader>
+                    <SidebarItem
+                        dismissMenu={props.onDismissMenu}
+                        name={'Logout '} icon={LogoutIcon} onSelect={logout} />
+                </StyledContainer>
+                    )
+            }
+        </>
+
     )
 }
 

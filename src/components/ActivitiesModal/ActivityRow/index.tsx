@@ -47,12 +47,6 @@ const StyledSpan = styled.span`
     text-transform: capitalize;
     font-weight: 600;
 `
-const StyledSmallText = styled.div`
-    align-items: center;
-    font-size: 12px;
-    margin-right: 8px;
-`
-
 interface Props {
     activity: Activity,
     type?: 'item' | 'user'
@@ -79,21 +73,21 @@ const ActivityRow = ({ activity, type }: Props) => {
 
     return <StyledWrapper>
         <StyledRowItem>
-            <StyledText flex={1}>
+            {!Constants.IS_MOBILE && <StyledText flex={1}>
                 {renderActivity(activity.type)}
-            </StyledText>
+            </StyledText>}
             <StyledText flex={2.6}>
                 {
                     activity.type !== ActivityType.PAY && (
                         <>
-                            <ItemImage itemId={activity.item_id} size={'very_small'} />
+                            {!Constants.IS_MOBILE && <ItemImage itemId={activity.item_id} size={'very_small'} />}
                             <StyledSpan>{item.name}</StyledSpan>
                         </>
                     )
                 }
 
             </StyledText>
-            <StyledText flex={1.2} color={
+            {!Constants.IS_MOBILE && <StyledText flex={1.2} color={
                 activity.type === ActivityType.PAY || activity.type === ActivityType.BUY ?
                     Constants.green :
                     Constants.red
@@ -101,7 +95,7 @@ const ActivityRow = ({ activity, type }: Props) => {
                 {(activity.type === ActivityType.PAY || activity.type === ActivityType.BUY) ?
                     '+' : '-'}{activity.amount.toFixed(2)} {item ? item.unit : ''}
 
-            </StyledText>
+            </StyledText>}
 
             <StyledText flex={1.2} color={
                 activity.type === ActivityType.PAY || activity.type === ActivityType.BUY ?
@@ -109,9 +103,7 @@ const ActivityRow = ({ activity, type }: Props) => {
                     Constants.red
             }>
                 {
-                    type === 'item' ? (<>
-                        {(activity.type === ActivityType.PAY || activity.type === ActivityType.BUY) ? '+' : '-'}{activity.amount.toFixed(2)} {item ? item.unit : ''}
-                    </>) : (<>
+                    (<>
                         {(activity.type === ActivityType.PAY || activity.type === ActivityType.BUY) ? '-' : '+'}
                         {formatMoney(activity.cost)}
                     </>)

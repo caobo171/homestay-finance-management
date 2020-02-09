@@ -9,7 +9,7 @@ import SelectForm from 'pages/Form/SelectForm'
 const StyledWrapper = styled.div`
     background-color: ${CssVariable.PRIMARY_COLOR};
     
-    width: 72%;
+    width: 78%;
     min-height: 36px;
     display: flex;
     flex-direction: row;
@@ -19,11 +19,12 @@ const StyledWrapper = styled.div`
     text-transform: capitalize;
 
     align-items: center;
-    padding-left: 36px;
+    padding-left: 30px;
+    cursor: pointer;
 `
 
 const StyledPlusIcon = styled(PlusIcon)`
-    margin-left: 12px;
+    margin-left: 4px;
 `
 
 const StyledName = styled.div`

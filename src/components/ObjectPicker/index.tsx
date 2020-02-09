@@ -67,6 +67,7 @@ const StyledCloseIcon = styled(CloseIcon)`
     height: 12px;
     margin-left: 8px;
     margin-right: 4px;
+    cursor:pointer;
 `
 
 interface Props {

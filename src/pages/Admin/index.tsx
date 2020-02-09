@@ -31,6 +31,7 @@ const StyledAddHomeStayButton = styled.div`
 
     align-items: center;
     padding-left: 36px;
+    cursor: pointer;
 `
 
 const HomeStayWrapper = styled.div`

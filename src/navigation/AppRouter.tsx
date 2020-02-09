@@ -19,13 +19,28 @@ import LoadingComponent from 'components/LoadingComponent'
 import Admin from 'pages/Admin'
 import CurrentUser from 'service/CurrentUser'
 import Activities from 'pages/Activities'
+import Constants from 'Constants'
 
 
 const BodyWrapper = styled.div`
     display: flex;
     justify-content: center;
 `
+const StyledWrapper = styled.div`
+    ${!Constants.IS_MOBILE && `
+        display:flex;
+        flex-direction: row;
+        height: ${window.innerHeight - 80}px;
+    `}
+    
+`
 
+const StyledRouterWrapper = styled.div`
+    width: 100%;
+    height: 100%;
+    ${!Constants.IS_MOBILE && `
+    `}
+`
 
 const PrivateRoute: React.FC<{
     component: React.ComponentType<any>,
@@ -75,13 +90,13 @@ const AppRouter = () => {
 
     const [openSidebar, setOpenSidebar] = useState(false)
 
-    useEffect(()=>{
-        (async ()=>{
-            if(!user){
+    useEffect(() => {
+        (async () => {
+            if (!user) {
                 const res = await getCurrentUser()
             }
-            
-            if(user){
+
+            if (user) {
                 CurrentUser.init()
                 await getUserList()
                 realtimeSystem.init()
@@ -89,41 +104,54 @@ const AppRouter = () => {
 
             await setFullyLoaded(true)
         })()
-    
-    },[user])
 
-    const onClickMenu = useCallback(()=>{
+    }, [user])
+
+    const onClickMenu = useCallback(() => {
         setOpenSidebar(true)
-    },[openSidebar])
+    }, [openSidebar])
 
-    const onDismissMenu = useCallback(()=>{
+    const onDismissMenu = useCallback(() => {
         setOpenSidebar(false)
-    },[openSidebar])
+    }, [openSidebar])
 
     return (
         <Router>
             {
                 isFullyLoaded ? (
-                    <RouterContext>
-                        <Navbar onClickMenu={onClickMenu} />
-                        <Sidebar active={openSidebar} onDismissMenu={onDismissMenu}/>
 
-                        <Modal/>
-                        <BodyWrapper>
-                            <Switch>
-                                <PrivateRoute path={'/items'} component={ItemList} />
-                                <PrivateRoute path={'/item/:id'} component={ItemDetail} />
-                                <PrivateRoute path={'/users'} component={UserList} />
-                                <PrivateRoute path={'/user/:id'} component={UserDetail} />
-                                <PrivateRoute path={'/admin'} component={Admin} />
-                                <PrivateRoute path={'/activities'} component={Activities} />
-                                <Route path={'/login'} component={Login} />
-                                <PrivateRoute path={'/'} component={Checkin} />
+                    <StyledWrapper>
 
-                            </Switch>
-                        </BodyWrapper>
+                        <RouterContext>
 
-                    </RouterContext>
+                            <Sidebar active={openSidebar} onDismissMenu={onDismissMenu} />
+
+                            <StyledRouterWrapper>
+                                <Navbar onClickMenu={onClickMenu} />
+                                <Modal />
+                                <BodyWrapper>
+                                    <Switch>
+                                        <PrivateRoute path={'/items'} component={ItemList} />
+                                        <PrivateRoute path={'/item/:id'} component={ItemDetail} />
+                                        <PrivateRoute path={'/users'} component={UserList} />
+                                        <PrivateRoute path={'/user/:id'} component={UserDetail} />
+                                        <PrivateRoute path={'/admin'} component={Admin} />
+                                        <PrivateRoute path={'/activities'} component={Activities} />
+                                        <Route path={'/login'} component={Login} />
+
+                                        {Constants.IS_MOBILE ? (
+                                            <PrivateRoute path={'/'} component={Checkin} />
+                                        ) : (
+                                                <PrivateRoute path={'/'} component={Activities} />
+                                            )}
+
+
+                                    </Switch>
+                                </BodyWrapper>
+                            </StyledRouterWrapper>
+
+                        </RouterContext>
+                    </StyledWrapper>
                 ) : (
                         <LoadingComponent />
                     )

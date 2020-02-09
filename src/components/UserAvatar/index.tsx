@@ -54,15 +54,15 @@ const UserAvatar = (props: Props) => {
 
     const user = useUser(props.userId)
 
-    const onClickHandle = ()=>{
-        if(user.id !== '-1'){
-            openModal(<ImageModal uri={user.photoURL}/>)
-        }
-    }
+    // const onClickHandle = ()=>{
+    //     if(user.id !== '-1'){
+    //         openModal(<ImageModal uri={user.photoURL}/>)
+    //     }
+    // }
 
     return (
         <StyledWrapper size={props.size} height={props.height}
-            onClick={onClickHandle}
+            // onClick={onClickHandle}
         >
             <StyledImage height={props.height} size={props.size} src={user ? user.photoURL : DEFAULT_IMAGE} />
         </StyledWrapper>

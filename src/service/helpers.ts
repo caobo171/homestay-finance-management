@@ -13,6 +13,16 @@ export const now = () => {
 }
 
 
+export const isToday = (date: Date)=>{
+    let startTime = new Date(date)
+    let endTime = new Date(date)
+    const nowTime = now()
+    startTime.setHours(0)
+    endTime.setHours(23)
+
+    return nowTime > startTime.getTime() && nowTime < endTime.getTime()
+}
+
 export const uploadImage = async (file: File) => {
 
     const fileTypes = file.type.split('/');

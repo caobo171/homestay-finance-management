@@ -18,7 +18,7 @@ const StyledWrapper = styled.div`
     background-color: ${CssVariable.PRIMARY_COLOR};
     justify-content: center;
     align-items: center;
-
+    cursor: pointer;
   
 `
 

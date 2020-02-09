@@ -12,12 +12,12 @@ import ActivityFilter, { ActivityFilterType } from 'components/ActivityFilter'
 
 //@ts-ignore
 import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
-import useBoolean  from 'react-use/lib/useBoolean';
+import useBoolean from 'react-use/lib/useBoolean';
 import AddActivityButton from 'components/AddActivityButton'
 
 const StyledHeader = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding-right: 10px;
     margin-top: 10px;
     align-items: center;
@@ -43,6 +43,8 @@ const StyledDateTimeRangePicker = styled.div`
     .react-datetimerange-picker__clear-button {
         display: none;
     }
+
+    margin-right: 14px;
 `
 
 const StyledWrapper = styled.div`
@@ -71,7 +73,7 @@ const StyledActivitiesWrapper = styled.div`
     width: 100%; 
     overflow-y: scroll;
 
-    max-height: 400px;
+    max-height: ${ Constants.IS_MOBILE ? 320 : 400}px;
 
 
     &::-webkit-scrollbar {
@@ -122,6 +124,11 @@ const StyledCost = styled.div<{ color?: string }>`
     `}
 `
 
+const StyledSpan = styled.span`
+    margin-left: 32px;
+    font-weight: 700;
+`
+
 const StyledNotFound = styled.div`
     margin: auto;
     margin-top: 70px;
@@ -132,7 +139,7 @@ const StyledNotFound = styled.div`
     opacity: 0.6;
 `
 
-const filterByDate = (startDate:Date, endDate : Date, activities: Activity[]) => {
+const filterByDate = (startDate: Date, endDate: Date, activities: Activity[]) => {
     let rStartDate = startDate;
     rStartDate.setHours(0);
     let rEndDate = endDate;
@@ -142,7 +149,7 @@ const filterByDate = (startDate:Date, endDate : Date, activities: Activity[]) =>
         return act.time > rStartDate.getTime() && act.time < rEndDate.getTime();
     })
 
-} 
+}
 
 
 const filterData = (activities: Activity[], type: ActivityFilterType) => {
@@ -153,7 +160,7 @@ const filterData = (activities: Activity[], type: ActivityFilterType) => {
 const UserDetail = () => {
 
 
-    const [filter, toggleFilter ] = useBoolean(false)
+    const [filter, toggleFilter] = useBoolean(false)
 
     const param = useParams<{ id: string }>()
     const user = useUser(param.id)
@@ -167,15 +174,15 @@ const UserDetail = () => {
     const activities = useActivitiesByUserId(param.id)
 
     const [type, setType] = useState<ActivityFilterType>(ActivityFilterType.ALL)
-    
+
     const filterActivities = filterData(activities, type);
 
-    const displayData = useMemo(()=> filter ? 
-    filterByDate( date[0], date[1] ,filterActivities) : 
-    filterActivities , [filter, filterActivities])
+    const displayData = useMemo(() => filter ?
+        filterByDate(date[0], date[1], filterActivities) :
+        filterActivities, [filter, filterActivities])
 
 
-    
+
     const money = countMoney(displayData)
 
     return (<>
@@ -186,7 +193,7 @@ const UserDetail = () => {
                     <UserInfo user={user} />
 
 
-                    <span>Chọn ngày: </span>
+                    <StyledSpan>Chọn ngày: </StyledSpan>
                     <StyledDateTimeRangePicker>
                         <DateTimeRangePicker
                             value={date}
@@ -195,7 +202,7 @@ const UserDetail = () => {
                     </StyledDateTimeRangePicker>
 
                     <StyledAllButton onClick={toggleFilter}>
-                        <span>{filter ? 'Filter': 'All' }</span>
+                        <span>{filter ? 'Filter' : 'All'}</span>
                     </StyledAllButton>
                 </StyledHeader>
 
@@ -231,7 +238,7 @@ const UserDetail = () => {
                         )
                 }
 
-                <AddActivityButton/>
+                <AddActivityButton />
             </StyledWrapper>
         )}
     </>)

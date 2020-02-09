@@ -6,11 +6,12 @@ import { Activity } from 'store/activity/types';
 import ActivityGroupRow from './ActivityGroupRow';
 import { formatMoney, countMoney } from 'service/helpers';
 import UserGroup from 'components/UserGroup';
+import Constants from 'Constants';
 
 
 const StyledWrapper = styled.div`
-    width: ${window.innerWidth * 0.8}px;
-    height: ${window.innerHeight * 0.8}px;
+    width: ${window.innerWidth * (Constants.IS_MOBILE ? 1 : 0.8)}px;
+    height: ${window.innerHeight * (0.8)}px;
     background-color: #ffffff;
     display: flex;
     flex-direction: row;
@@ -18,7 +19,7 @@ const StyledWrapper = styled.div`
 
 const StyledGroup = styled.div`
     flex: 1;
-    padding-left: 20px;
+    ${!Constants.IS_MOBILE && `padding-left: 20px;`}
 `
 
 const StyledHeader = styled.h3``
@@ -27,7 +28,7 @@ const StyledRow = styled.div`
     display: flex;
     flex-direction: row;
     align-items; center;
-    padding: 12px;
+    ${!Constants.IS_MOBILE && `padding: 12px;`}
 
 `
 const StyledLabel = styled.span`
@@ -63,7 +64,6 @@ const StyledInfoWrapper = styled.div`
     flex: 1;
     padding-top: 24px;
     background-color: rgba(255,179,66,0.1);
-
 `
 
 interface Props {
@@ -110,7 +110,7 @@ const ActivitiesModal = ({ activities }: Props) => {
 
     const [group, setGroup] = useState<ActivityGroup>(activityGroups[0])
 
-    const money = countMoney(group.activities);
+    const money = countMoney(group.activities) * (group.influencers.length > 0 ? group.influencers.length : 1);
     return (
         <StyledWrapper>
 
@@ -134,7 +134,7 @@ const ActivitiesModal = ({ activities }: Props) => {
                     {
                         group.activities.map(act => {
                             return (
-                                <ActivityRow activity={act} />
+                                <ActivityRow key={act.id} activity={act} />
                             )
                         })
                     }

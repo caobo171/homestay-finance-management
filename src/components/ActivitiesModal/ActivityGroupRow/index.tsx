@@ -2,6 +2,7 @@ import React from 'react'
 import { ActivityGroup } from '..'
 import styled from 'styled-components';
 import UserAvatar from 'components/UserAvatar';
+import Constants from 'Constants';
 
 
 const StyledWrapper = styled.div`
@@ -38,9 +39,11 @@ const ActivityGroupRow = ({ activityGroup, setGroup }: Props) => {
     }
     return (
         <StyledWrapper onClick={onClickHandle}>
-            <StyledRowItem flex={1}>
+
+
+            {!Constants.IS_MOBILE && <StyledRowItem flex={1}>
                 <UserAvatar userId={activityGroup.userId} />
-            </StyledRowItem>
+            </StyledRowItem>}
 
             <StyledRowItem flex={3}>
                 <span>{activityGroup.name}</span>

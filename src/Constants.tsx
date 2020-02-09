@@ -29,5 +29,6 @@ export default {
     red: '#ff4848',
     green: '#4CD964',
     yellow: '#f2a100',
+    IS_MOBILE : window.innerWidth < 600
 
 }

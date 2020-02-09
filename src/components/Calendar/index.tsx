@@ -14,7 +14,7 @@ const StyledWrapper = styled.div`
 const StyledHeader = styled.div`
     display: flex;
     flex-direction: row;
-    width: 40%;
+    width: 60%;
     justify-content: space-around;
     margin-bottom: 28px;
     background-color: rgba(256,165,0,0.5);

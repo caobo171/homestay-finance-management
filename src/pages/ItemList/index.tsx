@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/macro'
-import Item from 'store/item/types'
+import Item, { ItemFilterType } from 'store/item/types'
 import ItemRow from './ItemRow'
 import AddActivityButton from 'components/AddActivityButton'
 import { useItems } from 'store/item/hooks'
 import SearchBox from './Searchbox'
+import { CssVariable } from 'Constants'
 
 
 
@@ -18,7 +19,7 @@ const Wrapper = styled.div`
 const StyledListUserWrapper = styled.div`
     width : 100%;
     overflow-y: scroll;
-    max-height: ${window.innerHeight - 150}px;
+    max-height: ${window.innerHeight - 200}px;
 
     &::-webkit-scrollbar {
         width: 2px;
@@ -31,6 +32,31 @@ const StyledListUserWrapper = styled.div`
     }
 `
 
+
+
+const StyledFilterWrapper = styled.div`
+    height: 32px;
+    width: 100%;
+    background-color: ${CssVariable.PRIMARY_COLOR};
+    color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`
+
+const StyledFilterItemWrapper = styled.div`
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4px;
+    cursor: pointer;
+`
+
+const StyledSpan = styled.span<{ active: boolean }>`
+    opacity: ${props => props.active ? 1 : 0.7}; 
+`
+
 const filterBySearchString = (items: Item[], searchString: string) => {
     const rSearchString = searchString.toLowerCase().replace(/\s/g, '')
 
@@ -38,15 +64,34 @@ const filterBySearchString = (items: Item[], searchString: string) => {
         .replace(/\s/g, '').indexOf(rSearchString) > -1)
 }
 
+const filterByType = (items: Item[], type: ItemFilterType) => {
+    return items.filter(item => {
+        return (type === ItemFilterType.AVAILABLE && item.remain > 0)
+            || (type === ItemFilterType.UN_AVAILABLE && item.remain <= 0)
+    })
+}
+
 const ItemList = () => {
 
     const [searchString, setSearchString] = useState('')
+
+    const [type, setType] = useState<ItemFilterType>(ItemFilterType.AVAILABLE)
     const items = useItems()
-    const displayItems = filterBySearchString(items, searchString)
+    const displayItems = filterBySearchString(filterByType(items, type), searchString)
     return (
         <Wrapper>
-            <SearchBox searchString = {searchString} 
-            setSearchString={setSearchString}/>
+            <StyledFilterWrapper>
+                <StyledFilterItemWrapper
+                    onClick={() => setType(ItemFilterType.AVAILABLE)}
+                >
+                    <StyledSpan active={type === ItemFilterType.AVAILABLE}>{'Đồ  Còn'}</StyledSpan>
+                </StyledFilterItemWrapper>
+                <StyledFilterItemWrapper
+                    onClick={() => setType(ItemFilterType.UN_AVAILABLE)}
+                ><StyledSpan active={type === ItemFilterType.UN_AVAILABLE}>{'Đồ  Hết'}</StyledSpan></StyledFilterItemWrapper>
+            </StyledFilterWrapper>
+            <SearchBox searchString={searchString}
+                setSearchString={setSearchString} />
             <StyledListUserWrapper>
                 {
                     displayItems.map((item: Item) => {
@@ -54,7 +99,7 @@ const ItemList = () => {
                     })
                 }
             </StyledListUserWrapper>
-            <AddActivityButton/>
+            <AddActivityButton />
         </Wrapper>
     )
 }

@@ -66,11 +66,6 @@ const Navbar = React.memo(({ onClickMenu }: Props) => {
     const location = useLocation()
 
     const param = useParams<{ id: string }>()
-    //@ts-ignore
-    window.val = location
-
-    console.log(param.id)
-
     const isDetailPage = location.pathname.indexOf('user/') != -1 || location.pathname.indexOf('item/') != -1
 
     const id = location.pathname.replace('/user/', '').replace('/item/', '')

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components/macro'
+import Constants from 'Constants'
 
 
 
@@ -25,7 +26,7 @@ const StyledDay = styled.div`
 `
 
 const renderDay = (day: number) => {
-    if (day === 0) return 'Chủ nhật'
+    if (day === 0) return  Constants.IS_MOBILE ? 'CN': 'Chủ nhật'
     else {
         return `Thứ ${day +1 }`
     }

@@ -3,6 +3,12 @@ export enum ItemType {
     NOT_GENERAL = 'not_general'
 }
 
+
+export enum ItemFilterType{
+    AVAILABLE = 'available',
+    UN_AVAILABLE = 'unavailable'
+}
+
 export default interface Item {
     type: ItemType,
     name: string,

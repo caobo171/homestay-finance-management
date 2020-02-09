@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components';
-import { useActivitiesByDate } from 'store/activity/hooks';
 import ActivityRow from './ActivityRow';
 import { Activity } from 'store/activity/types';
 import ActivityGroupRow from './ActivityGroupRow';
@@ -27,7 +26,7 @@ const StyledHeader = styled.h3``
 const StyledRow = styled.div`
     display: flex;
     flex-direction: row;
-    align-items; center;
+    align-items: center;
     ${!Constants.IS_MOBILE && `padding: 12px;`}
 
 `
@@ -46,7 +45,7 @@ const StyledActivitiesWrapper = styled.div`
     width: 100%; 
     overflow-y: scroll;
     
-    max-height: 450px;
+    max-height: ${Constants.IS_MOBILE ? 320: 450 }px;
 
     &::-webkit-scrollbar {
         width: 2px;
@@ -89,8 +88,12 @@ const groupActivitys = (activities: Activity[]) => {
 
         groups[act.name] = listActivities
     })
+
+
     let activityGroups: ActivityGroup[] = []
     const keys = Object.keys(groups);
+
+
     for (let i = 0; i < keys.length; i++) {
         activityGroups.push({
             name: keys[i],

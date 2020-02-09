@@ -8,15 +8,10 @@ import { useHomeStays } from 'store/homestay/hooks'
 import HomeStayItem from './HomeStayItem'
 
 
-
-
 const Wrapper = styled.div`
     width: 90%;
     
 `
-
-
-
 const StyledAddHomeStayButton = styled.div`
     background-color: ${CssVariable.PRIMARY_COLOR};
     

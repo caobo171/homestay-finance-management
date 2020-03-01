@@ -6,7 +6,7 @@ import AddActivityButton from 'components/AddActivityButton'
 import { useItems } from 'store/item/hooks'
 import SearchBox from './Searchbox'
 import { CssVariable } from 'Constants'
-import { reformatString } from 'service/helpers'
+import { reformatString, formatMoney } from 'service/helpers'
 
 
 
@@ -58,6 +58,17 @@ const StyledSpan = styled.span<{ active: boolean }>`
     opacity: ${props => props.active ? 1 : 0.7}; 
 `
 
+
+const RemainCost = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    font-size: 20px;
+    margin-top: 20px;
+`
+
 const filterBySearchString = (items: Item[], searchString: string) => {
     const rSearchString = reformatString(searchString)
 
@@ -69,6 +80,17 @@ const filterByType = (items: Item[], type: ItemFilterType) => {
         return (type === ItemFilterType.AVAILABLE && item.remain > 0)
             || (type === ItemFilterType.UN_AVAILABLE && item.remain <= 0)
     })
+}
+
+
+const totalRemainCost = (items: Item[])=>{
+    let cost = 0;
+    for(let i = 0 ; i< items.length; i++){
+        const item = items[i];
+        cost += item.remain /item.amount * item.cost;
+    }
+
+    return cost;
 }
 
 const ItemList = () => {
@@ -99,6 +121,8 @@ const ItemList = () => {
                     })
                 }
             </StyledListUserWrapper>
+
+            {displayItems.length > 0 && <RemainCost>Tổng tiền : {formatMoney(totalRemainCost(displayItems))}</RemainCost>}
             <AddActivityButton />
         </Wrapper>
     )

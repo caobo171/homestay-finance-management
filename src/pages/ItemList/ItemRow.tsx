@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import Item from 'store/item/types'
 import ItemImage from 'components/ItemImage'
-import { CssVariable } from 'Constants'
+import Constants, { CssVariable } from 'Constants'
 import { AppRouterContext } from 'navigation/AppRouter'
 import { formatMoney } from 'service/helpers'
 import UserGroup from 'components/UserGroup'
@@ -64,7 +64,7 @@ const ItemRow = React.memo(({ item }: Props) => {
             <StyledName>{item.name}</StyledName>
         </StyledRowItem>
         <StyledRowItem>
-<StyledText>-Còn: {item.remain.toFixed(2)} {item.unit}  -Total: {formatMoney(item.cost)} -<StyledImage src={user.photoURL}></StyledImage></StyledText>
+<StyledText>-Còn: {item.remain.toFixed(2)} {item.unit} ({formatMoney(item.remain/item.amount * item.cost)})  {!Constants.IS_MOBILE &&`-Total: ${formatMoney(item.cost)} `}<StyledImage src={user.photoURL}></StyledImage></StyledText>
 
 
         </StyledRowItem>

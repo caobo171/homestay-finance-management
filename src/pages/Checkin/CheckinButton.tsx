@@ -7,7 +7,7 @@ const StyledWrapper = styled.div<{color: string}>`
     align-items: center;
     justify-content: center;
     height: 42px;
-    width: 92px;
+    width: 80px;
     font-size: 16px;
     color: #ffffff;
     background-color: ${props=> props.color};

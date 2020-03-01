@@ -21,7 +21,7 @@ import LoadingComponent from 'components/LoadingComponent'
 
 const StyledWrapper = styled.div`
     font-size: 14px;
-    width: ${Constants.IS_MOBILE ? '100%': '280px'};
+    width: ${Constants.IS_MOBILE ? '100%': `${Constants.FORM_WIDTH}px`};
     display: flex;
     flex-direction: column;
     background-color: #F6F6F6;

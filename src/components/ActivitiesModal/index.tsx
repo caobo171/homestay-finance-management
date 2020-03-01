@@ -145,7 +145,7 @@ const ActivitiesModal = ({ activities }: Props) => {
 
                 <StyledRow>
                     <StyledLabel>
-                        Tỏng tiền:
+                        Tổng tiền:
                     </StyledLabel>
                     <StyledValue>
                         {money > 0 && '+'}{formatMoney(money)}

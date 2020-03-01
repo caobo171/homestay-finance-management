@@ -45,6 +45,8 @@ interface Props{
     onValueChange : (value:any)=>void ,
 }
 
+
+
 const TextInput = ({title , type ,value, onValueChange, bottomInput}: Props)=>{
 
     const ref = useRef<HTMLInputElement>(null)

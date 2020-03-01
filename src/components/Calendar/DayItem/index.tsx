@@ -10,7 +10,7 @@ import { isToday } from 'service/helpers';
 const StyledWrapper = styled.div<{active:boolean}>`
     width: 100%;
     display: flex;
-    height: 92px;
+    height: ${Constants.IS_MOBILE ? 60: 92}px;
     flex-direction: column;
     align-items: center;
     border: solid 0.5px rgba(98,98,98,0.1);

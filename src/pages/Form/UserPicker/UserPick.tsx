@@ -10,29 +10,18 @@ import { CssVariable } from 'Constants'
 import PlusIcon from 'icons/PlusIcon'
 import UserAvatar from 'components/UserAvatar'
 import { useRemainUsers } from 'store/user/hooks'
+import { reformatString } from 'service/helpers'
 
 const StyledWrapper = styled.div`
     display: flex;
     margin-bottom: 16px;
     align-items: center;
-`
-
-
-
-const StyledInput = styled.input`
-    background: #DFDFDF;
-    height: 24px;
-    width: 20px;
-    max-width: 30px;
-    border:none;
-    border-radius: 8px;
-    padding-left: 8px;
-    margin-left: 4px;
+    width: 100%;
 `
 
 const StyledPopUpItem = styled.div`
     height: 34px;
-    width: 190px;
+    width: 100%;
     display: flex;
     flex-direction: row;
     background-color: #e2e2e2;
@@ -70,10 +59,13 @@ interface Props {
 }
 
 const filterBySearchString = (users: User[], searchString: string) => {
-    const rSearchString = searchString.toLowerCase().replace(/\s/g, '')
+    const rSearchString = reformatString(searchString)
 
-    return users.filter(user => (user.displayName ? user.displayName : '').toLowerCase()
-        .replace(/\s/g, '').indexOf(rSearchString) > -1)
+    return users.filter(user => reformatString(user.displayName ? user.displayName : '').indexOf(rSearchString) > -1)
+    // const rSearchString = searchString.toLowerCase().replace(/\s/g, '')
+
+    // return users.filter(user => (user.displayName ? user.displayName : '').toLowerCase()
+    //     .replace(/\s/g, '').indexOf(rSearchString) > -1)
 }
 
 const UserPick = ({ addPickUser, pickedUsers ,type }: Props) => {

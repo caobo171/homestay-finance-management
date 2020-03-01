@@ -6,6 +6,8 @@ import { User } from 'store/user/types'
 import CloseIcon from 'icons/CloseIcon'
 import { formRef, undoFormPosition } from 'service/FormRefContext'
 import { useItems } from 'store/item/hooks'
+import Constants from 'Constants'
+import { reformatString } from 'service/helpers'
 
 const StyledWrapper = styled.div`
     width: 100%;
@@ -14,6 +16,7 @@ const StyledWrapper = styled.div`
     margin: 12px 0px 6px 0px;
     flex-direction: row;
     align-items: center;
+    font-size: ${Constants.LABEL_FONTSIZE}px;
 `
 
 const StyledLabel = styled.div`
@@ -25,19 +28,19 @@ const StyledLabel = styled.div`
 `
 
 const StyledSearchWrapper = styled.div`
-    height: 30px;
+    height: ${Constants.INPUT_HEIGHT}px;
     flex: 1.5;
     border: none;
     background: #DFDFDF;
     padding-left: 12px;
-
+    box-sizing: border-box;
     display:flex;
     align-items: center;
     justify-content: center;
     margin-right: 12px;
     border-radius: 4px;
     max-width: 140px;
-
+    max-width: ${Constants.MAX_INPUT_WIDTH}px;
     position: relative
 `
 
@@ -75,10 +78,9 @@ interface Props {
 }
 
 const filterBySearchString = (items: Item[], searchString: string) => {
-    const rSearchString = searchString.toLowerCase().replace(/\s/g, '')
+    const rSearchString = reformatString(searchString)
 
-    return items.filter(item => item.name.toLowerCase()
-        .replace(/\s/g, '').indexOf(rSearchString) > -1)
+    return items.filter(item => reformatString(item.name).indexOf(rSearchString) > -1)
 }
 
 const ItemAutoComplete = (props: Props) => {
@@ -92,16 +94,6 @@ const ItemAutoComplete = (props: Props) => {
     const ref = useRef<HTMLInputElement>(null)
     const onFocusHandle = () => {
         setVisible(!visible)
-
-        if (formRef && formRef.current && ref && ref.current) {
-
-            const refTop = ref.current.getBoundingClientRect().top
-
-            console.log(refTop)
-            if (window.innerWidth <= 600) {
-                formRef.current.style.marginTop = `${200 - refTop}px`
-            }
-        }
     }
 
     const searchStringChangeHandle = useCallback((event) => {

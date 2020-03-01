@@ -5,6 +5,7 @@ import Item from 'store/item/types'
 import { User } from 'store/user/types'
 import CloseIcon from 'icons/CloseIcon'
 import { formRef } from 'service/FormRefContext'
+import Constants from 'Constants'
 
 const StyledWrapper = styled.div`
     display: flex;
@@ -20,20 +21,22 @@ const StyledSearchWrapper = styled.div`
 
     border-radius: 4px;
     position: relative;
+    width: 100%;
+    margin-right: 12px;
 `
 
 const StyledSearch = styled.input`
-    height: 24px;
+    height: ${Constants.INPUT_HEIGHT}px;
     border: none;
   
     padding-left: 12px;
-
+    box-sizing: border-box;
     display:flex;
     align-items: center;
     justify-content: center;
 
     border-radius: 4px;
-    max-width: 120px;
+    max-width: ${Constants.MAX_INPUT_WIDTH+ 100}px;
 
     background-color: transparent;
 `
@@ -48,7 +51,7 @@ const StyledPopUpList = styled.div`
 `
 
 const StyledCurrentItem = styled.div`
-    height: 24px;
+    height: ${Constants.INPUT_HEIGHT}px;
     border: none;
     width: 100%;
 

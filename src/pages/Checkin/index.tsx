@@ -33,7 +33,7 @@ const StyledDiv = styled.div`
 
 const getDay = () => {
     const today = new Date(now())
-    if (today.getDay() === 7) return 'Chủ nhật'
+    if (today.getDay() === 0) return 'Chủ nhật'
     return `Thứ ${today.getDay() + 1}`
 }
 

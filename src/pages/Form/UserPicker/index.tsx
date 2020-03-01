@@ -1,16 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import ItemPick from 'pages/Form/Itempicker/ItemPick'
-import Item from 'store/item/types'
 import { User } from 'store/user/types'
 import UserGroup from 'components/UserGroup'
 import UserPick from './UserPick'
-import CloseIcon from 'icons/CloseIcon'
 import TrashIcon from 'icons/TrashIcon'
+import Constants from 'Constants'
 
 
 const StyledWrapper = styled.div`
     width: 95%;
+    font-size: ${Constants.LABEL_FONTSIZE}px;
 `
 const StyledHeader = styled.div`
     margin-bottom: 8px;
@@ -28,6 +27,7 @@ const StyledUserGroupWrapper = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    width: 100%;
 `
 
 const StyledCloseIcon = styled(TrashIcon)`

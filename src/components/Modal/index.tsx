@@ -4,6 +4,7 @@ import { CSSTransition } from 'react-transition-group';
 import { TransitionStatus } from "react-transition-group/Transition";
 
 import { EventEmitter } from 'events'
+import Constants from 'Constants';
 
 
 const event = new EventEmitter()
@@ -16,7 +17,6 @@ const StyledWrapper = styled.div<{ status: TransitionStatus }>`
     height: 100%;
     
     z-index: 2;
-
     display:flex;
     align-items: center;
     justify-content: center;
@@ -26,6 +26,11 @@ const StyledWrapper = styled.div<{ status: TransitionStatus }>`
 `
 const StyledFront = styled.div`
     z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    ${Constants.IS_MOBILE && `width: 100%;`}
 `
 
 const StyledBack  = styled.div`

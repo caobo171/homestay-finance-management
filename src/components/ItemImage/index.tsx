@@ -33,7 +33,8 @@ const ItemImage = React.memo(({ itemId, size }: Props) => {
     const item = useItem(itemId)
 
 
-    const onClickHandle = ()=>{
+    const onClickHandle = (e:any)=>{
+        e.preventDefault();
         if(item.photoUrl){
             openModal(<ImageModal 
                 uri={item.photoUrl ? item.photoUrl: ''}/>)

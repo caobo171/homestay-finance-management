@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import TextInput from '../TextInput'
-import { CssVariable } from 'Constants'
+import Constants, { CssVariable } from 'Constants'
 import DatePicker from '../DatePicker'
 import ItemPicker, { PickedItemType } from '../Itempicker'
 import UserPicker from '../UserPicker'
@@ -21,7 +21,7 @@ import LoadingComponent from 'components/LoadingComponent'
 
 const StyledWrapper = styled.div`
     font-size: 14px;
-    width: 280px;
+    width: ${Constants.IS_MOBILE ? '100%': '280px'};
     display: flex;
     flex-direction: column;
     background-color: #F6F6F6;
@@ -80,11 +80,6 @@ const UseActionForm = () => {
         }
         return true
     }
-
-    // useEffect(()=>{
-    //     console.log(type === ActivityType.DESTROY)
-    // })
-
 
     const onSubmitHandle = async () => {
         if (!validate()) return

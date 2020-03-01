@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import ItemPick from 'pages/Form/Itempicker/ItemPick'
 import ItemComponent from './ItemComponent'
 import Item from 'store/item/types'
+import Constants from 'Constants'
 
 
 const StyledWrapper = styled.div`
     width: 95%;
+    font-size: ${Constants.LABEL_FONTSIZE}px;
 `
 const StyledHeader = styled.div`
     margin-bottom: 8px;

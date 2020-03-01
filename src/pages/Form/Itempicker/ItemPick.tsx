@@ -9,6 +9,7 @@ import { User } from 'store/user/types'
 import { CssVariable } from 'Constants'
 import PlusIcon from 'icons/PlusIcon'
 import { toast } from 'react-toastify'
+import { reformatString } from 'service/helpers'
 
 const StyledWrapper = styled.div`
     display: flex;
@@ -37,7 +38,7 @@ const StyledInput = styled.input`
 
 const StyledPopUpItem = styled.div`
     height: 34px;
-    width: 190px;
+    width: 100%;
     display: flex;
     flex-direction: row;
     background-color: #e2e2e2;
@@ -74,10 +75,9 @@ interface Props {
 }
 
 const filterBySearchString = (items: Item[], searchString: string) => {
-    const rSearchString = searchString.toLowerCase().replace(/\s/g, '')
+    const rSearchString = reformatString(searchString)
 
-    return items.filter(item => item.name.toLowerCase()
-        .replace(/\s/g, '').indexOf(rSearchString) > -1)
+    return items.filter(item => reformatString(item.name).indexOf(rSearchString) > -1)
 }
 
 const ItemPick = ({ addPickItem, pickedItems }: Props) => {

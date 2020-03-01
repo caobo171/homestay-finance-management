@@ -80,3 +80,16 @@ export const countMoney = (activities: Activity[]) => {
 
     return cost
 }
+
+export const reformatString  = (text: String)=>{
+    return text
+    .replace(/\s/g, '')
+    .toLowerCase()
+    .replace(/[aăâáạàãảảắặẵaậấẫẩậ]/g,'a')
+    .replace(/[ơởớợỡởỏòóõọ]/g,'o')
+    .replace(/[êểếệễểẻèéeẹ]/g, 'e')
+    .replace(/[ưửữựứừúùúụủ]/g, 'u')
+    .replace(/[íịĩíì]/g, 'i')
+    .replace(/[ỹỳýỵỷ]/g, 'y')
+
+}

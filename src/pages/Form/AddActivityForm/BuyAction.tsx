@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import TextInput from '../TextInput'
-import { CssVariable } from 'Constants'
+import Constants, { CssVariable } from 'Constants'
 import SelectInput from '../SelectInput'
 import DatePicker from '../DatePicker'
-import * as firebase from 'firebase'
 import { addItem } from 'store/item/function'
 import Item, { ItemType } from 'store/item/types'
 import { useCurrentUser, useUserList } from 'store/user/hooks'
@@ -23,7 +22,7 @@ import ItemAutoComplete from '../ItemAutoComplete'
 
 const StyledWrapper = styled.div`
     font-size: 14px;
-    width: 280px;
+    width: ${Constants.IS_MOBILE ? '100%': `${Constants.FORM_WIDTH}px`};
     display: flex;
     flex-direction: column;
     background-color: #F6F6F6;
@@ -34,15 +33,17 @@ const StyledWrapper = styled.div`
 `
 
 const StyledSubmitButton = styled.div`
-    width: 60%;
-    height: 32px;
-    border-radius: 50px;
-    display:flex;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
+width: 60%;
+height: ${Constants.INPUT_HEIGHT}px;
+font-size: ${Constants.LABEL_FONTSIZE}px;
+text-transform: uppercase;
+border-radius: 50px;
+display:flex;
+text-align: center;
+align-items: center;
+justify-content: center;
 
-    background-color: ${CssVariable.PRIMARY_COLOR};
+background-color: ${CssVariable.PRIMARY_COLOR};
     margin: 20px 12px 20px 0px;
 `
 const SELECT_TYPE_DATA = [
@@ -165,10 +166,6 @@ const AddActivityForm = () => {
         }else{
             res2 = true
         }
-
-        // users.forEach(user=>{
-        //     sendNotification(user,`${currentUser?.displayName} đã thêm ${name}`, 'Finance Management')
-        // })
 
         if (res && res2) {
             toast.success('Thêm đồ thành công !!')

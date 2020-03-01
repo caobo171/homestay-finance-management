@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 import TextInput from 'components/Form/TextInput'
-import { CssVariable } from 'Constants'
+import Constants, { CssVariable } from 'Constants'
 import { useAsyncFn } from 'react-use'
 import { toast } from 'react-toastify'
 import HomeStay, { FAKE_IMAGE_HOMESTAY } from 'store/homestay/types'
@@ -17,7 +17,9 @@ const StyledWrapper = styled.div`
 
 const StyledSubmitButton = styled.div`
     width: 60%;
-    height: 32px;
+    height: ${Constants.INPUT_HEIGHT}px;
+    font-size: ${Constants.LABEL_FONTSIZE}px;
+    text-transform: uppercase;
     border-radius: 50px;
     display:flex;
     text-align: center;
@@ -96,7 +98,7 @@ const AddHomeStayForm = () => {
                             />
                             <StyledSubmitButton onClick={fetch}>
                                 Add Activity
-                </StyledSubmitButton>
+                            </StyledSubmitButton>
                         </>
                     )
             }

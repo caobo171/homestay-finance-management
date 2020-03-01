@@ -13,14 +13,14 @@ import Constants from 'Constants';
 import { useActivitiesByDate } from 'store/activity/hooks';
 import { now } from 'service/helpers';
 
-const SIDEBAR_WIDTH = 225;
+const SIDEBAR_WIDTH = 280;
 
 const StyledWrapper = styled.div<{ active: boolean }>`
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
+    height: ${window.innerHeight}px;
     visibility: visible;
     z-index: 2;
     ${props => !props.active && 'visibility: hidden;'}
@@ -36,7 +36,7 @@ const StyledBack = styled.div<{ active: boolean }>`
 `
 const StyledContainer = styled.div<{ active: boolean }>`
     ${Constants.IS_MOBILE && 'position:absolute;'}
-    height: 100%;
+    height: ${window.innerHeight}px;
     top:0;
     bottom: 0;
     left: 0 ;
@@ -47,6 +47,7 @@ const StyledContainer = styled.div<{ active: boolean }>`
     align-items: flex-start;
     transition: 0.3s;
     padding: 40px 18px;
+    box-sizing: border-box;
     ${!Constants.IS_MOBILE && 'background-color: rgba(100,100,100,0.1);'}
   
     ${props => !props.active && `left: -${SIDEBAR_WIDTH * 1.5}px`}

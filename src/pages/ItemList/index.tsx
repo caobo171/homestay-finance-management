@@ -6,6 +6,7 @@ import AddActivityButton from 'components/AddActivityButton'
 import { useItems } from 'store/item/hooks'
 import SearchBox from './Searchbox'
 import { CssVariable } from 'Constants'
+import { reformatString } from 'service/helpers'
 
 
 
@@ -58,10 +59,9 @@ const StyledSpan = styled.span<{ active: boolean }>`
 `
 
 const filterBySearchString = (items: Item[], searchString: string) => {
-    const rSearchString = searchString.toLowerCase().replace(/\s/g, '')
+    const rSearchString = reformatString(searchString)
 
-    return items.filter(item => item.name.toLowerCase()
-        .replace(/\s/g, '').indexOf(rSearchString) > -1)
+    return items.filter(item => reformatString(item.name).indexOf(rSearchString) > -1)
 }
 
 const filterByType = (items: Item[], type: ItemFilterType) => {

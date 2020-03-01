@@ -67,7 +67,7 @@ const SidebarItem = ({
             <Icon />
         </StyledIcon>
         <StyledSpan>{name}</StyledSpan>
-        {(todayActivitiesNumber && todayActivitiesNumber > 0) && (
+        {(todayActivitiesNumber !== undefined && todayActivitiesNumber > 0) && (
             <StyledNumberIndicator>
                 {todayActivitiesNumber}
             </StyledNumberIndicator>

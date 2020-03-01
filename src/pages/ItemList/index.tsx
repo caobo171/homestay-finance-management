@@ -20,7 +20,7 @@ const Wrapper = styled.div`
 const StyledListUserWrapper = styled.div`
     width : 100%;
     overflow-y: scroll;
-    max-height: ${window.innerHeight - 200}px;
+    max-height: ${window.innerHeight - 250}px;
 
     &::-webkit-scrollbar {
         width: 2px;

@@ -1,8 +1,17 @@
-body {
+html, body {
     margin: 0;
+    height: 100%;
+    width: 100%;
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
 }
 
-#id {
+label {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#root {
     height: 100%;
     width: 100%;
 }

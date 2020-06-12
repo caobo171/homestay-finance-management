@@ -103,17 +103,21 @@ export const login = async (storex = store) => {
 export const getCurrentUser = async (storex = store) => {
     const res = await localStorage.getItem(CURRENT_USER_STORAGE_KEY)
 
+    console.log('aaa')
+
     if (res) {
+        console.log('ccc')
         const user: User = JSON.parse(res)
         const userData = await getCurrentUserAsync(user.id)
+        console.log('bbb')
         if (userData) {
-
-
 
             await storex.dispatch(actions.login({...user, ...userData}))
             localStorage.setItem(CURRENT_USER_STORAGE_KEY,JSON.stringify({...user, ...userData}))
             return userData
         } else {
+
+            console.log('aa vao day roi ')
             await storex.dispatch(actions.login(user))
             localStorage.setItem(CURRENT_USER_STORAGE_KEY,JSON.stringify(user))
             return user

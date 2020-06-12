@@ -7,7 +7,7 @@ import Sidebar from 'components/Sidebar'
 import UserList from 'pages/UsersList'
 import ItemList from 'pages/ItemList'
 import styled from 'styled-components/macro'
-import Login from 'pages/Login'
+import Login from 'pages/Login/Login'
 import Navbar from 'components/Navbar'
 import ItemDetail from 'pages/ItemDetail'
 import Modal from 'components/Modal'
@@ -25,12 +25,12 @@ import Constants from 'Constants'
 const BodyWrapper = styled.div`
     display: flex;
     justify-content: center;
+    height: 100%;
 `
 const StyledWrapper = styled.div`
     ${!Constants.IS_MOBILE && `
         display:flex;
         flex-direction: row;
-        height: ${window.innerHeight - 80}px;
     `}
     
 `
@@ -52,9 +52,6 @@ const PrivateRoute: React.FC<{
         return user ? <Component {...props} /> : <Redirect to={'/login'} />
     }} />
 }
-
-
-
 
 
 export const AppRouterContext: React.Context<{}> & {
@@ -119,39 +116,40 @@ const AppRouter = () => {
         <Router>
             {
                 isFullyLoaded ? (
+                    <>
+                        {
+                            user ? <RouterContext>
 
-                    <StyledWrapper>
+                                {/* <Sidebar active={openSidebar} onDismissMenu={onDismissMenu} /> */}
 
-                        <RouterContext>
+                                <StyledRouterWrapper>
+                                    {/* <Navbar onClickMenu={onClickMenu} /> */}
+                                    <Modal />
+                                    <BodyWrapper>
+                                        <Switch>
+                                            <PrivateRoute path={'/items'} component={ItemList} />
+                                            <PrivateRoute path={'/item/:id'} component={ItemDetail} />
+                                            <PrivateRoute path={'/users'} component={UserList} />
+                                            <PrivateRoute path={'/user/:id'} component={UserDetail} />
+                                            <PrivateRoute path={'/admin'} component={Admin} />
+                                            <PrivateRoute path={'/activities'} component={Activities} />
 
-                            <Sidebar active={openSidebar} onDismissMenu={onDismissMenu} />
-
-                            <StyledRouterWrapper>
-                                <Navbar onClickMenu={onClickMenu} />
-                                <Modal />
-                                <BodyWrapper>
-                                    <Switch>
-                                        <PrivateRoute path={'/items'} component={ItemList} />
-                                        <PrivateRoute path={'/item/:id'} component={ItemDetail} />
-                                        <PrivateRoute path={'/users'} component={UserList} />
-                                        <PrivateRoute path={'/user/:id'} component={UserDetail} />
-                                        <PrivateRoute path={'/admin'} component={Admin} />
-                                        <PrivateRoute path={'/activities'} component={Activities} />
-                                        <Route path={'/login'} component={Login} />
-
-                                        {Constants.IS_MOBILE ? (
-                                            <PrivateRoute path={'/'} component={Checkin} />
-                                        ) : (
-                                                <PrivateRoute path={'/'} component={Activities} />
-                                            )}
+                                            {Constants.IS_MOBILE ? (
+                                                <PrivateRoute path={'/'} component={Checkin} />
+                                            ) : (
+                                                    <PrivateRoute path={'/'} component={Activities} />
+                                                )}
 
 
-                                    </Switch>
-                                </BodyWrapper>
-                            </StyledRouterWrapper>
+                                        </Switch>
+                                    </BodyWrapper>
+                                </StyledRouterWrapper>
 
-                        </RouterContext>
-                    </StyledWrapper>
+                            </RouterContext> :
+                                <Login />
+                        }
+
+                    </>
                 ) : (
                         <LoadingComponent />
                     )
